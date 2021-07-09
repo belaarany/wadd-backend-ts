@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Client, ClientProxy, ClientRedis, Transport } from '@nestjs/microservices';
+import { Wallet } from 'src/interfaces/wallet.interface';
+import { CreateWalletDTO } from './expense.dto';
 
 @Injectable()
 export class ExpenseMicroservice {
@@ -7,8 +9,8 @@ export class ExpenseMicroservice {
 		@Inject('EXPENSE_SERVICE') private client: ClientProxy,
 	) { }
 
-	async createWallet(idx: number = 1): Promise<any> {
-		const response = await this.client.send("create-wallet", { idx }).toPromise();
+	async createWallet(walletData: CreateWalletDTO): Promise<Wallet> {
+		const response = await this.client.send("create-wallet", { wallet: walletData }).toPromise()
 		return response
 	}
 }

@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IdentityMicroservice } from 'src/microservices/identity/identity.service';
 import { CommonResponse, CommonResponseFactory } from 'src/shared/CommonResponse.service';
+import { CreateWalletHttpRequest, CreateWalletHttpResponseSuccess } from './expense.dto';
 // import { RegisterRequest, RegisterResponse } from './identity.dto';
 import { ExpenseService } from './expense.service';
 
@@ -14,14 +15,15 @@ export class ExpenseController {
 	) { }
 
 	@Post("create-wallet")
-	async createWallet(@Body() data): Promise<any> {
-		let wallet = await this.expenseService.createWallet(0)
-		
-		console.log("starttick", Date.now())
-
-		for (let i = 1; i < 10_000; i++) {
-			this.expenseService.createWallet(i)
-		}
+	@ApiOperation({ summary: "Creates a new Wallet." })
+	@ApiCreatedResponse({ description: "Wallet successfully created.", type: CreateWalletHttpResponseSuccess })
+	async createWallet(@Body() data: CreateWalletHttpRequest): Promise<any> {
+		let wallet = await this.expenseService.createWallet({
+			name: data.name,
+			order: data.order,
+			owner_id: data.owner_id,
+			initial_balance: data.initial_balance,
+		})
 
 		return wallet
 	}
