@@ -1,15 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Client, ClientProxy, ClientRedis, Transport } from '@nestjs/microservices';
-import { Wallet } from 'src/interfaces/wallet.interface';
+import { Inject, Injectable } from "@nestjs/common"
+import { ClientProxy } from "@nestjs/microservices"
+import { CreateLogDTO } from "./log.dto"
 
 @Injectable()
 export class LogMicroservice {
-	constructor(
-		@Inject('LOG_SERVICE') private client: ClientProxy,
-	) { }
+	constructor(@Inject("LOG_SERVICE") private client: ClientProxy) {}
 
-	async createWallet(logData: any): Promise<any> {
-		const response = await this.client.send("create-log", { log: logData }).toPromise()
-		return response
+	async createLog(logData: CreateLogDTO): Promise<void> {
+		await this.client.send("create-log", { log: logData }).toPromise()
+		return
 	}
 }

@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { IdentityMicroservice } from './identity.service';
+import { Module } from "@nestjs/common"
+import { ClientsModule, Transport } from "@nestjs/microservices"
+import { IdentityMicroservice } from "./identity.service"
 
 @Module({
 	imports: [
 		ClientsModule.register([
 			{
-				name: 'IDENTITY_SERVICE',
+				name: "IDENTITY_SERVICE",
 				transport: Transport.REDIS,
 				options: {
-					url: 'redis://localhost:6379',
+					url: "redis://localhost:6379",
 				},
 			},
 		]),
@@ -17,4 +17,4 @@ import { IdentityMicroservice } from './identity.service';
 	providers: [IdentityMicroservice],
 	exports: [IdentityMicroservice],
 })
-export class IdentityMicroserviceModule { }
+export class IdentityMicroserviceModule {}

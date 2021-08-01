@@ -1,10 +1,12 @@
-import { Module } from '@nestjs/common';
-import { ExpenseModule } from './modules/expense/expense.module';
-import { IdentityModule } from './modules/identity/identity.module';
+import { Module } from "@nestjs/common"
+import { WalletsModule } from "./routes/wallets/wallets.module"
+import { IdentityModule } from "./routes/identity/identity.module"
+import { BalancesModule } from "./routes/balances/balances.module"
+import { IncomesModule } from "./routes/incomes/incomes.module"
 
 @Module({
-  imports: [IdentityModule, ExpenseModule],
-  controllers: [],
-  providers: [],
+	imports: [IdentityModule, WalletsModule, BalancesModule, IncomesModule],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}

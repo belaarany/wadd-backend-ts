@@ -1,13 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Client, ClientProxy, ClientRedis, Transport } from '@nestjs/microservices';
-import { CommonResponse } from 'src/shared/CommonResponse.service';
-
+import { Inject, Injectable } from "@nestjs/common"
+import { ClientProxy } from "@nestjs/microservices"
 
 @Injectable()
 export class IdentityMicroservice {
-	constructor(
-		@Inject('IDENTITY_SERVICE') private client: ClientProxy,
-	) { }
+	constructor(@Inject("IDENTITY_SERVICE") private client: ClientProxy) {}
 
 	async register(): Promise<any> {
 		// const response = await this.client.send("auth:login", { exampledata: 123 }).toPromise();
@@ -16,5 +12,15 @@ export class IdentityMicroservice {
 		return {
 			id: 123,
 		}
+	}
+
+	async verifyAccessToken(accessToken: string): Promise<boolean> {
+		if (!accessToken) {
+			return false
+		}
+
+		return new Promise((res) => {
+			setTimeout(() => res(true), 500)
+		})
 	}
 }
