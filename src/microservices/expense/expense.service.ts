@@ -32,6 +32,18 @@ export class ExpenseMicroservice {
 		return response
 	}
 
+	async walletExists(walletId: string): Promise<boolean> {
+		const response = await this.client.send("wallets.wallet-exists", { walletId: walletId }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
 	async createIncome(incomeData: CreateIncomeDto): Promise<Income> {
 		const response = await this.client.send("incomes.create-income", { income: incomeData }).toPromise()
 

@@ -63,5 +63,5 @@ export class ListWalletIncomesHttpRequest {
 	@ApiProperty()
 	@IsNotEmpty()
 	@IsWaddObjectId()
-	walletId: string
+	wallet_id: string
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common"
 import { ApiOperation, ApiTags } from "@nestjs/swagger"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { WalletNotExistsException } from "src/exceptions/walletNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
 import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
 import { LogMicroservice } from "src/microservices/log/log.service"
@@ -16,6 +17,10 @@ export class IncomesController {
 	@ApiOperation({ summary: "Creates a new Income." })
 	// TODO: Missing return type
 	async createIncome(@Authorization() authUser: AuthUser, @Body() body: CreateIncomeHttpRequest): Promise<any> {
+		if ((await this.expenseMicroservice.walletExists(body.wallet_id)) === false) {
+			throw new WalletNotExistsException(body.wallet_id)
+		}
+
 		const income = await this.expenseMicroservice.createIncome(body)
 
 		this.logMicroservice.createLog({
@@ -37,7 +42,11 @@ export class IncomesController {
 	@ApiOperation({ summary: "Lists the Incomes of a Wallet." })
 	// TODO: Missing return type
 	async listWalletIncomes(@Query() query: ListWalletIncomesHttpRequest): Promise<any> {
-		const incomes = await this.expenseMicroservice.listWalletIncomes(query.walletId)
+		if ((await this.expenseMicroservice.walletExists(query.wallet_id)) === false) {
+			throw new WalletNotExistsException(query.wallet_id)
+		}
+
+		const incomes = await this.expenseMicroservice.listWalletIncomes(query.wallet_id)
 
 		return incomes
 	}
