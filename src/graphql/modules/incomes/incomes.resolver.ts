@@ -13,12 +13,12 @@ import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { IncomeGQLModel } from "./interfaces/income.model"
 import { CreateIncomeGQLInput } from "./interfaces/incomes.inputs"
 
-@Resolver((of) => IncomeGQLModel)
+@Resolver(() => IncomeGQLModel)
 export class IncomesResolver {
 	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
-	@Mutation((returns) => IncomeGQLModel)
+	@Mutation(() => IncomeGQLModel)
 	async createIncome(@Authorization() authUser: AuthUser, @Args("data") data: CreateIncomeGQLInput): Promise<Income> {
 		const income = await this.expenseMicroservice.createIncome(data)
 
@@ -37,14 +37,14 @@ export class IncomesResolver {
 	}
 
 	@UseGuards(AuthGuard)
-	@Query((returns) => [IncomeGQLModel])
+	@Query(() => [IncomeGQLModel])
 	async incomes(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Income[]> {
 		const incomes = await this.expenseMicroservice.listWalletIncomes(walletIds)
 
 		return incomes
 	}
 
-	@ResolveField((returns) => WalletGQLModel)
+	@ResolveField(() => WalletGQLModel)
 	async wallet(
 		@Parent() parent: IncomeGQLModel,
 		@Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,

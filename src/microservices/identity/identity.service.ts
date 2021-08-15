@@ -26,6 +26,6 @@ export class IdentityMicroservice {
 
 	async getUsers(userIds: string[]): Promise<any> {
 		console.log("[IdentityMicroservice] getUsers", userIds)
-		return Promise.resolve(userIds.map(userId => ({ id: "owner_"+userId, name: "owner_"+userId})))
+		return Promise.resolve(userIds.map((userId) => ({ id: "owner_" + userId, name: "owner_" + userId })))
 	}
 }

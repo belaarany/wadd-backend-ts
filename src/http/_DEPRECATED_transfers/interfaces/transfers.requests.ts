@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { ArrayUnique, IsArray, IsDateString, IsEnum, IsNotEmpty, IsOptional } from "class-validator"
+import { IsDateString, IsEnum, IsNotEmpty } from "class-validator"
 import { Currency } from "src/interfaces/types/Currency"
 import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"
 

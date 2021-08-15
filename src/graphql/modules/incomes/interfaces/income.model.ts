@@ -11,7 +11,7 @@ registerEnumType(WalletType, {
 
 @ObjectType()
 export class IncomeGQLModel {
-	@Field((type) => ID)
+	@Field(() => ID)
 	readonly id: string
 
 	@Field()
@@ -32,7 +32,7 @@ export class IncomeGQLModel {
 	@Field()
 	location: string
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	related_expense_ids: string[]
 
 	@Field()
@@ -41,13 +41,13 @@ export class IncomeGQLModel {
 	@Field()
 	category_id: string
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	tags: string[]
 
 	@Field({ nullable: true })
 	group_id: string | null
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	attachment_file_ids: string[]
 
 	@Field()

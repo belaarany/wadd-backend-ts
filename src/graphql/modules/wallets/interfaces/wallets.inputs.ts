@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql"
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Length, MaxLength } from "class-validator"
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator"
 import { Currency } from "src/interfaces/types/Currency"
 import { WalletType } from "src/interfaces/types/WalletType"
 import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"

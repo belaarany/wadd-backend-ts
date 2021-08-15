@@ -28,7 +28,7 @@ export class CreateIncomeGQLInput {
 	@IsNotEmpty()
 	location: string
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()
@@ -43,7 +43,7 @@ export class CreateIncomeGQLInput {
 	@IsNotEmpty()
 	category_id: string
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()
@@ -54,7 +54,7 @@ export class CreateIncomeGQLInput {
 	@IsOptional()
 	group_id: string | null
 
-	@Field((type) => [String])
+	@Field(() => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()

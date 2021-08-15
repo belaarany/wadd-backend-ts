@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query } from "@nestjs/common"
+import { Controller, Get, Query } from "@nestjs/common"
 import { ApiTags } from "@nestjs/swagger"
 import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
 import { LogMicroservice } from "src/microservices/log/log.service"

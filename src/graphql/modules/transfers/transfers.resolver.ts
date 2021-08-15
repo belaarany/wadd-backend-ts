@@ -1,8 +1,9 @@
-import { UseGuards } from "@nestjs/common"
+import { HttpException, HttpStatus, UseGuards } from "@nestjs/common"
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql"
 import DataLoader from "dataloader"
 import { Loader } from "nestjs-dataloader"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { WalletNotExistsException } from "src/exceptions/walletNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
@@ -13,13 +14,34 @@ import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { TransferGQLModel } from "./interfaces/transfer.model"
 import { CreateTransferGQLInput } from "./interfaces/transfers.inputs"
 
-@Resolver((of) => TransferGQLModel)
+@Resolver(() => TransferGQLModel)
 export class TransfersResolver {
 	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
-	@Mutation((returns) => TransferGQLModel)
-	async createTransfer(@Authorization() authUser: AuthUser, @Args("data") data: CreateTransferGQLInput): Promise<Income> {
+	@Mutation(() => TransferGQLModel)
+	async createTransfer(
+		@Authorization() authUser: AuthUser,
+		@Args("data") data: CreateTransferGQLInput,
+	): Promise<Income> {
+		if ((await this.expenseMicroservice.walletExists(data.source_wallet_id)) === false) {
+			throw new WalletNotExistsException(data.source_wallet_id)
+		}
+
+		if ((await this.expenseMicroservice.walletExists(data.target_wallet_id)) === false) {
+			throw new WalletNotExistsException(data.target_wallet_id)
+		}
+
+		if (data.source_wallet_id === data.target_wallet_id) {
+			throw new HttpException(
+				{
+					status: HttpStatus.BAD_REQUEST,
+					error: `'source_wallet_id' and 'target_wallet_id' cannot be the same.`,
+				},
+				HttpStatus.BAD_REQUEST,
+			)
+		}
+
 		const transfer = await this.expenseMicroservice.createTransfer(data)
 
 		this.logMicroservice.createLog({
@@ -37,14 +59,14 @@ export class TransfersResolver {
 	}
 
 	@UseGuards(AuthGuard)
-	@Query((returns) => [TransferGQLModel])
+	@Query(() => [TransferGQLModel])
 	async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Income[]> {
 		const incomes = await this.expenseMicroservice.listWalletTransfers(walletIds)
 
 		return incomes
 	}
 
-	@ResolveField((returns) => WalletGQLModel)
+	@ResolveField(() => WalletGQLModel)
 	async source_wallet(
 		@Parent() parent: TransferGQLModel,
 		@Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
@@ -54,7 +76,7 @@ export class TransfersResolver {
 		return wallet
 	}
 
-	@ResolveField((returns) => WalletGQLModel)
+	@ResolveField(() => WalletGQLModel)
 	async target_wallet(
 		@Parent() parent: TransferGQLModel,
 		@Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,

@@ -26,11 +26,13 @@ export class TransfersController {
 		}
 
 		if (body.source_wallet_id === body.target_wallet_id) {
-			throw new HttpException({
-				status: HttpStatus.BAD_REQUEST,
-				error: `'source_wallet_id' and 'target_wallet_id' cannot be the same.`,
-			},
-			HttpStatus.BAD_REQUEST)
+			throw new HttpException(
+				{
+					status: HttpStatus.BAD_REQUEST,
+					error: `'source_wallet_id' and 'target_wallet_id' cannot be the same.`,
+				},
+				HttpStatus.BAD_REQUEST,
+			)
 		}
 
 		const transfer = await this.expenseMicroservice.createTransfer(body)

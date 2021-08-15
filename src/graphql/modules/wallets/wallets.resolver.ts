@@ -8,12 +8,12 @@ import { LogMicroservice } from "src/microservices/log/log.service"
 import { WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput } from "./interfaces/wallets.inputs"
 
-@Resolver((of) => WalletGQLModel)
+@Resolver(() => WalletGQLModel)
 export class WalletsResolver {
 	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
-	@Mutation((returns) => WalletGQLModel)
+	@Mutation(() => WalletGQLModel)
 	async createWallet(@Authorization() authUser: AuthUser, @Args("data") data: CreateWalletGQLInput): Promise<Wallet> {
 		const wallet = await this.expenseMicroservice.createWallet({
 			name: data.name,
@@ -40,7 +40,7 @@ export class WalletsResolver {
 	}
 
 	@UseGuards(AuthGuard)
-	@Query((returns) => [WalletGQLModel])
+	@Query(() => [WalletGQLModel])
 	async wallets(@Authorization() authUser: AuthUser): Promise<Wallet[]> {
 		const wallets = await this.expenseMicroservice.listUserWallets(authUser.id)
 

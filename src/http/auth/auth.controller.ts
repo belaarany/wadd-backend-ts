@@ -1,7 +1,5 @@
 import { Body, Controller, Post } from "@nestjs/common"
-import { ApiCreatedResponse, ApiTags } from "@nestjs/swagger"
 import { AuthService } from "./auth.service"
-import { RegisterRequest, RegisterResponse } from "./interfaces/auth.dto"
 
 @Controller("auth")
 export class AuthController {

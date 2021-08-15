@@ -1,4 +1,4 @@
-import { Currency } from "./types/Currency";
+import { Currency } from "./types/Currency"
 
 export type Transfer = {
 	readonly id: string

@@ -10,6 +10,8 @@ export class WalletsLoader implements NestDataLoader<string, Wallet> {
 	constructor(private expenseMicroservice: ExpenseMicroservice, private identityMicroservice: IdentityMicroservice) {}
 
 	generateDataLoader(): DataLoader<string, Wallet> {
-		return new DataLoader<string, Wallet>((walletIds) => this.expenseMicroservice.listWallets(walletIds as string[]))
+		return new DataLoader<string, Wallet>((walletIds) =>
+			this.expenseMicroservice.listWallets(walletIds as string[]),
+		)
 	}
 }

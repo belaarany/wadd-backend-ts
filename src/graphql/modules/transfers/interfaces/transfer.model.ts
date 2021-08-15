@@ -11,7 +11,7 @@ registerEnumType(WalletType, {
 
 @ObjectType()
 export class TransferGQLModel {
-	@Field((type) => ID)
+	@Field(() => ID)
 	readonly id: string
 
 	@Field()

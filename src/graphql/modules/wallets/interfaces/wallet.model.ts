@@ -11,7 +11,7 @@ registerEnumType(WalletType, {
 
 @ObjectType()
 export class WalletGQLModel {
-	@Field((type) => ID)
+	@Field(() => ID)
 	readonly id: string
 
 	@Field()
@@ -29,10 +29,10 @@ export class WalletGQLModel {
 	@Field()
 	initial_balance: number
 
-	@Field((type) => Currency)
+	@Field(() => Currency)
 	default_currency: Currency
 
-	@Field((type) => WalletType)
+	@Field(() => WalletType)
 	type: WalletType
 
 	@Field({ nullable: true })
