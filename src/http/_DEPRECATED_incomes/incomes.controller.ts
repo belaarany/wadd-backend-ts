@@ -46,7 +46,7 @@ export class IncomesController {
 			throw new WalletNotExistsException(query.wallet_id)
 		}
 
-		const incomes = await this.expenseMicroservice.listWalletIncomes(query.wallet_id)
+		const incomes = await this.expenseMicroservice.listWalletIncomes([query.wallet_id])
 
 		return incomes
 	}

@@ -1,67 +1,63 @@
-import { ApiProperty } from "@nestjs/swagger"
+import { Field, InputType } from "@nestjs/graphql"
 import { ArrayUnique, IsArray, IsEnum, IsNotEmpty, IsOptional } from "class-validator"
 import { Currency } from "src/interfaces/types/Currency"
 import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"
 
-export class CreateIncomeHttpRequest {
-	@ApiProperty()
+@InputType()
+export class CreateIncomeGQLInput {
+	@Field()
 	@IsNotEmpty()
 	wallet_id: string
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
 	amount: number
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
 	@IsEnum(Currency)
 	currency: Currency
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
+	// TODO: check
+	// @IsDateString()
 	timestamp: Date
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
 	location: string
 
-	@ApiProperty()
+	@Field((type) => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()
 	@IsWaddObjectId({ each: true })
 	related_expense_ids: string[]
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
 	note: string
 
-	@ApiProperty()
+	@Field()
 	@IsNotEmpty()
 	category_id: string
 
-	@ApiProperty()
+	@Field((type) => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()
 	tags: string[]
 
-	@ApiProperty()
+	@Field({ nullable: true })
 	@IsNotEmpty()
 	@IsOptional()
 	group_id: string | null
 
-	@ApiProperty()
+	@Field((type) => [String])
 	@IsNotEmpty()
 	@IsArray()
 	@ArrayUnique()
 	@IsWaddObjectId({ each: true })
 	attachment_file_ids: string[]
-}
-
-export class ListWalletIncomesHttpRequest {
-	@ApiProperty()
-	@IsNotEmpty()
-	@IsWaddObjectId()
-	wallet_id: string
 }

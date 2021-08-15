@@ -1,0 +1,125 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type WalletGQLModel {
+  id: ID!
+  kind: String!
+  name: String!
+  order: Float!
+  owner_user_id: String!
+  initial_balance: Float!
+  default_currency: Currency!
+  type: WalletType!
+  icon_file_id: String
+  is_deleted: Boolean!
+  is_archived: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+  archived_at: String
+}
+
+enum Currency {
+  HUF
+  EUR
+  USD
+}
+
+enum WalletType {
+  CREDIT_CARD
+  CASH
+}
+
+type IncomeGQLModel {
+  id: ID!
+  kind: String!
+  wallet_id: String!
+  amount: Float!
+  currency: String!
+  timestamp: DateTime!
+  location: String!
+  related_expense_ids: [String!]!
+  note: String!
+  category_id: String!
+  tags: [String!]!
+  group_id: String
+  attachment_file_ids: [String!]!
+  is_deleted: Boolean!
+  is_cancelled: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+  cancelled_at: String
+  wallet: WalletGQLModel!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type TransferGQLModel {
+  id: ID!
+  kind: String!
+  source_wallet_id: String!
+  source_amount: Float!
+  source_currency: String!
+  target_wallet_id: String!
+  target_amount: Float!
+  target_currency: String!
+  timestamp: String!
+  note: String!
+  is_deleted: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+  source_wallet: WalletGQLModel!
+  target_wallet: WalletGQLModel!
+}
+
+type Query {
+  wallets: [WalletGQLModel!]!
+  incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
+  transfers(wallet_ids: [String!]!): [TransferGQLModel!]!
+}
+
+type Mutation {
+  createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
+  createIncome(data: CreateIncomeGQLInput!): IncomeGQLModel!
+  createTransfer(data: CreateTransferGQLInput!): TransferGQLModel!
+}
+
+input CreateWalletGQLInput {
+  name: String!
+  order: Float!
+  initial_balance: Float!
+  default_currency: String!
+  type: String!
+  icon_file_id: String
+}
+
+input CreateIncomeGQLInput {
+  wallet_id: String!
+  amount: Float!
+  currency: String!
+  timestamp: DateTime!
+  location: String!
+  related_expense_ids: [String!]!
+  note: String!
+  category_id: String!
+  tags: [String!]!
+  group_id: String
+  attachment_file_ids: [String!]!
+}
+
+input CreateTransferGQLInput {
+  source_wallet_id: String!
+  source_amount: Float!
+  source_currency: String!
+  target_wallet_id: String!
+  target_amount: Float!
+  target_currency: String!
+  timestamp: DateTime!
+  note: String!
+}

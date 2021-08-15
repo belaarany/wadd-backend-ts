@@ -1,11 +1,9 @@
 import { Module } from "@nestjs/common"
-import { WalletsModule } from "./routes/wallets/wallets.module"
-import { IdentityModule } from "./routes/identity/identity.module"
-import { BalancesModule } from "./routes/balances/balances.module"
-import { IncomesModule } from "./routes/incomes/incomes.module"
+import { GraphQLRootModule } from "./graphql/graphql.module"
+import { HttpRootModule } from "./http/http.module"
 
 @Module({
-	imports: [IdentityModule, WalletsModule, BalancesModule, IncomesModule],
+	imports: [HttpRootModule, GraphQLRootModule],
 	controllers: [],
 	providers: [],
 })

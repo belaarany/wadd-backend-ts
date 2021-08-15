@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common"
 import { IdentityMicroservice } from "src/microservices/identity/identity.service"
 
 @Injectable()
-export class IdentityService {
+export class AuthService {
 	constructor(private identityMicroservice: IdentityMicroservice) {}
 
 	async register(): Promise<any> {

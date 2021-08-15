@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { CreateIncomeDto, CreateWalletDto } from "./expense.dto"
+import { CreateIncomeDto, CreateTransferDto, CreateWalletDto } from "./expense.dto"
 
 @Injectable()
 export class ExpenseMicroservice {
@@ -22,6 +22,18 @@ export class ExpenseMicroservice {
 
 	async listUserWallets(userId: string): Promise<Wallet[]> {
 		const response = await this.client.send("wallets.list-user-wallets", { userId: userId }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
+	async listWallets(walletIds: string[]): Promise<Wallet[]> {
+		const response = await this.client.send("wallets.list-wallets", { walletIds: walletIds }).toPromise()
 
 		if (response.error) {
 			Logger.error("Microservice replied with an error:")
@@ -56,8 +68,44 @@ export class ExpenseMicroservice {
 		return response
 	}
 
-	async listWalletIncomes(walletId: string): Promise<Income[]> {
-		const response = await this.client.send("incomes.list-wallet-incomes", { walletId: walletId }).toPromise()
+	async listWalletIncomes(walletIds: string[]): Promise<Income[]> {
+		const response = await this.client.send("incomes.list-wallet-incomes", { walletIds: walletIds }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
+	async createTransfer(transferData: CreateTransferDto): Promise<Income> {
+		const response = await this.client.send("transfers.create-transfer", { transfer: transferData }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
+	async listWalletTransfers(walletIds: string[]): Promise<Income[]> {
+		const response = await this.client.send("transfers.list-wallet-transfers", { walletIds: walletIds }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
+	async getIncomesSummary(walletId: string): Promise<Income[]> {
+		const response = await this.client.send("incomes.get-summary", { walletId: walletId }).toPromise()
 
 		if (response.error) {
 			Logger.error("Microservice replied with an error:")
