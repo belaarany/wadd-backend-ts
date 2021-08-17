@@ -5,10 +5,15 @@ import { DataLoaderInterceptor } from "nestjs-dataloader"
 import { ExpenseMicroserviceModule } from "src/microservices/expense/expense.module"
 import { IdentityMicroserviceModule } from "src/microservices/identity/identity.module"
 import { LogMicroserviceModule } from "src/microservices/log/log.module"
+import { BalancesLoader } from "./loaders/balances.loader"
+import { CategoriesLoader } from "./loaders/categories.loader"
+import { ExpensesLoader } from "./loaders/expenses.loader"
 import { UsersLoader } from "./loaders/users.loader"
 import { WalletsLoader } from "./loaders/wallets.loader"
+import { CategoriesGQLModule } from "./modules/categories/categories.module"
+import { ExpensesGQLModule } from "./modules/expenses/expenses.module"
 import { IncomesGQLModule } from "./modules/incomes/incomes.module"
-import { TransfersGQLModule } from "./modules/transfers/transfer.module"
+import { TransfersGQLModule } from "./modules/transfers/transfers.module"
 import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 
 @Module({
@@ -18,7 +23,9 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 		LogMicroserviceModule,
 		WalletsGQLModule,
 		IncomesGQLModule,
+		ExpensesGQLModule,
 		TransfersGQLModule,
+		CategoriesGQLModule,
 		GraphQLModule.forRoot({
 			autoSchemaFile: "schema.gql",
 			playground: true,
@@ -28,6 +35,9 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 	providers: [
 		UsersLoader,
 		WalletsLoader,
+		CategoriesLoader,
+		BalancesLoader,
+		ExpensesLoader,
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: DataLoaderInterceptor,

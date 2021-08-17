@@ -25,6 +25,20 @@ export type CreateIncomeDto = {
 	attachment_file_ids: string[]
 }
 
+export type CreateExpenseDto = {
+	wallet_id: string
+	amount: number
+	currency: Currency
+	timestamp: Date
+	location: string
+	related_income_ids: string[]
+	note: string
+	category_id: string
+	tags: string[]
+	group_id: string | null
+	attachment_file_ids: string[]
+}
+
 export type CreateTransferDto = {
 	source_wallet_id: string
 	source_amount: number
@@ -34,4 +48,10 @@ export type CreateTransferDto = {
 	target_currency: Currency
 	timestamp: Date
 	note: string
+}
+
+export type CreateCategoryDto = {
+	owner_user_id: string
+	parent_category_id: string | null
+	name: string
 }

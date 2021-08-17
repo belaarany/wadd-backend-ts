@@ -1,11 +1,14 @@
 import { UseGuards } from "@nestjs/common"
-import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
+import { Args, Info, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql"
+import DataLoader from "dataloader"
+import { Loader } from "nestjs-dataloader"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { BalancesLoader } from "src/graphql/loaders/balances.loader"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Wallet } from "src/interfaces/wallet.interface"
 import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
 import { LogMicroservice } from "src/microservices/log/log.service"
-import { WalletGQLModel } from "./interfaces/wallet.model"
+import { BalanceGQLModel, WalletBalanceGQLModel, WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput } from "./interfaces/wallets.inputs"
 
 @Resolver(() => WalletGQLModel)
@@ -41,9 +44,29 @@ export class WalletsResolver {
 
 	@UseGuards(AuthGuard)
 	@Query(() => [WalletGQLModel])
-	async wallets(@Authorization() authUser: AuthUser): Promise<Wallet[]> {
+	async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<Wallet[]> {
 		const wallets = await this.expenseMicroservice.listUserWallets(authUser.id)
+
+		console.log(info.fieldNodes[0].selectionSet.selections.map(item => item.name.value))
 
 		return wallets
 	}
+
+	@UseGuards(AuthGuard)
+	@Query(() => BalanceGQLModel)
+	async balances(@Authorization() authUser: AuthUser): Promise<any> {
+		const balances = await this.expenseMicroservice.getBalances(["wal_XZrrpjiQk7VI3eL7", "wal_kCqOXOLFlGcyVkHIm2", "wal_kCqOXOLFlGcyVkHIm"])
+
+		return balances
+	}
+
+	// @ResolveField(() => WalletBalanceGQLModel)
+	// async balance(
+	// 	@Parent() parent: WalletGQLModel,
+	// 	@Loader(BalancesLoader) categoriesLoader: DataLoader<string, any>,
+	// ): Promise<any> {
+	// 	const balance = await categoriesLoader.load(parent.id)
+
+	// 	return balance
+	// }
 }

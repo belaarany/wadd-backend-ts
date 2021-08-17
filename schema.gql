@@ -2,6 +2,18 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CategoryGQLModel {
+  id: ID!
+  kind: String!
+  owner_user_id: String!
+  parent_category_id: String
+  name: String!
+  is_deleted: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+}
+
 type WalletGQLModel {
   id: ID!
   kind: String!
@@ -31,6 +43,44 @@ enum WalletType {
   CASH
 }
 
+type BalanceGQLModel {
+  wallets: JSON!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type ExpenseGQLModel {
+  id: ID!
+  kind: String!
+  wallet_id: String!
+  amount: Float!
+  currency: String!
+  timestamp: DateTime!
+  location: String!
+  related_income_ids: [String!]!
+  note: String!
+  category_id: String!
+  tags: [String!]!
+  group_id: String
+  attachment_file_ids: [String!]!
+  is_deleted: Boolean!
+  is_cancelled: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+  cancelled_at: String
+  wallet: WalletGQLModel!
+  category: CategoryGQLModel!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type IncomeGQLModel {
   id: ID!
   kind: String!
@@ -52,12 +102,9 @@ type IncomeGQLModel {
   deleted_at: String
   cancelled_at: String
   wallet: WalletGQLModel!
+  category: CategoryGQLModel!
+  related_expenses: [ExpenseGQLModel!]!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type TransferGQLModel {
   id: ID!
@@ -80,14 +127,19 @@ type TransferGQLModel {
 
 type Query {
   wallets: [WalletGQLModel!]!
+  balances: BalanceGQLModel!
   incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
+  expenses(wallet_ids: [String!]!): [ExpenseGQLModel!]!
   transfers(wallet_ids: [String!]!): [TransferGQLModel!]!
+  categories: [CategoryGQLModel!]!
 }
 
 type Mutation {
   createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
   createIncome(data: CreateIncomeGQLInput!): IncomeGQLModel!
+  createExpense(data: CreateExpenseGQLInput!): ExpenseGQLModel!
   createTransfer(data: CreateTransferGQLInput!): TransferGQLModel!
+  createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
 }
 
 input CreateWalletGQLInput {
@@ -113,6 +165,20 @@ input CreateIncomeGQLInput {
   attachment_file_ids: [String!]!
 }
 
+input CreateExpenseGQLInput {
+  wallet_id: String!
+  amount: Float!
+  currency: String!
+  timestamp: DateTime!
+  location: String!
+  related_income_ids: [String!]!
+  note: String!
+  category_id: String!
+  tags: [String!]!
+  group_id: String
+  attachment_file_ids: [String!]!
+}
+
 input CreateTransferGQLInput {
   source_wallet_id: String!
   source_amount: Float!
@@ -122,4 +188,9 @@ input CreateTransferGQLInput {
   target_currency: String!
   timestamp: DateTime!
   note: String!
+}
+
+input CreateCategoryGQLInput {
+  parent_category_id: String
+  name: String!
 }
