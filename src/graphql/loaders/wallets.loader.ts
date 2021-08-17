@@ -3,7 +3,7 @@ import * as DataLoader from "dataloader"
 import { NestDataLoader } from "nestjs-dataloader"
 import { Wallet } from "src/interfaces/wallet.interface"
 
-import { ExpenseMicroserviceWalletsService } from "../../microservices/expense/services/wallets.service";
+import { ExpenseMicroserviceWalletsService } from "../../microservices/expense/services/wallets.service"
 
 @Injectable()
 export class WalletsLoader implements NestDataLoader<string, Wallet> {

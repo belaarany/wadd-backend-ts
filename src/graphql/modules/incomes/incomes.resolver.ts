@@ -9,20 +9,21 @@ import { AuthGuard } from "src/guards/auth.guard"
 import { Expense } from "src/interfaces/expense.interface"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-
 import { LogMicroservice } from "src/microservices/log/log.service"
+import { ExpenseMicroserviceIncomesService } from "../../../microservices/expense/services/incomes.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
-import { ExpensesGQLModule } from "../expenses/expenses.module"
 import { ExpenseGQLModel } from "../expenses/interfaces/expense.model"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { IncomeGQLModel } from "./interfaces/income.model"
 import { CreateIncomeGQLInput } from "./interfaces/incomes.inputs"
-import { ExpenseMicroserviceIncomesService } from "../../../microservices/expense/services/incomes.service";
 
 @Resolver(() => IncomeGQLModel)
 export class IncomesResolver {
-	constructor(private expenseMicroserviceIncomesService: ExpenseMicroserviceIncomesService, private logMicroservice: LogMicroservice) {}
+	constructor(
+		private expenseMicroserviceIncomesService: ExpenseMicroserviceIncomesService,
+		private logMicroservice: LogMicroservice,
+	) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => IncomeGQLModel)
@@ -59,7 +60,7 @@ export class IncomesResolver {
 		const wallet = await walletsLoader.load(parent.wallet_id)
 
 		return wallet
-	}	
+	}
 
 	@ResolveField(() => CategoryGQLModel)
 	async category(

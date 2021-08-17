@@ -3,7 +3,7 @@ import * as DataLoader from "dataloader"
 import { NestDataLoader } from "nestjs-dataloader"
 import { Category } from "src/interfaces/category.interface"
 
-import { ExpenseMicroserviceCategoriesService } from "../../microservices/expense/services/categories.service";
+import { ExpenseMicroserviceCategoriesService } from "../../microservices/expense/services/categories.service"
 
 @Injectable()
 export class CategoriesLoader implements NestDataLoader<string, Category> {

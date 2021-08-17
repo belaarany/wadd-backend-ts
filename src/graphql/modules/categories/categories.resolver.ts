@@ -1,18 +1,19 @@
 import { UseGuards } from "@nestjs/common"
-import { Args, Mutation, Query, ResolveField, Resolver } from "@nestjs/graphql"
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Category } from "src/interfaces/category.interface"
-import { Income } from "src/interfaces/income.interface"
-
 import { LogMicroservice } from "src/microservices/log/log.service"
+import { ExpenseMicroserviceCategoriesService } from "../../../microservices/expense/services/categories.service"
 import { CreateCategoryGQLInput } from "./interfaces/categories.inputs"
 import { CategoryGQLModel } from "./interfaces/category.model"
-import { ExpenseMicroserviceCategoriesService } from "../../../microservices/expense/services/categories.service";
 
 @Resolver(() => CategoryGQLModel)
 export class CategoriesResolver {
-	constructor(private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService, private logMicroservice: LogMicroservice) {}
+	constructor(
+		private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService,
+		private logMicroservice: LogMicroservice,
+	) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => CategoryGQLModel)

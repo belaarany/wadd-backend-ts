@@ -13,15 +13,15 @@ import { WalletsLoader } from "../../loaders/wallets.loader"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { TransferGQLModel } from "./interfaces/transfer.model"
 import { CreateTransferGQLInput } from "./interfaces/transfers.inputs"
-import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service";
-import { ExpenseMicroserviceTransfersService } from "../../../microservices/expense/services/transfers.service";
+import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service"
+import { ExpenseMicroserviceTransfersService } from "../../../microservices/expense/services/transfers.service"
 
 @Resolver(() => TransferGQLModel)
 export class TransfersResolver {
 	constructor(
 		private expenseMicroserviceWalletsService: ExpenseMicroserviceWalletsService,
 		private logMicroservice: LogMicroservice,
-		private expanseMicroserviceTransfersService: ExpenseMicroserviceTransfersService
+		private expanseMicroserviceTransfersService: ExpenseMicroserviceTransfersService,
 	) {}
 
 	@UseGuards(AuthGuard)
