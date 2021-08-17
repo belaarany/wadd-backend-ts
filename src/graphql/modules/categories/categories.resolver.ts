@@ -4,14 +4,15 @@ import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Category } from "src/interfaces/category.interface"
 import { Income } from "src/interfaces/income.interface"
-import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
+
 import { LogMicroservice } from "src/microservices/log/log.service"
 import { CreateCategoryGQLInput } from "./interfaces/categories.inputs"
 import { CategoryGQLModel } from "./interfaces/category.model"
+import { ExpenseMicroserviceCategoriesService } from "../../../microservices/expense/services/categories.service";
 
 @Resolver(() => CategoryGQLModel)
 export class CategoriesResolver {
-	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
+	constructor(private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => CategoryGQLModel)
@@ -24,7 +25,7 @@ export class CategoriesResolver {
 		// 	throw new WalletNotExistsException(data.source_wallet_id)
 		// }
 
-		const cateogry = await this.expenseMicroservice.createCategory({
+		const cateogry = await this.expenseMicroserviceCategoriesService.createCategory({
 			owner_user_id: authUser.id,
 			parent_category_id: data.parent_category_id,
 			name: data.name,
@@ -47,7 +48,7 @@ export class CategoriesResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [CategoryGQLModel])
 	async categories(@Authorization() authUser: AuthUser): Promise<Category[]> {
-		const categories = await this.expenseMicroservice.listUserCategories(authUser.id)
+		const categories = await this.expenseMicroserviceCategoriesService.listUserCategories(authUser.id)
 
 		return categories
 	}

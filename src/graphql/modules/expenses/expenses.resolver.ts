@@ -8,22 +8,23 @@ import { AuthGuard } from "src/guards/auth.guard"
 import { Expense } from "src/interfaces/expense.interface"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
+
 import { LogMicroservice } from "src/microservices/log/log.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { ExpenseGQLModel } from "./interfaces/expense.model"
 import { CreateExpenseGQLInput } from "./interfaces/expenses.inputs"
+import { ExpenseMicroserviceExpensesService } from "../../../microservices/expense/services/expenses.service";
 
 @Resolver(() => ExpenseGQLModel)
 export class ExpensesResolver {
-	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
+	constructor(private expenseMicroserviceExpensesService: ExpenseMicroserviceExpensesService, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => ExpenseGQLModel)
 	async createExpense(@Authorization() authUser: AuthUser, @Args("data") data: CreateExpenseGQLInput): Promise<Expense> {
-		const expense = await this.expenseMicroservice.createExpense(data)
+		const expense = await this.expenseMicroserviceExpensesService.createExpense(data)
 
 		this.logMicroservice.createLog({
 			scope: "user",
@@ -42,7 +43,7 @@ export class ExpensesResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [ExpenseGQLModel])
 	async expenses(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Expense[]> {
-		const expenses = await this.expenseMicroservice.listWalletExpenses(walletIds)
+		const expenses = await this.expenseMicroserviceExpensesService.listWalletExpenses(walletIds)
 
 		return expenses
 	}

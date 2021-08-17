@@ -6,19 +6,19 @@ import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { BalancesLoader } from "src/graphql/loaders/balances.loader"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
 import { LogMicroservice } from "src/microservices/log/log.service"
 import { BalanceGQLModel, WalletBalanceGQLModel, WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput } from "./interfaces/wallets.inputs"
+import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service";
 
 @Resolver(() => WalletGQLModel)
 export class WalletsResolver {
-	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
+	constructor(private expenseMicroserviceWalletsService: ExpenseMicroserviceWalletsService, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => WalletGQLModel)
 	async createWallet(@Authorization() authUser: AuthUser, @Args("data") data: CreateWalletGQLInput): Promise<Wallet> {
-		const wallet = await this.expenseMicroservice.createWallet({
+		const wallet = await this.expenseMicroserviceWalletsService.createWallet({
 			name: data.name,
 			order: data.order,
 			owner_user_id: authUser.id,
@@ -45,20 +45,20 @@ export class WalletsResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [WalletGQLModel])
 	async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<Wallet[]> {
-		const wallets = await this.expenseMicroservice.listUserWallets(authUser.id)
+		const wallets = await this.expenseMicroserviceWalletsService.listUserWallets(authUser.id)
 
 		console.log(info.fieldNodes[0].selectionSet.selections.map(item => item.name.value))
 
 		return wallets
 	}
 
-	@UseGuards(AuthGuard)
-	@Query(() => BalanceGQLModel)
-	async balances(@Authorization() authUser: AuthUser): Promise<any> {
-		const balances = await this.expenseMicroservice.getBalances(["wal_XZrrpjiQk7VI3eL7", "wal_kCqOXOLFlGcyVkHIm2", "wal_kCqOXOLFlGcyVkHIm"])
-
-		return balances
-	}
+	// @UseGuards(AuthGuard)
+	// @Query(() => BalanceGQLModel)
+	// async balances(@Authorization() authUser: AuthUser): Promise<any> {
+	// 	const balances = await this.expenseMicroserviceWalletsService.getBalances(["wal_XZrrpjiQk7VI3eL7", "wal_kCqOXOLFlGcyVkHIm2", "wal_kCqOXOLFlGcyVkHIm"])
+	//
+	// 	return balances
+	// }
 
 	// @ResolveField(() => WalletBalanceGQLModel)
 	// async balance(

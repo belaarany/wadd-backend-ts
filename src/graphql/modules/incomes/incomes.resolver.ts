@@ -9,7 +9,7 @@ import { AuthGuard } from "src/guards/auth.guard"
 import { Expense } from "src/interfaces/expense.interface"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { ExpenseMicroservice } from "src/microservices/expense/expense.service"
+
 import { LogMicroservice } from "src/microservices/log/log.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
@@ -18,15 +18,16 @@ import { ExpenseGQLModel } from "../expenses/interfaces/expense.model"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { IncomeGQLModel } from "./interfaces/income.model"
 import { CreateIncomeGQLInput } from "./interfaces/incomes.inputs"
+import { ExpenseMicroserviceIncomesService } from "../../../microservices/expense/services/incomes.service";
 
 @Resolver(() => IncomeGQLModel)
 export class IncomesResolver {
-	constructor(private expenseMicroservice: ExpenseMicroservice, private logMicroservice: LogMicroservice) {}
+	constructor(private expenseMicroserviceIncomesService: ExpenseMicroserviceIncomesService, private logMicroservice: LogMicroservice) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => IncomeGQLModel)
 	async createIncome(@Authorization() authUser: AuthUser, @Args("data") data: CreateIncomeGQLInput): Promise<Income> {
-		const income = await this.expenseMicroservice.createIncome(data)
+		const income = await this.expenseMicroserviceIncomesService.createIncome(data)
 
 		this.logMicroservice.createLog({
 			scope: "user",
@@ -45,7 +46,7 @@ export class IncomesResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [IncomeGQLModel])
 	async incomes(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Income[]> {
-		const incomes = await this.expenseMicroservice.listWalletIncomes(walletIds)
+		const incomes = await this.expenseMicroserviceIncomesService.listWalletIncomes(walletIds)
 
 		return incomes
 	}
