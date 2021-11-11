@@ -3,12 +3,16 @@ import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/g
 import DataLoader from "dataloader"
 import { Loader } from "nestjs-dataloader"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { CategoryNotExistsException } from "src/exceptions/categoryNotExists.exception"
+import { ExpenseNotExistsException } from "src/exceptions/expenseNotExists.exception"
 import { CategoriesLoader } from "src/graphql/loaders/categories.loader"
 import { ExpensesLoader } from "src/graphql/loaders/expenses.loader"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Expense } from "src/interfaces/expense.interface"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
+import { ExpenseMicroserviceCategoriesService } from "src/microservices/expense/services/categories.service"
+import { ExpenseMicroserviceExpensesService } from "src/microservices/expense/services/expenses.service"
 import { LogMicroservice } from "src/microservices/log/log.service"
 import { ExpenseMicroserviceIncomesService } from "../../../microservices/expense/services/incomes.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
@@ -22,12 +26,24 @@ import { CreateIncomeGQLInput } from "./interfaces/incomes.inputs"
 export class IncomesResolver {
 	constructor(
 		private expenseMicroserviceIncomesService: ExpenseMicroserviceIncomesService,
+		private expenseMicroserviceExpensesService: ExpenseMicroserviceExpensesService,
+		private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService,
 		private logMicroservice: LogMicroservice,
 	) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => IncomeGQLModel)
 	async createIncome(@Authorization() authUser: AuthUser, @Args("data") data: CreateIncomeGQLInput): Promise<Income> {
+		if ((await this.expenseMicroserviceCategoriesService.categoryExists(data.category_id)) === false) {
+			throw new CategoryNotExistsException(data.category_id)
+		}
+
+		for (let related_expense_id of data.related_expense_ids) {
+			if (await this.expenseMicroserviceExpensesService.expenseExists(related_expense_id) === false) {
+				throw new ExpenseNotExistsException(related_expense_id)
+			}
+		}
+
 		const income = await this.expenseMicroserviceIncomesService.createIncome(data)
 
 		this.logMicroservice.createLog({

@@ -27,7 +27,7 @@ export class IncomeGQLModel {
 	currency: Currency
 
 	@Field()
-	timestamp: Date
+	timestamp: string
 
 	@Field()
 	location: string

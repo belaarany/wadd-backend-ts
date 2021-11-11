@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
 import { NestDataLoader } from "nestjs-dataloader"
 import { Category } from "src/interfaces/category.interface"
-
 import { ExpenseMicroserviceCategoriesService } from "../../microservices/expense/services/categories.service"
 
 @Injectable()

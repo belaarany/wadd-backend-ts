@@ -14,6 +14,31 @@ type CategoryGQLModel {
   deleted_at: String
 }
 
+type IncomeGQLModel {
+  id: ID!
+  kind: String!
+  wallet_id: String!
+  amount: Float!
+  currency: String!
+  timestamp: String!
+  location: String!
+  related_expense_ids: [String!]!
+  note: String!
+  category_id: String!
+  tags: [String!]!
+  group_id: String
+  attachment_file_ids: [String!]!
+  is_deleted: Boolean!
+  is_cancelled: Boolean!
+  created_at: String
+  updated_at: String
+  deleted_at: String
+  cancelled_at: String
+  wallet: WalletGQLModel!
+  category: CategoryGQLModel!
+  related_expenses: [ExpenseGQLModel!]!
+}
+
 type WalletGQLModel {
   id: ID!
   kind: String!
@@ -49,7 +74,7 @@ type ExpenseGQLModel {
   wallet_id: String!
   amount: Float!
   currency: String!
-  timestamp: DateTime!
+  timestamp: String!
   location: String!
   related_income_ids: [String!]!
   note: String!
@@ -65,36 +90,7 @@ type ExpenseGQLModel {
   cancelled_at: String
   wallet: WalletGQLModel!
   category: CategoryGQLModel!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type IncomeGQLModel {
-  id: ID!
-  kind: String!
-  wallet_id: String!
-  amount: Float!
-  currency: String!
-  timestamp: DateTime!
-  location: String!
-  related_expense_ids: [String!]!
-  note: String!
-  category_id: String!
-  tags: [String!]!
-  group_id: String
-  attachment_file_ids: [String!]!
-  is_deleted: Boolean!
-  is_cancelled: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
-  cancelled_at: String
-  wallet: WalletGQLModel!
-  category: CategoryGQLModel!
-  related_expenses: [ExpenseGQLModel!]!
+  related_incomes: [IncomeGQLModel!]!
 }
 
 type TransferGQLModel {
@@ -116,12 +112,20 @@ type TransferGQLModel {
   target_wallet: WalletGQLModel!
 }
 
+type TransactionGQLModel {
+  kind: String!
+  incomes: [IncomeGQLModel!]!
+  expenses: [ExpenseGQLModel!]!
+  transfers: [TransferGQLModel!]!
+}
+
 type Query {
   wallets: [WalletGQLModel!]!
   incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
   expenses(wallet_ids: [String!]!): [ExpenseGQLModel!]!
   transfers(wallet_ids: [String!]!): [TransferGQLModel!]!
   categories: [CategoryGQLModel!]!
+  transactions(wallet_ids: [String!]!): TransactionGQLModel!
 }
 
 type Mutation {
@@ -154,6 +158,11 @@ input CreateIncomeGQLInput {
   group_id: String
   attachment_file_ids: [String!]!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 input CreateExpenseGQLInput {
   wallet_id: String!

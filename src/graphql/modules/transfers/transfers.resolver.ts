@@ -15,6 +15,7 @@ import { TransferGQLModel } from "./interfaces/transfer.model"
 import { CreateTransferGQLInput } from "./interfaces/transfers.inputs"
 import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service"
 import { ExpenseMicroserviceTransfersService } from "../../../microservices/expense/services/transfers.service"
+import { Transfer } from "src/interfaces/transfer.interface"
 
 @Resolver(() => TransferGQLModel)
 export class TransfersResolver {
@@ -29,7 +30,7 @@ export class TransfersResolver {
 	async createTransfer(
 		@Authorization() authUser: AuthUser,
 		@Args("data") data: CreateTransferGQLInput,
-	): Promise<Income> {
+	): Promise<Transfer> {
 		if ((await this.expenseMicroserviceWalletsService.walletExists(data.source_wallet_id)) === false) {
 			throw new WalletNotExistsException(data.source_wallet_id)
 		}
@@ -66,7 +67,7 @@ export class TransfersResolver {
 
 	@UseGuards(AuthGuard)
 	@Query(() => [TransferGQLModel])
-	async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Income[]> {
+	async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Transfer[]> {
 		const incomes = await this.expanseMicroserviceTransfersService.listWalletTransfers(walletIds)
 
 		return incomes

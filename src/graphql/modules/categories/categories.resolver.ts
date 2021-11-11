@@ -1,6 +1,7 @@
 import { UseGuards } from "@nestjs/common"
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { CategoryNotExistsException } from "src/exceptions/categoryNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Category } from "src/interfaces/category.interface"
 import { LogMicroservice } from "src/microservices/log/log.service"
@@ -21,10 +22,9 @@ export class CategoriesResolver {
 		@Authorization() authUser: AuthUser,
 		@Args("data") data: CreateCategoryGQLInput,
 	): Promise<Category> {
-		// TODO: check
-		// if ((await this.expenseMicroservice.walletExists(data.parent_category_id)) === false) {
-		// 	throw new WalletNotExistsException(data.source_wallet_id)
-		// }
+		if (data.parent_category_id !== null && (await this.expenseMicroserviceCategoriesService.categoryExists(data.parent_category_id)) === false) {
+			throw new CategoryNotExistsException(data.parent_category_id)
+		}
 
 		const cateogry = await this.expenseMicroserviceCategoriesService.createCategory({
 			owner_user_id: authUser.id,

@@ -1,12 +1,13 @@
 import { Inject, Logger } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
 import { Income } from "src/interfaces/income.interface"
+import { Transfer } from "src/interfaces/transfer.interface"
 import { CreateTransferDto } from "../expense.dto"
 
 export class ExpenseMicroserviceTransfersService {
 	constructor(@Inject("EXPENSE_SERVICE") private client: ClientProxy) {}
 
-	async createTransfer(transferData: CreateTransferDto): Promise<Income> {
+	async createTransfer(transferData: CreateTransferDto): Promise<Transfer> {
 		const response = await this.client.send("transfers.create-transfer", { transfer: transferData }).toPromise()
 
 		if (response.error) {
@@ -18,8 +19,20 @@ export class ExpenseMicroserviceTransfersService {
 		return response
 	}
 
-	async listWalletTransfers(walletIds: string[]): Promise<Income[]> {
+	async listWalletTransfers(walletIds: string[]): Promise<Transfer[]> {
 		const response = await this.client.send("transfers.list-wallet-transfers", { walletIds: walletIds }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
+
+	async transferExists(transferId: string): Promise<boolean> {
+		const response = await this.client.send("transfers.transfer-exists", { transferId: transferId }).toPromise()
 
 		if (response.error) {
 			Logger.error("Microservice replied with an error:")

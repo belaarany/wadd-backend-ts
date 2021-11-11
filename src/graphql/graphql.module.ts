@@ -8,11 +8,13 @@ import { LogMicroserviceModule } from "src/microservices/log/log.module"
 import { BalancesLoader } from "./loaders/balances.loader"
 import { CategoriesLoader } from "./loaders/categories.loader"
 import { ExpensesLoader } from "./loaders/expenses.loader"
+import { IncomesLoader } from "./loaders/incomes.loader"
 import { UsersLoader } from "./loaders/users.loader"
 import { WalletsLoader } from "./loaders/wallets.loader"
 import { CategoriesGQLModule } from "./modules/categories/categories.module"
 import { ExpensesGQLModule } from "./modules/expenses/expenses.module"
 import { IncomesGQLModule } from "./modules/incomes/incomes.module"
+import { TransactionsGQLModule } from "./modules/transactions/transactions.module"
 import { TransfersGQLModule } from "./modules/transfers/transfers.module"
 import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 
@@ -26,6 +28,7 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 		ExpensesGQLModule,
 		TransfersGQLModule,
 		CategoriesGQLModule,
+		TransactionsGQLModule,
 		GraphQLModule.forRoot({
 			autoSchemaFile: "schema.gql",
 			playground: true,
@@ -38,6 +41,7 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 		CategoriesLoader,
 		BalancesLoader,
 		ExpensesLoader,
+		IncomesLoader,
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: DataLoaderInterceptor,

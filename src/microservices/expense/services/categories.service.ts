@@ -41,4 +41,16 @@ export class ExpenseMicroserviceCategoriesService {
 
 		return response
 	}
+
+	async categoryExists(categoryId: string): Promise<boolean> {
+		const response = await this.client.send("categories.category-exists", { categoryId: categoryId }).toPromise()
+
+		if (response.error) {
+			Logger.error("Microservice replied with an error:")
+			console.error(response)
+			throw new Error("Microservice replied with an error")
+		}
+
+		return response
+	}
 }

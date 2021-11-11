@@ -12,7 +12,7 @@ export class AuthGuard implements CanActivate {
 		const request = gqlCtx.getContext().req
 
 		request.authUser = {
-			id: request.headers?.authorization?.split(" ")?.[1] || "unknown",
+			id: request?.headers?.authorization?.split(" ")?.[1] || "unknown",
 		}
 
 		return Promise.resolve(true)
