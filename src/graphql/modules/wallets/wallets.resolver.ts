@@ -3,22 +3,19 @@ import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { LogMicroservice } from "src/microservices/log/log.service"
-import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service"
+import { WalletsService } from "src/services/wallets/wallets.service"
 import { WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput } from "./interfaces/wallets.inputs"
 
 @Resolver(() => WalletGQLModel)
 export class WalletsResolver {
-	constructor(
-		private expenseMicroserviceWalletsService: ExpenseMicroserviceWalletsService,
-		private logMicroservice: LogMicroservice,
-	) {}
+	constructor(private walletsService: WalletsService)
+	{}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => WalletGQLModel)
 	async createWallet(@Authorization() authUser: AuthUser, @Args("data") data: CreateWalletGQLInput): Promise<Wallet> {
-		const wallet = await this.expenseMicroserviceWalletsService.createWallet({
+		const wallet = await this.walletsService.create({
 			name: data.name,
 			order: data.order,
 			owner_user_id: authUser.id,
@@ -28,16 +25,16 @@ export class WalletsResolver {
 			icon_file_id: data.icon_file_id,
 		})
 
-		this.logMicroservice.createLog({
-			scope: "user",
-			action: "wallet.create",
-			user_id: wallet.owner_user_id,
-			target_id: wallet.id,
-			platform: null,
-			data: {
-				wallet: wallet,
-			},
-		})
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "wallet.create",
+		// 	user_id: wallet.owner_user_id,
+		// 	target_id: wallet.id,
+		// 	platform: null,
+		// 	data: {
+		// 		wallet: wallet,
+		// 	},
+		// })
 
 		return wallet
 	}
@@ -45,7 +42,7 @@ export class WalletsResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [WalletGQLModel])
 	async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<Wallet[]> {
-		const wallets = await this.expenseMicroserviceWalletsService.listUserWallets(authUser.id)
+		const wallets = await this.walletsService.listByUserId(authUser.id)
 
 		console.log(info.fieldNodes[0].selectionSet.selections.map((item) => item.name.value))
 

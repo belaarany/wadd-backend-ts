@@ -11,10 +11,10 @@ import { AuthGuard } from "src/guards/auth.guard"
 import { Expense } from "src/interfaces/expense.interface"
 import { Income } from "src/interfaces/income.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-import { ExpenseMicroserviceCategoriesService } from "src/microservices/expense/services/categories.service"
-import { ExpenseMicroserviceIncomesService } from "src/microservices/expense/services/incomes.service"
 import { LogMicroservice } from "src/microservices/log/log.service"
-import { ExpenseMicroserviceExpensesService } from "../../../microservices/expense/services/expenses.service"
+import { CategoriesService } from "src/services/categories/categories.service"
+import { ExpensesService } from "src/services/expenses/expenses.service"
+import { IncomesService } from "src/services/incomes/incomes.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
 import { IncomeGQLModel } from "../incomes/interfaces/income.model"
@@ -25,10 +25,9 @@ import { CreateExpenseGQLInput } from "./interfaces/expenses.inputs"
 @Resolver(() => ExpenseGQLModel)
 export class ExpensesResolver {
 	constructor(
-		private expenseMicroserviceExpensesService: ExpenseMicroserviceExpensesService,
-		private expenseMicroserviceIncomeService: ExpenseMicroserviceIncomesService,
-		private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService,
-		private logMicroservice: LogMicroservice,
+		private expensesService: ExpensesService,
+		private categoriesService: CategoriesService,
+		private incomesService: IncomesService,
 	) {}
 
 	@UseGuards(AuthGuard)
@@ -37,28 +36,28 @@ export class ExpensesResolver {
 		@Authorization() authUser: AuthUser,
 		@Args("data") data: CreateExpenseGQLInput,
 	): Promise<Expense> {
-		if ((await this.expenseMicroserviceCategoriesService.categoryExists(data.category_id)) === false) {
+		if ((await this.categoriesService.exists(data.category_id)) === false) {
 			throw new CategoryNotExistsException(data.category_id)
 		}
 
 		for (let related_income_id of data.related_income_ids) {
-			if (await this.expenseMicroserviceIncomeService.incomeExists(related_income_id) === false) {
+			if ((await this.incomesService.exists(related_income_id)) === false) {
 				throw new IncomeNotExistsException(related_income_id)
 			}
 		}
 
-		const expense = await this.expenseMicroserviceExpensesService.createExpense(data)
+		const expense = await this.expensesService.create(data)
 
-		this.logMicroservice.createLog({
-			scope: "user",
-			action: "expense.create",
-			user_id: authUser.id,
-			target_id: expense.id,
-			platform: null,
-			data: {
-				expense: expense,
-			},
-		})
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "expense.create",
+		// 	user_id: authUser.id,
+		// 	target_id: expense.id,
+		// 	platform: null,
+		// 	data: {
+		// 		expense: expense,
+		// 	},
+		// })
 
 		return expense
 	}
@@ -66,7 +65,7 @@ export class ExpensesResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [ExpenseGQLModel])
 	async expenses(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Expense[]> {
-		const expenses = await this.expenseMicroserviceExpensesService.listWalletExpenses(walletIds)
+		const expenses = await this.expensesService.listByWalletIds(walletIds)
 
 		return expenses
 	}

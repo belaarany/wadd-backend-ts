@@ -1,6 +1,6 @@
 import { Field, InputType } from "@nestjs/graphql"
 import { IsEnum, IsNotEmpty } from "class-validator"
-import { Currency } from "src/interfaces/types/Currency"
+import { Currency } from "src/interfaces/enums/Currency"
 import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"
 
 @InputType()

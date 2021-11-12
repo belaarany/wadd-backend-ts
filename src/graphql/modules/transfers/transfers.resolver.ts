@@ -5,24 +5,21 @@ import { Loader } from "nestjs-dataloader"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { WalletNotExistsException } from "src/exceptions/walletNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
-import { Income } from "src/interfaces/income.interface"
+import { Transfer } from "src/interfaces/transfer.interface"
 import { Wallet } from "src/interfaces/wallet.interface"
-
-import { LogMicroservice } from "src/microservices/log/log.service"
+import { TransfersService } from "src/services/transfers/transfers.service"
+import { WalletsService } from "src/services/wallets/wallets.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { TransferGQLModel } from "./interfaces/transfer.model"
 import { CreateTransferGQLInput } from "./interfaces/transfers.inputs"
-import { ExpenseMicroserviceWalletsService } from "../../../microservices/expense/services/wallets.service"
-import { ExpenseMicroserviceTransfersService } from "../../../microservices/expense/services/transfers.service"
-import { Transfer } from "src/interfaces/transfer.interface"
+
 
 @Resolver(() => TransferGQLModel)
 export class TransfersResolver {
 	constructor(
-		private expenseMicroserviceWalletsService: ExpenseMicroserviceWalletsService,
-		private logMicroservice: LogMicroservice,
-		private expanseMicroserviceTransfersService: ExpenseMicroserviceTransfersService,
+		private walletsService: WalletsService,
+		private transfersService: TransfersService,
 	) {}
 
 	@UseGuards(AuthGuard)
@@ -31,11 +28,11 @@ export class TransfersResolver {
 		@Authorization() authUser: AuthUser,
 		@Args("data") data: CreateTransferGQLInput,
 	): Promise<Transfer> {
-		if ((await this.expenseMicroserviceWalletsService.walletExists(data.source_wallet_id)) === false) {
+		if ((await this.walletsService.exists(data.source_wallet_id)) === false) {
 			throw new WalletNotExistsException(data.source_wallet_id)
 		}
 
-		if ((await this.expenseMicroserviceWalletsService.walletExists(data.target_wallet_id)) === false) {
+		if ((await this.walletsService.exists(data.target_wallet_id)) === false) {
 			throw new WalletNotExistsException(data.target_wallet_id)
 		}
 
@@ -49,18 +46,18 @@ export class TransfersResolver {
 			)
 		}
 
-		const transfer = await this.expanseMicroserviceTransfersService.createTransfer(data)
+		const transfer = await this.transfersService.create(data)
 
-		this.logMicroservice.createLog({
-			scope: "user",
-			action: "transfer.create",
-			user_id: authUser.id,
-			target_id: transfer.id,
-			platform: null,
-			data: {
-				transfer: transfer,
-			},
-		})
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "transfer.create",
+		// 	user_id: authUser.id,
+		// 	target_id: transfer.id,
+		// 	platform: null,
+		// 	data: {
+		// 		transfer: transfer,
+		// 	},
+		// })
 
 		return transfer
 	}
@@ -68,7 +65,7 @@ export class TransfersResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [TransferGQLModel])
 	async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Transfer[]> {
-		const incomes = await this.expanseMicroserviceTransfersService.listWalletTransfers(walletIds)
+		const incomes = await this.transfersService.listByWalletIds(walletIds)
 
 		return incomes
 	}

@@ -121,19 +121,19 @@ type TransactionGQLModel {
 
 type Query {
   wallets: [WalletGQLModel!]!
+  categories: [CategoryGQLModel!]!
   incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
   expenses(wallet_ids: [String!]!): [ExpenseGQLModel!]!
   transfers(wallet_ids: [String!]!): [TransferGQLModel!]!
-  categories: [CategoryGQLModel!]!
   transactions(wallet_ids: [String!]!): TransactionGQLModel!
 }
 
 type Mutation {
   createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
+  createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
   createIncome(data: CreateIncomeGQLInput!): IncomeGQLModel!
   createExpense(data: CreateExpenseGQLInput!): ExpenseGQLModel!
   createTransfer(data: CreateTransferGQLInput!): TransferGQLModel!
-  createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
 }
 
 input CreateWalletGQLInput {
@@ -143,6 +143,11 @@ input CreateWalletGQLInput {
   default_currency: String!
   type: String!
   icon_file_id: String
+}
+
+input CreateCategoryGQLInput {
+  parent_category_id: String
+  name: String!
 }
 
 input CreateIncomeGQLInput {
@@ -187,9 +192,4 @@ input CreateTransferGQLInput {
   target_currency: String!
   timestamp: DateTime!
   note: String!
-}
-
-input CreateCategoryGQLInput {
-  parent_category_id: String
-  name: String!
 }

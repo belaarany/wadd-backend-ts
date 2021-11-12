@@ -1,19 +1,19 @@
-image: node:latest
+# image: node:latest
 
-stages:
-  - pretest
-  # - test
+# stages:
+#   - pretest
+#   # - test
 
-pretest:
-  stage: pretest
-  script:
-    - npm install
-    - npm run prettier
-    - npm run lint
-
-# test:
-#   stage: test
+# pretest:
+#   stage: pretest
 #   script:
 #     - npm install
-#     - docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:latest
-#     - npm run test
+#     - npm run prettier
+#     - npm run lint
+
+# # test:
+# #   stage: test
+# #   script:
+# #     - npm install
+# #     - docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:latest
+# #     - npm run test

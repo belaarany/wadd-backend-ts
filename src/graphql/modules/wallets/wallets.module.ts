@@ -1,11 +1,10 @@
 import { Module } from "@nestjs/common"
-import { ExpenseMicroserviceModule } from "src/microservices/expense/expense.module"
-import { IdentityMicroserviceModule } from "src/microservices/identity/identity.module"
-import { LogMicroserviceModule } from "src/microservices/log/log.module"
+import { WalletsModule } from "src/services/wallets/wallets.module"
+import { WalletsService } from "src/services/wallets/wallets.service"
 import { WalletsResolver } from "./wallets.resolver"
 
 @Module({
-	imports: [ExpenseMicroserviceModule, IdentityMicroserviceModule, LogMicroserviceModule],
+	imports: [WalletsModule],
 	providers: [WalletsResolver],
 })
 export class WalletsGQLModule {}

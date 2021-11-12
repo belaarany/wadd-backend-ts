@@ -4,7 +4,7 @@ import { IdentityMicroservice } from "src/microservices/identity/identity.servic
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor(private identityMicroservice: IdentityMicroservice) {}
+	constructor() {}
 
 	canActivate(context: ExecutionContext): Promise<boolean> {
 		// const request = context.switchToHttp().getRequest()
@@ -21,9 +21,10 @@ export class AuthGuard implements CanActivate {
 	}
 
 	async validateRequest(): Promise<boolean> {
-		const isAccessTokenValied = await this.identityMicroservice.verifyAccessToken("test")
+		return Promise.resolve(true)
+		// const isAccessTokenValied = await this.identityMicroservice.verifyAccessToken("test")
 		// console.log({isAccessTokenValied})
 
-		return Promise.resolve(isAccessTokenValied)
+		// return Promise.resolve(isAccessTokenValied)
 	}
 }

@@ -1,5 +1,5 @@
-import { Currency } from "./types/Currency"
-import { WalletType } from "./types/WalletType"
+import { Currency } from "./enums/Currency"
+import { WalletType } from "./enums/WalletType"
 
 export type Wallet = {
 	readonly id: string

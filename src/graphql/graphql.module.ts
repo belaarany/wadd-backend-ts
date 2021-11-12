@@ -2,9 +2,11 @@ import { Module } from "@nestjs/common"
 import { APP_INTERCEPTOR } from "@nestjs/core"
 import { GraphQLModule } from "@nestjs/graphql"
 import { DataLoaderInterceptor } from "nestjs-dataloader"
-import { ExpenseMicroserviceModule } from "src/microservices/expense/expense.module"
-import { IdentityMicroserviceModule } from "src/microservices/identity/identity.module"
-import { LogMicroserviceModule } from "src/microservices/log/log.module"
+import { CategoriesModule } from "src/services/categories/categories.module"
+import { ExpensesModule } from "src/services/expenses/expenses.module"
+import { IncomesModule } from "src/services/incomes/incomes.module"
+import { TransfersModule } from "src/services/transfers/transfers.module"
+import { WalletsModule } from "src/services/wallets/wallets.module"
 import { BalancesLoader } from "./loaders/balances.loader"
 import { CategoriesLoader } from "./loaders/categories.loader"
 import { ExpensesLoader } from "./loaders/expenses.loader"
@@ -20,14 +22,16 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 
 @Module({
 	imports: [
-		ExpenseMicroserviceModule,
-		IdentityMicroserviceModule,
-		LogMicroserviceModule,
+		WalletsModule,
+		CategoriesModule,
+		IncomesModule,
+		ExpensesModule,
+		TransfersModule,
 		WalletsGQLModule,
+		CategoriesGQLModule,
 		IncomesGQLModule,
 		ExpensesGQLModule,
 		TransfersGQLModule,
-		CategoriesGQLModule,
 		TransactionsGQLModule,
 		GraphQLModule.forRoot({
 			autoSchemaFile: "schema.gql",
@@ -36,17 +40,17 @@ import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 	],
 	controllers: [],
 	providers: [
-		UsersLoader,
+		// UsersLoader,
 		WalletsLoader,
 		CategoriesLoader,
-		BalancesLoader,
-		ExpensesLoader,
 		IncomesLoader,
+		ExpensesLoader,
+		// BalancesLoader,
 		{
 			provide: APP_INTERCEPTOR,
 			useClass: DataLoaderInterceptor,
 		},
 	],
-	exports: [UsersLoader, WalletsLoader],
+	exports: [],
 })
 export class GraphQLRootModule {}

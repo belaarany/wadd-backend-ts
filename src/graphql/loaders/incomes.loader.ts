@@ -2,15 +2,13 @@ import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
 import { NestDataLoader } from "nestjs-dataloader"
 import { Income } from "src/interfaces/income.interface"
-import { ExpenseMicroserviceIncomesService } from "src/microservices/expense/services/incomes.service"
+import { IncomesService } from "src/services/incomes/incomes.service"
 
 @Injectable()
 export class IncomesLoader implements NestDataLoader<string, Income> {
-	constructor(private expenseMicroserviceIncomesService: ExpenseMicroserviceIncomesService) {}
+	constructor(private incomesService: IncomesService) {}
 
 	generateDataLoader(): DataLoader<string, Income> {
-		return new DataLoader<string, Income>((incomeIds) =>
-			this.expenseMicroserviceIncomesService.listIncomes(incomeIds as string[]),
-		)
+		return new DataLoader<string, Income>((incomeIds) => this.incomesService.listByIds(incomeIds as string[]))
 	}
 }

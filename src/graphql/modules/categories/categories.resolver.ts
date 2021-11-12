@@ -4,16 +4,14 @@ import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { CategoryNotExistsException } from "src/exceptions/categoryNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Category } from "src/interfaces/category.interface"
-import { LogMicroservice } from "src/microservices/log/log.service"
-import { ExpenseMicroserviceCategoriesService } from "../../../microservices/expense/services/categories.service"
+import { CategoriesService } from "src/services/categories/categories.service"
 import { CreateCategoryGQLInput } from "./interfaces/categories.inputs"
 import { CategoryGQLModel } from "./interfaces/category.model"
 
 @Resolver(() => CategoryGQLModel)
 export class CategoriesResolver {
 	constructor(
-		private expenseMicroserviceCategoriesService: ExpenseMicroserviceCategoriesService,
-		private logMicroservice: LogMicroservice,
+		private categoriesService: CategoriesService,
 	) {}
 
 	@UseGuards(AuthGuard)
@@ -22,26 +20,26 @@ export class CategoriesResolver {
 		@Authorization() authUser: AuthUser,
 		@Args("data") data: CreateCategoryGQLInput,
 	): Promise<Category> {
-		if (data.parent_category_id !== null && (await this.expenseMicroserviceCategoriesService.categoryExists(data.parent_category_id)) === false) {
+		if (data.parent_category_id !== null && (await this.categoriesService.exists(data.parent_category_id)) === false) {
 			throw new CategoryNotExistsException(data.parent_category_id)
 		}
 
-		const cateogry = await this.expenseMicroserviceCategoriesService.createCategory({
+		const cateogry = await this.categoriesService.create({
 			owner_user_id: authUser.id,
 			parent_category_id: data.parent_category_id,
 			name: data.name,
 		})
 
-		this.logMicroservice.createLog({
-			scope: "user",
-			action: "category.create",
-			user_id: authUser.id,
-			target_id: cateogry.id,
-			platform: null,
-			data: {
-				category: cateogry,
-			},
-		})
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "category.create",
+		// 	user_id: authUser.id,
+		// 	target_id: cateogry.id,
+		// 	platform: null,
+		// 	data: {
+		// 		category: cateogry,c
+		// 	},
+		// })
 
 		return cateogry
 	}
@@ -49,7 +47,7 @@ export class CategoriesResolver {
 	@UseGuards(AuthGuard)
 	@Query(() => [CategoryGQLModel])
 	async categories(@Authorization() authUser: AuthUser): Promise<Category[]> {
-		const categories = await this.expenseMicroserviceCategoriesService.listUserCategories(authUser.id)
+		const categories = await this.categoriesService.listByUserId(authUser.id)
 
 		return categories
 	}
