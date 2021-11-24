@@ -1,5 +1,6 @@
 import { Wallet } from "../interfaces/wallet.model"
 import { WalletEntity } from "./wallet.entity"
+import * as _ from "lodash"
 
 export class WalletMapper {
 	static fromEntity(document: WalletEntity): Wallet {
@@ -12,7 +13,8 @@ export class WalletMapper {
 			initial_balance: document.initial_balance,
 			default_currency: document.default_currency,
 			type: document.type,
-			icon_file_id: document.icon_file_id,
+			color_hex: document.color_hex || "",
+			icon_url: document.icon_url || "",
 			is_deleted: document.is_deleted,
 			is_archived: document.is_archived,
 			created_at: document.created_at,

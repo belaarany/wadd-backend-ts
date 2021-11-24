@@ -9,7 +9,8 @@ export type Wallet = {
 	initial_balance: number
 	default_currency: Currency
 	type: WalletType
-	icon_file_id: string | null
+	color_hex: string
+	icon_url: string
 	is_deleted: boolean
 	is_archived: boolean
 	created_at: Date

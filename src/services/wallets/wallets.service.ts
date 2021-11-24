@@ -61,6 +61,7 @@ export class WalletsService implements IWalletsService {
 			const deletedWallet = await this.walletsRepo.update(walletId, { is_deleted: true, deleted_at: new Date() })
 			return deletedWallet
 		} catch (e) {
+			console.log(e)
 			throw e
 		}
 	}

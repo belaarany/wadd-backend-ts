@@ -77,7 +77,7 @@ describe("WalletsService", () => {
 			const testWalletCreated: Wallet = await service.create(mockWalletPartial)
 
 			expect(testWalletCreated).toBeTruthy()
-			expect(Object.keys(testWalletCreated).length).toEqual(15)
+			expect(Object.keys(testWalletCreated).length).toEqual(16)
 
 			expect(testWalletCreated.created_at).toBeTruthy()
 			expect(testWalletCreated.updated_at).toEqual(null)
@@ -105,7 +105,7 @@ describe("WalletsService", () => {
 			})
 
 			expect(testWalletCreated).toBeTruthy()
-			expect(Object.keys(testWalletCreated).length).toEqual(15)
+			expect(Object.keys(testWalletCreated).length).toEqual(16)
 
 			expect(testWalletCreated.default_currency).toEqual("HUF")
 			expect(testWalletCreated.default_currency).toEqual(Currency.HUF)
@@ -120,7 +120,7 @@ describe("WalletsService", () => {
 			})
 
 			expect(testWalletCreated).toBeTruthy()
-			expect(Object.keys(testWalletCreated).length).toEqual(15)
+			expect(Object.keys(testWalletCreated).length).toEqual(16)
 
 			expect(testWalletCreated.initial_balance).toEqual(20.367)
 		})
@@ -152,11 +152,12 @@ describe("WalletsService", () => {
 				initial_balance: 666,
 				default_currency: Currency.HUF,
 				type: WalletType.CASH,
-				icon_file_id: "8f18f70a-1fe0-47ce-b021-3977275c7407",
+				color_hex: "7F00FF",
+				icon_url: "https://logo.clearbit.com/spendesk.com",
 			})
 
 			expect(updatedWallet).toBeTruthy()
-			expect(Object.keys(updatedWallet).length).toEqual(15)
+			expect(Object.keys(updatedWallet).length).toEqual(16)
 
 			expect(updatedWallet.name).not.toEqual(mockWalletPartial.name)
 			expect(updatedWallet.order).not.toEqual(mockWalletPartial.order)
@@ -182,7 +183,8 @@ describe("WalletsService", () => {
 					initial_balance: 555,
 					default_currency: Currency.HUF,
 					type: WalletType.CASH,
-					icon_file_id: "8f18f70a-1fe0-47ce-b021-3977275c7407",
+					color_hex: "7F00FF",
+					icon_url: "https://logo.clearbit.com/spendesk.com",
 				})
 			}).rejects.toThrow(EntityNotFoundException)
 		})
@@ -196,11 +198,12 @@ describe("WalletsService", () => {
 				initial_balance: 666,
 				default_currency: "HUF" as any,
 				type: "CASH" as any,
-				icon_file_id: "8f18f70a-1fe0-47ce-b021-3977275c7407",
+				color_hex: "7F00FF",
+				icon_url: "https://logo.clearbit.com/spendesk.com",
 			})
 
 			expect(updatedWallet).toBeTruthy()
-			expect(Object.keys(updatedWallet).length).toEqual(15)
+			expect(Object.keys(updatedWallet).length).toEqual(16)
 
 			expect(updatedWallet.default_currency).toEqual("HUF")
 			expect(updatedWallet.default_currency).toEqual(Currency.HUF)
@@ -216,7 +219,7 @@ describe("WalletsService", () => {
 			const foundWallet = await service.get(testWalletCreated.id)
 
 			expect(foundWallet).toBeTruthy()
-			expect(Object.keys(foundWallet).length).toEqual(15)
+			expect(Object.keys(foundWallet).length).toEqual(16)
 
 			for (const value of Object.values(foundWallet)) {
 				expect(value).not.toEqual(undefined)
@@ -237,7 +240,7 @@ describe("WalletsService", () => {
 			const foundWallet = await service.get(testWalletCreated.id)
 
 			expect(foundWallet).toBeTruthy()
-			expect(Object.keys(foundWallet).length).toEqual(15)
+			expect(Object.keys(foundWallet).length).toEqual(16)
 
 			expect(foundWallet.default_currency).toEqual("HUF")
 			expect(foundWallet.default_currency).toEqual(Currency.HUF)
@@ -259,7 +262,7 @@ describe("WalletsService", () => {
 
 			for (const wallet of wallets) {
 				expect(wallet).toBeTruthy()
-				expect(Object.keys(wallet).length).toEqual(15)
+				expect(Object.keys(wallet).length).toEqual(16)
 
 				for (const value of Object.values(wallet)) {
 					expect(value).not.toEqual(undefined)
@@ -281,7 +284,7 @@ describe("WalletsService", () => {
 
 			for (const wallet of wallets) {
 				expect(wallet).toBeTruthy()
-				expect(Object.keys(wallet).length).toEqual(15)
+				expect(Object.keys(wallet).length).toEqual(16)
 
 				for (const value of Object.values(wallet)) {
 					expect(value).not.toEqual(undefined)

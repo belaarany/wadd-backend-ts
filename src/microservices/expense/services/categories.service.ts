@@ -1,6 +1,6 @@
 import { Inject, Logger } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
-import { Category } from "src/interfaces/category.interface"
+import { Category } from "src/services/categories/interfaces/category.model"
 import { CreateCategoryDto } from "../expense.dto"
 
 export class ExpenseMicroserviceCategoriesService {

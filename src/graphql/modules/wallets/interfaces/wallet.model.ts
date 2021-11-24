@@ -36,8 +36,11 @@ export class WalletGQLModel {
 	@Field(() => WalletType)
 	type: WalletType
 
-	@Field({ nullable: true })
-	icon_file_id: string | null
+	@Field()
+	color_hex: string
+
+	@Field()
+	icon_url: string
 
 	@Field()
 	is_deleted: boolean

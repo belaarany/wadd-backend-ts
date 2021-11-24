@@ -351,82 +351,86 @@ describe("IncomesService", () => {
 		})
 	})
 
-	describe("getSummary", () => {
-		// it("Manual amounts, same currency", async () => {
-		// 	const walletId = generateId(IdPrefix.WALLET)
-		// 	const expectTotal = 8_291_283.55182357789
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 77384 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 59658.843 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 8121816.2436 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 32423.23 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 1 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 0.23522357789 }))
-		// 	let total = await service.getSummary([walletId])
-		// 	expect(total).toBeTruthy()
-		// 	expect(Object.keys(total).length).toEqual(1)
-		// 	expect(total).toHaveProperty("incomes")
-		// 	expect(total["income"]).toHaveProperty("wallets")
-		// 	expect(total["income"]["wallets"]).toHaveProperty(Currency.HUF)
-		// 	expect(total["income"]["wallets"][Currency.HUF]).toEqual(expectTotal)
-		// })
-		// it("Manual amounts, different currencies", async () => {
-		// 	const walletId = generateId(IdPrefix.WALLET)
-		// 	const expectTotalHUF = 8_291_283.5518235
-		// 	const expectTotalUSD = 9_296_857.343265743255
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest())
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 77384 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 59658.843 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 8121816.2436 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 32423.23 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 1 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 0.2352235 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 1 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 0.343265743255 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 813518 }))
-		// 	await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 8483338 }))
-		// 	let total = await service.getSummary([walletId])
-		// 	expect(total).toBeTruthy()
-		// 	expect(Object.keys(total).length).toEqual(1)
-		// 	expect(total).toHaveProperty("incomes")
-		// 	expect(Object.keys(total["incomes"]).length).toEqual(2)
-		// 	expect(total["incomes"]).toHaveProperty(Currency.HUF)
-		// 	expect(total["incomes"]).toHaveProperty(Currency.USD)
-		// 	expect(total["incomes"][Currency.HUF]).toEqual(expectTotalHUF)
-		// 	expect(total["incomes"][Currency.USD]).toEqual(expectTotalUSD)
-		// })
-		// it("Random amounts, random currencies", async () => {
-		// 	const walletId = generateId(IdPrefix.WALLET)
-		// 	let expectedTotal = 0
-		// 	for (let index of (new Array(100).fill(null))) {
-		// 		let params: Partial<CreateIncomeDto> = {
-		// 			note: index,
-		// 		}
-		// 		if (Faker.datatype.boolean()) {
-		// 			params.wallet_id = walletId
-		// 			if (Faker.datatype.boolean()) {
-		// 				params.amount = Faker.datatype.float(0.0001)
-		// 				params.currency = Currency.HUF
-		// 				expectedTotal = (((expectedTotal * 1000000) + (params.amount * 1000000)) / 1000000)
-		// 			}
-		// 			else {
-		// 				params.currency = Faker.datatype.boolean() ? Currency.USD : Currency.EUR
-		// 			}
-		// 		}
-		// 		await service.create(IncomeMock.makeCreateRequest(params))
-		// 	}
-		// 	let total = await service.getSummary([walletId])
-		// 	expect(total).toBeTruthy()
-		// 	expect(total).toEqual(expect.any(Object))
-		// 	expect(Object.keys(total).length).toEqual(1)
-		// 	expect(total).toHaveProperty("incomes")
-		// 	expect(total["incomes"]).toHaveProperty(Currency.HUF)
-		// 	expect(total["incomes"][Currency.HUF]).toEqual(expectedTotal)
-		// })
-		// it.todo("Should not return deleted items")
-	})
+	// describe("getSummary", () => {
+	// 	it("Manual amounts, same currency", async () => {
+	// 		const walletId = generateId(IdPrefix.WALLET)
+
+	// 		const expectTotal = 8_291_283.55182357789
+
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 77384 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 59658.843 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 8121816.2436 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 32423.23 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 1 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 0.23522357789 }))
+
+	// 		let summary = await service.getSummary([walletId])
+
+	// 		// expect(total).toBeTruthy()
+	// 		// expect(Object.keys(total).length).toEqual(1)
+	// 		// expect(total).toHaveProperty("incomes")
+	// 		// expect(total["income"]).toHaveProperty("wallets")
+	// 		// expect(total["income"]["wallets"]).toHaveProperty(Currency.HUF)
+	// 		// expect(total["income"]["wallets"][Currency.HUF]).toEqual(expectTotal)
+	// 	})
+	// 	it("Manual amounts, different currencies", async () => {
+	// 		const walletId = generateId(IdPrefix.WALLET)
+	// 		const expectTotalHUF = 8_291_283.5518235
+	// 		const expectTotalUSD = 9_296_857.343265743255
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest())
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 77384 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 59658.843 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 8121816.2436 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 32423.23 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 1 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.HUF, amount: 0.2352235 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 1 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 0.343265743255 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 813518 }))
+	// 		await service.create(IncomeMock.makeCreateRequest({ wallet_id: walletId, currency: Currency.USD, amount: 8483338 }))
+	// 		let total = await service.getSummary([walletId])
+	// 		expect(total).toBeTruthy()
+	// 		expect(Object.keys(total).length).toEqual(1)
+	// 		expect(total).toHaveProperty("incomes")
+	// 		expect(Object.keys(total["incomes"]).length).toEqual(2)
+	// 		expect(total["incomes"]).toHaveProperty(Currency.HUF)
+	// 		expect(total["incomes"]).toHaveProperty(Currency.USD)
+	// 		expect(total["incomes"][Currency.HUF]).toEqual(expectTotalHUF)
+	// 		expect(total["incomes"][Currency.USD]).toEqual(expectTotalUSD)
+	// 	})
+	// 	it("Random amounts, random currencies", async () => {
+	// 		const walletId = generateId(IdPrefix.WALLET)
+	// 		let expectedTotal = 0
+	// 		for (let index of (new Array(100).fill(null))) {
+	// 			let params: Partial<CreateIncomeDto> = {
+	// 				note: index,
+	// 			}
+	// 			if (Faker.datatype.boolean()) {
+	// 				params.wallet_id = walletId
+	// 				if (Faker.datatype.boolean()) {
+	// 					params.amount = Faker.datatype.float(0.0001)
+	// 					params.currency = Currency.HUF
+	// 					expectedTotal = (((expectedTotal * 1000000) + (params.amount * 1000000)) / 1000000)
+	// 				}
+	// 				else {
+	// 					params.currency = Faker.datatype.boolean() ? Currency.USD : Currency.EUR
+	// 				}
+	// 			}
+	// 			await service.create(IncomeMock.makeCreateRequest(params))
+	// 		}
+	// 		let total = await service.getSummary([walletId])
+	// 		expect(total).toBeTruthy()
+	// 		expect(total).toEqual(expect.any(Object))
+	// 		expect(Object.keys(total).length).toEqual(1)
+	// 		expect(total).toHaveProperty("incomes")
+	// 		expect(total["incomes"]).toHaveProperty(Currency.HUF)
+	// 		expect(total["incomes"][Currency.HUF]).toEqual(expectedTotal)
+	// 	})
+	// 	it.todo("Should not return deleted items")
+	// })
 })

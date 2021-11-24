@@ -2,15 +2,14 @@ import { UseGuards } from "@nestjs/common"
 import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { AuthGuard } from "src/guards/auth.guard"
-import { Wallet } from "src/interfaces/wallet.interface"
+import { Wallet } from "src/services/wallets/interfaces/wallet.model"
 import { WalletsService } from "src/services/wallets/wallets.service"
 import { WalletGQLModel } from "./interfaces/wallet.model"
-import { CreateWalletGQLInput } from "./interfaces/wallets.inputs"
+import { CreateWalletGQLInput, UpdateWalletGQLInput } from "./interfaces/wallets.inputs"
 
 @Resolver(() => WalletGQLModel)
 export class WalletsResolver {
-	constructor(private walletsService: WalletsService)
-	{}
+	constructor(private walletsService: WalletsService) {}
 
 	@UseGuards(AuthGuard)
 	@Mutation(() => WalletGQLModel)
@@ -22,8 +21,55 @@ export class WalletsResolver {
 			default_currency: data.default_currency,
 			initial_balance: data.initial_balance,
 			type: data.type,
-			icon_file_id: data.icon_file_id,
+			color_hex: data.color_hex,
+			icon_url: data.icon_url,
 		})
+
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "wallet.create",
+		// 	user_id: wallet.owner_user_id,
+		// 	target_id: wallet.id,
+		// 	platform: null,
+		// 	data: {
+		// 		wallet: wallet,
+		// 	},
+		// })
+
+		return wallet
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation(() => WalletGQLModel)
+	async updateWallet(@Authorization() authUser: AuthUser, @Args("data") data: UpdateWalletGQLInput): Promise<Wallet> {
+		const wallet = await this.walletsService.update(data.id, {
+			name: data.name,
+			order: data.order,
+			default_currency: data.default_currency,
+			initial_balance: data.initial_balance,
+			type: data.type,
+			color_hex: data.color_hex,
+			icon_url: data.icon_url,
+		})
+
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "wallet.create",
+		// 	user_id: wallet.owner_user_id,
+		// 	target_id: wallet.id,
+		// 	platform: null,
+		// 	data: {
+		// 		wallet: wallet,
+		// 	},
+		// })
+
+		return wallet
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation(() => WalletGQLModel)
+	async deleteWallet(@Authorization() authUser: AuthUser, @Args("walletId") walletId: string): Promise<Wallet> {
+		let wallet = await this.walletsService.delete(walletId)
 
 		// this.logMicroservice.createLog({
 		// 	scope: "user",

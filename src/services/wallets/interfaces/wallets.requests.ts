@@ -3,10 +3,13 @@ import {
 	ArrayUnique,
 	IsArray,
 	IsEnum,
+	IsHexColor,
 	IsNotEmpty,
 	IsNumber,
 	IsOptional,
 	IsString,
+	IsUrl,
+	isURL,
 	ValidateNested,
 } from "class-validator"
 import { Currency } from "src/interfaces/enums/Currency"
@@ -39,9 +42,12 @@ class CreateWalletRpcRequest_Wallet {
 	type: WalletType
 
 	@IsNotEmpty()
-	@IsOptional()
-	@IsString()
-	icon_file_id: string | null
+	@IsHexColor()
+	color_hex: string
+
+	@IsNotEmpty()
+	@IsUrl()
+	icon_url: string
 }
 
 export class CreateWalletRpcRequest {
@@ -72,9 +78,12 @@ class UpdateWalletRpcRequest_Wallet {
 	type: WalletType
 
 	@IsNotEmpty()
-	@IsOptional()
-	@IsWaddObjectId()
-	icon_file_id: string | null
+	@IsHexColor()
+	color_hex: string
+
+	@IsNotEmpty()
+	@IsUrl()
+	icon_url: string
 }
 
 export class UpdateWalletRpcRequest {

@@ -29,7 +29,10 @@ export class WalletEntity {
 	type: WalletType
 
 	@Column()
-	icon_file_id: string | null
+	color_hex: string
+
+	@Column()
+	icon_url: string
 
 	@Column({ type: "boolean" })
 	is_deleted = false

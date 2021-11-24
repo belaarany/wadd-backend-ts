@@ -9,32 +9,38 @@ import { IExpenseService } from "./interfaces/expenses.interfaces"
 export class ExpensesService implements IExpenseService {
 	constructor(private readonly expensesRepo: ExpensesRepository) {}
 
-	async create(incomeData: CreateExpenseDto): Promise<Expense> {
-		const income = await this.expensesRepo.create(incomeData)
-		return income
+	async create(data: CreateExpenseDto): Promise<Expense> {
+		const entity = await this.expensesRepo.create(data)
+		return entity
 	}
 
-	async exists(expenseId: string): Promise<boolean> {
-		const expenses = await this.expensesRepo.list({ ids: [expenseId] })
+	// TODO: not tested yet
+	async update(id: string, data: CreateExpenseDto): Promise<Expense> {
+		const entity = await this.expensesRepo.update(id, data)
+		return entity
+	}
 
-		if (expenses.length > 1) {
+	async exists(id: string): Promise<boolean> {
+		const entity = await this.expensesRepo.list({ ids: [id] })
+
+		if (entity.length > 1) {
 			throw new MultipleEntitiesFoundException()
 		}
 
-		if (expenses.length === 0) {
+		if (entity.length === 0) {
 			return false
 		}
 
 		return true
 	}
 
-	async listByWalletIds(walletIds: string[]): Promise<Expense[]> {
-		const incomes = await this.expensesRepo.list({ wallet_ids: walletIds })
-		return incomes
+	async listByWalletIds(ids: string[]): Promise<Expense[]> {
+		const entities = await this.expensesRepo.list({ wallet_ids: ids })
+		return entities
 	}
 
-	async listByIds(expenseIds: string[]): Promise<Expense[]> {
-		const expenses = await this.expensesRepo.list({ ids: expenseIds })
-		return expenses
+	async listByIds(ids: string[]): Promise<Expense[]> {
+		const entities = await this.expensesRepo.list({ ids: ids })
+		return entities
 	}
 }

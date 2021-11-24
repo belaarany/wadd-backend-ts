@@ -51,4 +51,8 @@ export class IncomesRepository implements IIncomesRepository {
 
 		return incomes.map(IncomeMapper.fromEntity)
 	}
+
+	async getRunningSum(walletIds: string[]): Promise<any> {
+		// this.db.manager.
+	}
 }

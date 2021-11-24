@@ -24,7 +24,8 @@ export class WalletsRepository implements IWalletsRepository {
 			initial_balance: data.initial_balance,
 			default_currency: data.default_currency,
 			type: data.type,
-			icon_file_id: data.icon_file_id,
+			color_hex: data.color_hex,
+			icon_url: data.icon_url,
 			created_at: new Date(),
 		})
 		const insertedWallet = await this.db.save(wallet)

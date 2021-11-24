@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
 import { NestDataLoader } from "nestjs-dataloader"
-import { Wallet } from "src/interfaces/wallet.interface"
+import { Wallet } from "src/services/wallets/interfaces/wallet.model"
 import { WalletsService } from "src/services/wallets/wallets.service"
 import { ExpenseMicroserviceWalletsService } from "../../microservices/expense/services/wallets.service"
 

@@ -3,9 +3,9 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/decorators/auth.decorator"
 import { CategoryNotExistsException } from "src/exceptions/categoryNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
-import { Category } from "src/interfaces/category.interface"
 import { CategoriesService } from "src/services/categories/categories.service"
-import { CreateCategoryGQLInput } from "./interfaces/categories.inputs"
+import { Category } from "src/services/categories/interfaces/category.model"
+import { CreateCategoryGQLInput, UpdateCategoryGQLInput } from "./interfaces/categories.inputs"
 import { CategoryGQLModel } from "./interfaces/category.model"
 
 @Resolver(() => CategoryGQLModel)
@@ -42,6 +42,50 @@ export class CategoriesResolver {
 		// })
 
 		return cateogry
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation(() => CategoryGQLModel)
+	async updateCategory(
+		@Authorization() authUser: AuthUser,
+		@Args("data") data: UpdateCategoryGQLInput,
+	): Promise<Category> {
+		const cateogry = await this.categoriesService.listByIds([data.id])
+
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "category.create",
+		// 	user_id: authUser.id,
+		// 	target_id: cateogry.id,
+		// 	platform: null,
+		// 	data: {
+		// 		category: cateogry,c
+		// 	},
+		// })
+
+		return cateogry[0]
+	}
+
+	@UseGuards(AuthGuard)
+	@Mutation(() => CategoryGQLModel)
+	async deleteCategory(
+		@Authorization() authUser: AuthUser,
+		@Args("categoryId") categoryId: string,
+	): Promise<Category> {
+		const cateogry = await this.categoriesService.listByIds([categoryId])
+
+		// this.logMicroservice.createLog({
+		// 	scope: "user",
+		// 	action: "category.create",
+		// 	user_id: authUser.id,
+		// 	target_id: cateogry.id,
+		// 	platform: null,
+		// 	data: {
+		// 		category: cateogry,c
+		// 	},
+		// })
+
+		return cateogry[0]
 	}
 
 	@UseGuards(AuthGuard)

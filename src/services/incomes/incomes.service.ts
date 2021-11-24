@@ -7,6 +7,8 @@ import { IncomesRepository } from "./incomes.repository"
 import { Income } from "./interfaces/income.model"
 import { CreateIncomeDto } from "./interfaces/incomes.dto"
 import { IIncomesService } from "./interfaces/incomes.interfaces"
+import * as _ from "lodash"
+import * as Moment from "moment"
 
 @Injectable()
 export class IncomesService implements IIncomesService, ISummarizable {
@@ -41,7 +43,7 @@ export class IncomesService implements IIncomesService, ISummarizable {
 		return incomes
 	}
 
-	async getSummary(walletIds: string[]): Promise<Summarized<Kind.INCOME, SummarizedCollection<"wallets">>> {
+	async getSummary(walletIds: string[]): Promise<any> {
 		const incomes = await this.incomesRepo.list({ wallet_ids: walletIds })
 		const sum: SummarizedCollection<"wallets"> = {
 			wallets: {},
@@ -49,7 +51,18 @@ export class IncomesService implements IIncomesService, ISummarizable {
 			// tags: {},
 		}
 
+		const running = {}
+
+		this.incomesRepo.getRunningSum(walletIds)
+
 		for (const income of incomes) {
+			let timestamp = Moment.utc(income.timestamp)
+			let timestampKey = timestamp.format("YYYYMM")
+			if (timestampKey in running === false) {
+				running[timestampKey] = 0
+			}
+			running[timestampKey] += income.amount
+
 			if (income.wallet_id in sum.wallets === false) {
 				sum.wallets[income.wallet_id] = {}
 			}

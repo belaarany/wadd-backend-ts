@@ -48,7 +48,8 @@ type WalletGQLModel {
   initial_balance: Float!
   default_currency: Currency!
   type: WalletType!
-  icon_file_id: String
+  color_hex: String!
+  icon_url: String!
   is_deleted: Boolean!
   is_archived: Boolean!
   created_at: String
@@ -130,7 +131,11 @@ type Query {
 
 type Mutation {
   createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
+  updateWallet(data: UpdateWalletGQLInput!): WalletGQLModel!
+  deleteWallet(walletId: String!): WalletGQLModel!
   createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
+  updateCategory(data: UpdateCategoryGQLInput!): CategoryGQLModel!
+  deleteCategory(categoryId: String!): CategoryGQLModel!
   createIncome(data: CreateIncomeGQLInput!): IncomeGQLModel!
   createExpense(data: CreateExpenseGQLInput!): ExpenseGQLModel!
   createTransfer(data: CreateTransferGQLInput!): TransferGQLModel!
@@ -142,10 +147,28 @@ input CreateWalletGQLInput {
   initial_balance: Float!
   default_currency: String!
   type: String!
-  icon_file_id: String
+  color_hex: String!
+  icon_url: String!
+}
+
+input UpdateWalletGQLInput {
+  id: String!
+  name: String!
+  order: Float!
+  initial_balance: Float!
+  default_currency: String!
+  type: String!
+  color_hex: String!
+  icon_url: String!
 }
 
 input CreateCategoryGQLInput {
+  parent_category_id: String
+  name: String!
+}
+
+input UpdateCategoryGQLInput {
+  id: String!
   parent_category_id: String
   name: String!
 }

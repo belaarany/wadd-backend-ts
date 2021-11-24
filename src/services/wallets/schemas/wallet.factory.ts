@@ -16,7 +16,8 @@ export class WalletFactory {
 		wallet.initial_balance = 0
 		wallet.default_currency = Currency.HUF
 		wallet.type = WalletType.CASH
-		wallet.icon_file_id = null
+		wallet.color_hex = "000000"
+		wallet.icon_url = ""
 		wallet.is_archived = false
 		wallet.is_deleted = false
 		wallet.created_at = null

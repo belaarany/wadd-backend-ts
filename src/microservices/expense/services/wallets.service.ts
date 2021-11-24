@@ -1,6 +1,6 @@
 import { Inject, Logger } from "@nestjs/common"
 import { ClientProxy } from "@nestjs/microservices"
-import { Wallet } from "src/interfaces/wallet.interface"
+import { Wallet } from "src/services/wallets/interfaces/wallet.model"
 import { CreateWalletDto } from "../expense.dto"
 
 export class ExpenseMicroserviceWalletsService {

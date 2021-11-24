@@ -8,7 +8,8 @@ export type CreateWalletDto = {
 	initial_balance: number
 	default_currency: Currency
 	type: WalletType
-	icon_file_id: string | null
+	color_hex: string
+	icon_url: string
 }
 
 export type UpdateWalletDto = {
@@ -17,5 +18,6 @@ export type UpdateWalletDto = {
 	initial_balance: number
 	default_currency: Currency
 	type: WalletType
-	icon_file_id: string | null
+	color_hex: string
+	icon_url: string
 }

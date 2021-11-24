@@ -9,7 +9,8 @@ export const mockWalletPartial: CreateWalletDto = {
 	initial_balance: 0,
 	default_currency: Currency.HUF,
 	type: WalletType.CASH,
-	icon_file_id: "8f18f70a-1fe0-47ce-b021-3977275c7407",
+	color_hex: "7F00FF",
+	icon_url: "https://logo.clearbit.com/spendesk.com",
 }
 
 export const mockWallet: Wallet = {
@@ -21,7 +22,8 @@ export const mockWallet: Wallet = {
 	initial_balance: 0,
 	default_currency: Currency.HUF,
 	type: WalletType.CASH,
-	icon_file_id: "8f18f70a-1fe0-47ce-b021-3977275c7407",
+	color_hex: "7F00FF",
+	icon_url: "https://logo.clearbit.com/spendesk.com",
 	is_deleted: false,
 	is_archived: false,
 	created_at: new Date("2021-07-09T17:01:15.819Z"),

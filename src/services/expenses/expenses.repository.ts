@@ -1,4 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm"
+import { EntityNotFoundException } from "src/errors/entity.errors"
 import { Repository } from "typeorm"
 import { Expense } from "./interfaces/expense.model"
 import { CreateExpenseDto } from "./interfaces/expenses.dto"
@@ -32,6 +33,22 @@ export class ExpensesRepository implements IExpenseRepository {
 		const insertedIncome = await this.db.save(income)
 
 		return ExpenseMapper.fromEntity(insertedIncome)
+	}
+
+	async update(entityId: string, entityData: Partial<Expense>): Promise<Expense> {
+		const entity = await this.db.findOne({ id: entityId })
+
+		if (!entity) {
+			throw new EntityNotFoundException()
+		}
+
+		for (const key of Object.keys(entityData)) {
+			entity[key] = entityData[key]
+		}
+
+		const savedEntity = await this.db.save(entity)
+
+		return ExpenseMapper.fromEntity(savedEntity)
 	}
 
 	async list(filter?: ExpenseRepositoryFilter): Promise<Expense[]> {

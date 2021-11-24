@@ -14,3 +14,21 @@ export class CreateCategoryGQLInput {
 	@IsNotEmpty()
 	name: string
 }
+
+@InputType()
+export class UpdateCategoryGQLInput {
+	@Field()
+	@IsNotEmpty()
+	@IsWaddObjectId()
+	id: string
+	
+	@Field({ nullable: true })
+	@IsNotEmpty()
+	@IsOptional()
+	@IsWaddObjectId()
+	parent_category_id: string | null
+
+	@Field()
+	@IsNotEmpty()
+	name: string
+}
