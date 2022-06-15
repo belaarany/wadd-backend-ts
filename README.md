@@ -3,6 +3,7 @@
 WADD (Finance Tracker) application backend.
 
 ## 🚀 Tech stack
+- Typescript
 - NodeJS
 - NestJS
 - GraphQL
