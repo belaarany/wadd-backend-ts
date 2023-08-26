@@ -3,13 +3,13 @@ import { IdentityMicroservice } from "src/microservices/identity/identity.servic
 
 @Injectable()
 export class AuthService {
-	constructor(private identityMicroservice: IdentityMicroservice) {}
+  constructor(private identityMicroservice: IdentityMicroservice) {}
 
-	async register(): Promise<any> {
-		const user = await this.identityMicroservice.register()
+  async register(): Promise<any> {
+    const user = await this.identityMicroservice.register()
 
-		return {
-			id: user.id,
-		}
-	}
+    return {
+      id: user.id,
+    }
+  }
 }

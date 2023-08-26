@@ -1,14 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger"
 
 export class RegisterRequest {
-	@ApiProperty()
-	email: string
+  @ApiProperty()
+  email: string
 
-	@ApiProperty()
-	password: string
+  @ApiProperty()
+  password: string
 }
 
 export class RegisterResponse {
-	@ApiProperty()
-	uuid: string
+  @ApiProperty()
+  uuid: string
 }

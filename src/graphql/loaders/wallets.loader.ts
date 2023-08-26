@@ -7,11 +7,9 @@ import { ExpenseMicroserviceWalletsService } from "../../microservices/expense/s
 
 @Injectable()
 export class WalletsLoader implements NestDataLoader<string, Wallet> {
-	constructor(private walletsService: WalletsService) {}
+  constructor(private walletsService: WalletsService) {}
 
-	generateDataLoader(): DataLoader<string, Wallet> {
-		return new DataLoader<string, Wallet>((walletIds) =>
-			this.walletsService.listByIds(walletIds as string[]),
-		)
-	}
+  generateDataLoader(): DataLoader<string, Wallet> {
+    return new DataLoader<string, Wallet>((walletIds) => this.walletsService.listByIds(walletIds as string[]))
+  }
 }

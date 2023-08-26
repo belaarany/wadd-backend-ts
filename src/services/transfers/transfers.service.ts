@@ -7,29 +7,29 @@ import { TransfersRepository } from "./transfers.repository"
 
 @Injectable()
 export class TransfersService implements ITransfersService {
-	constructor(private readonly transfersRepo: TransfersRepository) {}
+  constructor(private readonly transfersRepo: TransfersRepository) {}
 
-	async create(transferData: CreateTransferDto): Promise<Transfer> {
-		const transfer = await this.transfersRepo.create(transferData)
-		return transfer
-	}
+  async create(transferData: CreateTransferDto): Promise<Transfer> {
+    const transfer = await this.transfersRepo.create(transferData)
+    return transfer
+  }
 
-	async exists(transferId: string): Promise<boolean> {
-		const transfers = await this.transfersRepo.list({ ids: [transferId] })
+  async exists(transferId: string): Promise<boolean> {
+    const transfers = await this.transfersRepo.list({ ids: [transferId] })
 
-		if (transfers.length > 1) {
-			throw new MultipleEntitiesFoundException()
-		}
+    if (transfers.length > 1) {
+      throw new MultipleEntitiesFoundException()
+    }
 
-		if (transfers.length === 0) {
-			return false
-		}
+    if (transfers.length === 0) {
+      return false
+    }
 
-		return true
-	}
+    return true
+  }
 
-	async listByWalletIds(walletIds: string[]): Promise<Transfer[]> {
-		const transfers = await this.transfersRepo.list({ wallet_ids: walletIds })
-		return transfers
-	}
+  async listByWalletIds(walletIds: string[]): Promise<Transfer[]> {
+    const transfers = await this.transfersRepo.list({ wallet_ids: walletIds })
+    return transfers
+  }
 }

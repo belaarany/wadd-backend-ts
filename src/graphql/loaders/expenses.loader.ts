@@ -7,11 +7,9 @@ import { ExpenseMicroserviceExpensesService } from "../../microservices/expense/
 
 @Injectable()
 export class ExpensesLoader implements NestDataLoader<string, Expense> {
-	constructor(private expensesService: ExpensesService) {}
+  constructor(private expensesService: ExpensesService) {}
 
-	generateDataLoader(): DataLoader<string, Expense> {
-		return new DataLoader<string, Expense>((expenseIds) =>
-			this.expensesService.listByIds(expenseIds as string[]),
-		)
-	}
+  generateDataLoader(): DataLoader<string, Expense> {
+    return new DataLoader<string, Expense>((expenseIds) => this.expensesService.listByIds(expenseIds as string[]))
+  }
 }

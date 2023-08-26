@@ -4,6 +4,6 @@ import { WalletType } from "src/interfaces/enums/WalletType"
 
 @ObjectType()
 export class TransactionGQLModel {
-	@Field()
-	readonly kind: string
+  @Field()
+  readonly kind: string
 }

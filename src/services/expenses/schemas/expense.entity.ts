@@ -3,60 +3,60 @@ import { Column, Entity, ObjectIdColumn } from "typeorm"
 
 @Entity("expense")
 export class ExpenseEntity {
-	@ObjectIdColumn({ name: "_id" })
-	_id: string
+  @ObjectIdColumn({ name: "_id" })
+  _id: string
 
-	@Column()
-	id: string
+  @Column()
+  id: string
 
-	@Column()
-	wallet_id: string
+  @Column()
+  wallet_id: string
 
-	@Column()
-	amount: number
+  @Column()
+  amount: number
 
-	@Column()
-	currency: Currency
+  @Column()
+  currency: Currency
 
-	@Column()
-	timestamp: Date
+  @Column()
+  timestamp: Date
 
-	@Column()
-	location: string
+  @Column()
+  location: string
 
-	@Column()
-	related_income_ids: string[]
+  @Column()
+  related_income_ids: string[]
 
-	@Column()
-	note: string
+  @Column()
+  note: string
 
-	@Column()
-	category_id: string
+  @Column()
+  category_id: string
 
-	@Column()
-	tags: string[]
+  @Column()
+  tags: string[]
 
-	@Column({ nullable: true })
-	group_id: string | null = null
+  @Column({ nullable: true })
+  group_id: string | null = null
 
-	@Column()
-	attachment_file_ids: string[]
+  @Column()
+  attachment_file_ids: string[]
 
-	@Column({ type: "boolean" })
-	is_deleted = false
+  @Column({ type: "boolean" })
+  is_deleted = false
 
-	@Column({ type: "boolean" })
-	is_cancelled = false
+  @Column({ type: "boolean" })
+  is_cancelled = false
 
-	@Column()
-	created_at: Date
+  @Column()
+  created_at: Date
 
-	@Column({ nullable: true })
-	updated_at: Date = null
+  @Column({ nullable: true })
+  updated_at: Date = null
 
-	@Column({ nullable: true })
-	deleted_at: Date = null
+  @Column({ nullable: true })
+  deleted_at: Date = null
 
-	@Column({ nullable: true })
-	cancelled_at: Date = null
+  @Column({ nullable: true })
+  cancelled_at: Date = null
 }

@@ -4,7 +4,7 @@ import { WalletsService } from "src/services/wallets/wallets.service"
 import { WalletsResolver } from "./wallets.resolver"
 
 @Module({
-	imports: [WalletsModule],
-	providers: [WalletsResolver],
+  imports: [WalletsModule],
+  providers: [WalletsResolver],
 })
 export class WalletsGQLModule {}

@@ -6,7 +6,7 @@ import { WalletsService } from "src/services/wallets/wallets.service"
 import { TransfersResolver } from "./transfers.resolver"
 
 @Module({
-	imports: [TransfersModule, WalletsModule],
-	providers: [TransfersResolver],
+  imports: [TransfersModule, WalletsModule],
+  providers: [TransfersResolver],
 })
 export class TransfersGQLModule {}

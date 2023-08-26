@@ -9,63 +9,63 @@ import { ExpenseFactory } from "./schemas/expense.factory"
 import { ExpenseMapper } from "./schemas/expense.mapper"
 
 export class ExpensesRepository implements IExpenseRepository {
-	constructor(
-		@InjectRepository(ExpenseEntity)
-		private readonly db: Repository<ExpenseEntity>,
-	) {}
+  constructor(
+    @InjectRepository(ExpenseEntity)
+    private readonly db: Repository<ExpenseEntity>,
+  ) {}
 
-	async create(incomeData: CreateExpenseDto): Promise<Expense> {
-		const income = ExpenseFactory.make({
-			wallet_id: incomeData.wallet_id,
-			amount: incomeData.amount,
-			currency: incomeData.currency,
-			timestamp: incomeData.timestamp,
-			location: incomeData.location,
-			related_income_ids: incomeData.related_income_ids,
-			note: incomeData.note,
-			category_id: incomeData.category_id,
-			tags: incomeData.tags,
-			group_id: incomeData.group_id,
-			attachment_file_ids: incomeData.attachment_file_ids,
+  async create(incomeData: CreateExpenseDto): Promise<Expense> {
+    const income = ExpenseFactory.make({
+      wallet_id: incomeData.wallet_id,
+      amount: incomeData.amount,
+      currency: incomeData.currency,
+      timestamp: incomeData.timestamp,
+      location: incomeData.location,
+      related_income_ids: incomeData.related_income_ids,
+      note: incomeData.note,
+      category_id: incomeData.category_id,
+      tags: incomeData.tags,
+      group_id: incomeData.group_id,
+      attachment_file_ids: incomeData.attachment_file_ids,
 
-			created_at: new Date(),
-		})
-		const insertedIncome = await this.db.save(income)
+      created_at: new Date(),
+    })
+    const insertedIncome = await this.db.save(income)
 
-		return ExpenseMapper.fromEntity(insertedIncome)
-	}
+    return ExpenseMapper.fromEntity(insertedIncome)
+  }
 
-	async update(entityId: string, entityData: Partial<Expense>): Promise<Expense> {
-		const entity = await this.db.findOne({ id: entityId })
+  async update(entityId: string, entityData: Partial<Expense>): Promise<Expense> {
+    const entity = await this.db.findOne({ id: entityId })
 
-		if (!entity) {
-			throw new EntityNotFoundException()
-		}
+    if (!entity) {
+      throw new EntityNotFoundException()
+    }
 
-		for (const key of Object.keys(entityData)) {
-			entity[key] = entityData[key]
-		}
+    for (const key of Object.keys(entityData)) {
+      entity[key] = entityData[key]
+    }
 
-		const savedEntity = await this.db.save(entity)
+    const savedEntity = await this.db.save(entity)
 
-		return ExpenseMapper.fromEntity(savedEntity)
-	}
+    return ExpenseMapper.fromEntity(savedEntity)
+  }
 
-	async list(filter?: ExpenseRepositoryFilter): Promise<Expense[]> {
-		filter = filter ?? {}
+  async list(filter?: ExpenseRepositoryFilter): Promise<Expense[]> {
+    filter = filter ?? {}
 
-		const findFilterWhere = {}
+    const findFilterWhere = {}
 
-		if ("ids" in filter) {
-			findFilterWhere["$or"] = filter.ids.map((id) => ({ id: id }))
-		}
+    if ("ids" in filter) {
+      findFilterWhere["$or"] = filter.ids.map((id) => ({ id: id }))
+    }
 
-		if ("wallet_ids" in filter) {
-			findFilterWhere["$or"] = filter.wallet_ids.map((wallet_id) => ({ wallet_id: wallet_id }))
-		}
+    if ("wallet_ids" in filter) {
+      findFilterWhere["$or"] = filter.wallet_ids.map((wallet_id) => ({ wallet_id: wallet_id }))
+    }
 
-		const incomes = await this.db.find({ where: findFilterWhere })
+    const incomes = await this.db.find({ where: findFilterWhere })
 
-		return incomes.map(ExpenseMapper.fromEntity)
-	}
+    return incomes.map(ExpenseMapper.fromEntity)
+  }
 }

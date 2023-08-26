@@ -5,9 +5,9 @@ import { IdentityMicroservice } from "src/microservices/identity/identity.servic
 
 @Injectable()
 export class UsersLoader implements NestDataLoader<string, any> {
-	constructor(private identityMicroservice: IdentityMicroservice) {}
+  constructor(private identityMicroservice: IdentityMicroservice) {}
 
-	generateDataLoader(): DataLoader<string, any> {
-		return new DataLoader<string, any>((keys) => this.identityMicroservice.getUsers(keys as string[]))
-	}
+  generateDataLoader(): DataLoader<string, any> {
+    return new DataLoader<string, any>((keys) => this.identityMicroservice.getUsers(keys as string[]))
+  }
 }

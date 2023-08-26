@@ -8,7 +8,7 @@ import { TransfersService } from "src/services/transfers/transfers.service"
 import { CategoriesResolver } from "./transactions.resolver"
 
 @Module({
-	imports: [ExpensesModule, IncomesModule,TransfersModule],
-	providers: [CategoriesResolver],
+  imports: [ExpensesModule, IncomesModule, TransfersModule],
+  providers: [CategoriesResolver],
 })
 export class TransactionsGQLModule {}

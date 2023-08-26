@@ -7,11 +7,9 @@ import { ExpenseMicroserviceCategoriesService } from "../../microservices/expens
 
 @Injectable()
 export class CategoriesLoader implements NestDataLoader<string, Category> {
-	constructor(private categoriesService: CategoriesService) {}
+  constructor(private categoriesService: CategoriesService) {}
 
-	generateDataLoader(): DataLoader<string, Category> {
-		return new DataLoader<string, Category>((categoryIds) =>
-			this.categoriesService.listByIds(categoryIds as string[]),
-		)
-	}
+  generateDataLoader(): DataLoader<string, Category> {
+    return new DataLoader<string, Category>((categoryIds) => this.categoriesService.listByIds(categoryIds as string[]))
+  }
 }

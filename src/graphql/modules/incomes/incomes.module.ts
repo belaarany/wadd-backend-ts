@@ -5,7 +5,7 @@ import { IncomesModule } from "src/services/incomes/incomes.module"
 import { IncomesResolver } from "./incomes.resolver"
 
 @Module({
-	imports: [ExpensesModule, IncomesModule, CategoriesModule],
-	providers: [IncomesResolver],
+  imports: [ExpensesModule, IncomesModule, CategoriesModule],
+  providers: [IncomesResolver],
 })
 export class IncomesGQLModule {}

@@ -15,38 +15,38 @@ import { TransactionGQLModel } from "./interfaces/category.model"
 
 @Resolver(() => TransactionGQLModel)
 export class CategoriesResolver {
-	constructor(
-		private expensesService: ExpensesService,
-		private transfersService: TransfersService,
-		private incomesService: IncomesService,
-	) {}
+  constructor(
+    private expensesService: ExpensesService,
+    private transfersService: TransfersService,
+    private incomesService: IncomesService,
+  ) {}
 
-	@UseGuards(AuthGuard)
-	@Query(() => TransactionGQLModel)
-	async transactions(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<any> {
-		return {
-			kind: "transactions",
-		}
-	}
+  @UseGuards(AuthGuard)
+  @Query(() => TransactionGQLModel)
+  async transactions(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<any> {
+    return {
+      kind: "transactions",
+    }
+  }
 
-	@ResolveField(() => [IncomeGQLModel])
-	async incomes(@Info() info: GraphQLResolveInfo): Promise<Income[]> {
-		const incomes = await this.incomesService.listByWalletIds(info.variableValues.wallet_ids)
+  @ResolveField(() => [IncomeGQLModel])
+  async incomes(@Info() info: GraphQLResolveInfo): Promise<Income[]> {
+    const incomes = await this.incomesService.listByWalletIds(info.variableValues.wallet_ids)
 
-		return incomes as Income[]
-	}
+    return incomes as Income[]
+  }
 
-	@ResolveField(() => [ExpenseGQLModel])
-	async expenses(@Info() info: GraphQLResolveInfo): Promise<Expense[]> {
-		const expenses = await this.expensesService.listByWalletIds(info.variableValues.wallet_ids)
+  @ResolveField(() => [ExpenseGQLModel])
+  async expenses(@Info() info: GraphQLResolveInfo): Promise<Expense[]> {
+    const expenses = await this.expensesService.listByWalletIds(info.variableValues.wallet_ids)
 
-		return expenses as Expense[]
-	}
+    return expenses as Expense[]
+  }
 
-	@ResolveField(() => [TransferGQLModel])
-	async transfers(@Info() info: GraphQLResolveInfo): Promise<Transfer[]> {
-		const transfers = await this.transfersService.listByWalletIds(info.variableValues.wallet_ids)
+  @ResolveField(() => [TransferGQLModel])
+  async transfers(@Info() info: GraphQLResolveInfo): Promise<Transfer[]> {
+    const transfers = await this.transfersService.listByWalletIds(info.variableValues.wallet_ids)
 
-		return transfers as Transfer[]
-	}
+    return transfers as Transfer[]
+  }
 }

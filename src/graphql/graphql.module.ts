@@ -21,36 +21,36 @@ import { TransfersGQLModule } from "./modules/transfers/transfers.module"
 import { WalletsGQLModule } from "./modules/wallets/wallets.module"
 
 @Module({
-	imports: [
-		WalletsModule,
-		CategoriesModule,
-		IncomesModule,
-		ExpensesModule,
-		TransfersModule,
-		WalletsGQLModule,
-		CategoriesGQLModule,
-		IncomesGQLModule,
-		ExpensesGQLModule,
-		TransfersGQLModule,
-		TransactionsGQLModule,
-		GraphQLModule.forRoot({
-			autoSchemaFile: "schema.gql",
-			playground: true,
-		}),
-	],
-	controllers: [],
-	providers: [
-		// UsersLoader,
-		WalletsLoader,
-		CategoriesLoader,
-		IncomesLoader,
-		ExpensesLoader,
-		// BalancesLoader,
-		{
-			provide: APP_INTERCEPTOR,
-			useClass: DataLoaderInterceptor,
-		},
-	],
-	exports: [],
+  imports: [
+    WalletsModule,
+    CategoriesModule,
+    IncomesModule,
+    ExpensesModule,
+    TransfersModule,
+    WalletsGQLModule,
+    CategoriesGQLModule,
+    IncomesGQLModule,
+    ExpensesGQLModule,
+    TransfersGQLModule,
+    TransactionsGQLModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: "schema.gql",
+      playground: true,
+    }),
+  ],
+  controllers: [],
+  providers: [
+    // UsersLoader,
+    WalletsLoader,
+    CategoriesLoader,
+    IncomesLoader,
+    ExpensesLoader,
+    // BalancesLoader,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataLoaderInterceptor,
+    },
+  ],
+  exports: [],
 })
 export class GraphQLRootModule {}

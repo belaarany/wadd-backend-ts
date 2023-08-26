@@ -6,9 +6,9 @@ import { Income } from "src/services/incomes/interfaces/income.model"
 
 @Injectable()
 export class IncomesLoader implements NestDataLoader<string, Income> {
-	constructor(private incomesService: IncomesService) {}
+  constructor(private incomesService: IncomesService) {}
 
-	generateDataLoader(): DataLoader<string, Income> {
-		return new DataLoader<string, Income>((incomeIds) => this.incomesService.listByIds(incomeIds as string[]))
-	}
+  generateDataLoader(): DataLoader<string, Income> {
+    return new DataLoader<string, Income>((incomeIds) => this.incomesService.listByIds(incomeIds as string[]))
+  }
 }

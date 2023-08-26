@@ -24,79 +24,79 @@ import { CreateExpenseGQLInput } from "./interfaces/expenses.inputs"
 
 @Resolver(() => ExpenseGQLModel)
 export class ExpensesResolver {
-	constructor(
-		private expensesService: ExpensesService,
-		private categoriesService: CategoriesService,
-		private incomesService: IncomesService,
-	) {}
+  constructor(
+    private expensesService: ExpensesService,
+    private categoriesService: CategoriesService,
+    private incomesService: IncomesService,
+  ) {}
 
-	@UseGuards(AuthGuard)
-	@Mutation(() => ExpenseGQLModel)
-	async createExpense(
-		@Authorization() authUser: AuthUser,
-		@Args("data") data: CreateExpenseGQLInput,
-	): Promise<Expense> {
-		if ((await this.categoriesService.exists(data.category_id)) === false) {
-			throw new CategoryNotExistsException(data.category_id)
-		}
+  @UseGuards(AuthGuard)
+  @Mutation(() => ExpenseGQLModel)
+  async createExpense(
+    @Authorization() authUser: AuthUser,
+    @Args("data") data: CreateExpenseGQLInput,
+  ): Promise<Expense> {
+    if ((await this.categoriesService.exists(data.category_id)) === false) {
+      throw new CategoryNotExistsException(data.category_id)
+    }
 
-		for (let related_income_id of data.related_income_ids) {
-			if ((await this.incomesService.exists(related_income_id)) === false) {
-				throw new IncomeNotExistsException(related_income_id)
-			}
-		}
+    for (let related_income_id of data.related_income_ids) {
+      if ((await this.incomesService.exists(related_income_id)) === false) {
+        throw new IncomeNotExistsException(related_income_id)
+      }
+    }
 
-		const expense = await this.expensesService.create(data)
+    const expense = await this.expensesService.create(data)
 
-		// this.logMicroservice.createLog({
-		// 	scope: "user",
-		// 	action: "expense.create",
-		// 	user_id: authUser.id,
-		// 	target_id: expense.id,
-		// 	platform: null,
-		// 	data: {
-		// 		expense: expense,
-		// 	},
-		// })
+    // this.logMicroservice.createLog({
+    // 	scope: "user",
+    // 	action: "expense.create",
+    // 	user_id: authUser.id,
+    // 	target_id: expense.id,
+    // 	platform: null,
+    // 	data: {
+    // 		expense: expense,
+    // 	},
+    // })
 
-		return expense
-	}
+    return expense
+  }
 
-	@UseGuards(AuthGuard)
-	@Query(() => [ExpenseGQLModel])
-	async expenses(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Expense[]> {
-		const expenses = await this.expensesService.listByWalletIds(walletIds)
+  @UseGuards(AuthGuard)
+  @Query(() => [ExpenseGQLModel])
+  async expenses(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Expense[]> {
+    const expenses = await this.expensesService.listByWalletIds(walletIds)
 
-		return expenses
-	}
+    return expenses
+  }
 
-	@ResolveField(() => WalletGQLModel)
-	async wallet(
-		@Parent() parent: ExpenseGQLModel,
-		@Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
-	): Promise<Wallet> {
-		const wallet = await walletsLoader.load(parent.wallet_id)
+  @ResolveField(() => WalletGQLModel)
+  async wallet(
+    @Parent() parent: ExpenseGQLModel,
+    @Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
+  ): Promise<Wallet> {
+    const wallet = await walletsLoader.load(parent.wallet_id)
 
-		return wallet
-	}
+    return wallet
+  }
 
-	@ResolveField(() => CategoryGQLModel)
-	async category(
-		@Parent() parent: ExpenseGQLModel,
-		@Loader(CategoriesLoader) categoriesLoader: DataLoader<string, Wallet>,
-	): Promise<Wallet> {
-		const category = await categoriesLoader.load(parent.category_id)
+  @ResolveField(() => CategoryGQLModel)
+  async category(
+    @Parent() parent: ExpenseGQLModel,
+    @Loader(CategoriesLoader) categoriesLoader: DataLoader<string, Wallet>,
+  ): Promise<Wallet> {
+    const category = await categoriesLoader.load(parent.category_id)
 
-		return category
-	}
+    return category
+  }
 
-	@ResolveField(() => [IncomeGQLModel])
-	async related_incomes(
-		@Parent() parent: ExpenseGQLModel,
-		@Loader(IncomesLoader) incomesLoader: DataLoader<string, Income>,
-	): Promise<Income[]> {
-		const incomes = await incomesLoader.loadMany(parent.related_income_ids)
+  @ResolveField(() => [IncomeGQLModel])
+  async related_incomes(
+    @Parent() parent: ExpenseGQLModel,
+    @Loader(IncomesLoader) incomesLoader: DataLoader<string, Income>,
+  ): Promise<Income[]> {
+    const incomes = await incomesLoader.loadMany(parent.related_income_ids)
 
-		return incomes as Income[]
-	}
+    return incomes as Income[]
+  }
 }

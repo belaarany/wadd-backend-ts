@@ -4,10 +4,10 @@ import { CreateLogDTO } from "./log.dto"
 
 @Injectable()
 export class LogMicroservice {
-	constructor(@Inject("LOG_SERVICE") private client: ClientProxy) {}
+  constructor(@Inject("LOG_SERVICE") private client: ClientProxy) {}
 
-	async createLog(logData: CreateLogDTO): Promise<void> {
-		await this.client.send("create-log", { log: logData }).toPromise()
-		return
-	}
+  async createLog(logData: CreateLogDTO): Promise<void> {
+    await this.client.send("create-log", { log: logData }).toPromise()
+    return
+  }
 }

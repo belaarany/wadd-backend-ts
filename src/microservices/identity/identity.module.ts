@@ -3,18 +3,18 @@ import { ClientsModule, Transport } from "@nestjs/microservices"
 import { IdentityMicroservice } from "./identity.service"
 
 @Module({
-	imports: [
-		ClientsModule.register([
-			{
-				name: "IDENTITY_SERVICE",
-				transport: Transport.REDIS,
-				options: {
-					url: "redis://localhost:6379",
-				},
-			},
-		]),
-	],
-	providers: [IdentityMicroservice],
-	exports: [IdentityMicroservice],
+  imports: [
+    ClientsModule.register([
+      {
+        name: "IDENTITY_SERVICE",
+        transport: Transport.REDIS,
+        options: {
+          url: "redis://localhost:6379",
+        },
+      },
+    ]),
+  ],
+  providers: [IdentityMicroservice],
+  exports: [IdentityMicroservice],
 })
 export class IdentityMicroserviceModule {}

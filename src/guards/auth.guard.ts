@@ -4,27 +4,27 @@ import { IdentityMicroservice } from "src/microservices/identity/identity.servic
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor() {}
+  constructor() {}
 
-	canActivate(context: ExecutionContext): Promise<boolean> {
-		// const request = context.switchToHttp().getRequest()
-		const gqlCtx = GqlExecutionContext.create(context)
-		const request = gqlCtx.getContext().req
+  canActivate(context: ExecutionContext): Promise<boolean> {
+    // const request = context.switchToHttp().getRequest()
+    const gqlCtx = GqlExecutionContext.create(context)
+    const request = gqlCtx.getContext().req
 
-		request.authUser = {
-			id: request?.headers?.authorization?.split(" ")?.[1] || "unknown",
-		}
+    request.authUser = {
+      id: request?.headers?.authorization?.split(" ")?.[1] || "unknown",
+    }
 
-		return Promise.resolve(true)
+    return Promise.resolve(true)
 
-		// return this.validateRequest(request)
-	}
+    // return this.validateRequest(request)
+  }
 
-	async validateRequest(): Promise<boolean> {
-		return Promise.resolve(true)
-		// const isAccessTokenValied = await this.identityMicroservice.verifyAccessToken("test")
-		// console.log({isAccessTokenValied})
+  async validateRequest(): Promise<boolean> {
+    return Promise.resolve(true)
+    // const isAccessTokenValied = await this.identityMicroservice.verifyAccessToken("test")
+    // console.log({isAccessTokenValied})
 
-		// return Promise.resolve(isAccessTokenValied)
-	}
+    // return Promise.resolve(isAccessTokenValied)
+  }
 }

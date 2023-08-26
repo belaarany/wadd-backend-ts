@@ -8,37 +8,37 @@ import { CategoryFactory } from "./schemas/category.factory"
 import { CategoryMapper } from "./schemas/category.mapper"
 
 export class CategoriesRepository implements ICategoriesRepository {
-	constructor(
-		@InjectRepository(CategoryEntity)
-		private readonly db: Repository<CategoryEntity>,
-	) {}
+  constructor(
+    @InjectRepository(CategoryEntity)
+    private readonly db: Repository<CategoryEntity>,
+  ) {}
 
-	async create(categoryData: CreateCategoryDto): Promise<Category> {
-		const category = CategoryFactory.make({
-			owner_user_id: categoryData.owner_user_id,
-			parent_category_id: categoryData.parent_category_id,
-			name: categoryData.name,
+  async create(categoryData: CreateCategoryDto): Promise<Category> {
+    const category = CategoryFactory.make({
+      owner_user_id: categoryData.owner_user_id,
+      parent_category_id: categoryData.parent_category_id,
+      name: categoryData.name,
 
-			created_at: new Date(),
-		})
-		const insertedCategory = await this.db.save(category)
+      created_at: new Date(),
+    })
+    const insertedCategory = await this.db.save(category)
 
-		return CategoryMapper.fromEntity(insertedCategory)
-	}
+    return CategoryMapper.fromEntity(insertedCategory)
+  }
 
-	async list(filter?: CategoryRepositoryFilter): Promise<Category[]> {
-		const findFilterWhere = {}
+  async list(filter?: CategoryRepositoryFilter): Promise<Category[]> {
+    const findFilterWhere = {}
 
-		if ("ids" in filter) {
-			findFilterWhere["$or"] = filter.ids.map((id) => ({ id: id }))
-		}
+    if ("ids" in filter) {
+      findFilterWhere["$or"] = filter.ids.map((id) => ({ id: id }))
+    }
 
-		if ("owner_user_id" in filter) {
-			findFilterWhere["owner_user_id"] = filter.owner_user_id
-		}
+    if ("owner_user_id" in filter) {
+      findFilterWhere["owner_user_id"] = filter.owner_user_id
+    }
 
-		const categories = await this.db.find({ where: findFilterWhere })
+    const categories = await this.db.find({ where: findFilterWhere })
 
-		return categories.map(CategoryMapper.fromEntity)
-	}
+    return categories.map(CategoryMapper.fromEntity)
+  }
 }

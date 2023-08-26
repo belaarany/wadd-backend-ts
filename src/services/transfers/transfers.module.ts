@@ -5,9 +5,9 @@ import { TransfersRepository } from "./transfers.repository"
 import { TransfersService } from "./transfers.service"
 
 @Module({
-	imports: [TypeOrmModule.forFeature([TransferEntity])],
-	controllers: [],
-	providers: [TransfersService, TransfersRepository],
-	exports: [TransfersService]
+  imports: [TypeOrmModule.forFeature([TransferEntity])],
+  controllers: [],
+  providers: [TransfersService, TransfersRepository],
+  exports: [TransfersService],
 })
 export class TransfersModule {}
