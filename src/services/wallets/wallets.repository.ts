@@ -34,7 +34,7 @@ export class WalletsRepository implements IWalletsRepository {
   }
 
   async update(walletId: string, walletData: Partial<Wallet>): Promise<Wallet> {
-    const wallet = await this.db.findOne({ id: walletId })
+    const wallet = await this.db.findOneBy({ id: walletId })
 
     if (!wallet) {
       throw new EntityNotFoundException()

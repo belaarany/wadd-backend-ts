@@ -1,13 +1,10 @@
 import { Currency } from "src/interfaces/enums/Currency"
-import { Column, Entity, ObjectIdColumn } from "typeorm"
+import { Column, Entity, ObjectIdColumn, PrimaryColumn } from "typeorm"
 import { WalletType } from "../interfaces/wallet.model"
 
 @Entity("wallets")
 export class WalletEntity {
-  @ObjectIdColumn({ name: "_id" })
-  _id: string
-
-  @Column()
+  @PrimaryColumn()
   id: string
 
   @Column()
