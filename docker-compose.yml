@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: wadd-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    # volumes:
+    #   - /var/folders/postgres:/data/postgres
+    # env_file:
+    #   - docker.env
+    networks:
+      - wadd
+    environment:
+      POSTGRES_USER: wadd
+      POSTGRES_PASSWORD: wadd
+      POSTGRES_DB: wadd
+
+networks:
+  wadd:
+    driver: bridge
