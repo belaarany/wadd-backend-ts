@@ -1,11 +1,8 @@
-import { Column, Entity, ObjectIdColumn } from "typeorm"
+import { Column, Entity, PrimaryColumn } from "typeorm"
 
 @Entity("categories")
 export class CategoryEntity {
-  @ObjectIdColumn({ name: "_id" })
-  _id: string
-
-  @Column()
+  @PrimaryColumn()
   id: string
 
   @Column()

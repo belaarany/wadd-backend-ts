@@ -36,7 +36,7 @@ export class ExpensesRepository implements IExpenseRepository {
   }
 
   async update(entityId: string, entityData: Partial<Expense>): Promise<Expense> {
-    const entity = await this.db.findOne({ id: entityId })
+    const entity = await this.db.findOneBy({ id: entityId })
 
     if (!entity) {
       throw new EntityNotFoundException()

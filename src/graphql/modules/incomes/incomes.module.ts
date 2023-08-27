@@ -3,9 +3,13 @@ import { CategoriesModule } from "src/services/categories/categories.module"
 import { ExpensesModule } from "src/services/expenses/expenses.module"
 import { IncomesModule } from "src/services/incomes/incomes.module"
 import { IncomesResolver } from "./incomes.resolver"
+import { WalletsLoader } from "src/graphql/loaders/wallets.loader"
+import { CategoriesLoader } from "src/graphql/loaders/categories.loader"
+import { ExpensesLoader } from "src/graphql/loaders/expenses.loader"
+import { WalletsModule } from "src/services/wallets/wallets.module"
 
 @Module({
-  imports: [ExpensesModule, IncomesModule, CategoriesModule],
-  providers: [IncomesResolver],
+  imports: [ExpensesModule, IncomesModule, CategoriesModule, WalletsModule],
+  providers: [IncomesResolver, WalletsLoader, CategoriesLoader, ExpensesLoader],
 })
 export class IncomesGQLModule {}

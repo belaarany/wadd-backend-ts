@@ -1,4 +1,4 @@
-import * as Faker from "faker"
+import { faker } from "@faker-js/faker";
 import { IdPrefix } from "../interfaces/enums/IdPrefix"
 
 export function generateId(prefix: IdPrefix): string {
@@ -10,7 +10,7 @@ export function generateId(prefix: IdPrefix): string {
 }
 
 function _generateIdPostfix(): string {
-  const length = 15 + Faker.datatype.number(5)
+  const length = 15 + faker.number.int(5)
   let result = ""
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   const charactersLength = characters.length

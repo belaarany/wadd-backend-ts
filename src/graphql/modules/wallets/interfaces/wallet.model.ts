@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from "@nestjs/graphql"
 import { Currency } from "src/interfaces/enums/Currency"
 import { WalletType } from "src/interfaces/enums/WalletType"
-import GraphQLJSON from "graphql-type-json"
 
 registerEnumType(Currency, {
   name: "Currency",
@@ -61,14 +60,14 @@ export class WalletGQLModel {
   archived_at: string | null
 }
 
-@ObjectType()
-export class BalanceGQLModel {
-  @Field(() => GraphQLJSON)
-  wallets: any
-}
+// @ObjectType()
+// export class BalanceGQLModel {
+//   @Field(() => GraphQLJSON)
+//   wallets: any
+// }
 
-@ObjectType()
-export class WalletBalanceGQLModel {
-  @Field()
-  HUF: number
-}
+// @ObjectType()
+// export class WalletBalanceGQLModel {
+//   @Field()
+//   HUF: number
+// }

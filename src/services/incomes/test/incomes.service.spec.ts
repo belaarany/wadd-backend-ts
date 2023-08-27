@@ -1,4 +1,3 @@
-import * as Faker from "faker"
 import { createConnection, getConnection, getRepository, Repository } from "typeorm"
 import { Currency } from "../../../interfaces/enums/Currency"
 import { IdPrefix } from "../../../interfaces/enums/IdPrefix"
@@ -9,6 +8,7 @@ import { Income } from "../interfaces/income.model"
 import { CreateIncomeDto } from "../interfaces/incomes.dto"
 import { IncomeEntity } from "../schemas/income.entity"
 import { IncomeMock } from "./income.mock"
+import { faker } from "@faker-js/faker";
 
 describe("IncomesService", () => {
   let service: IncomesService
@@ -156,7 +156,7 @@ describe("IncomesService", () => {
     })
 
     it("The 'tags' should not be an empty array", async () => {
-      const tags = new Array(5).fill(null).map(() => Faker.lorem.word())
+      const tags = new Array(5).fill(null).map(() => faker.lorem.word())
 
       const income = await service.create({
         ...mockIncomeCreate,

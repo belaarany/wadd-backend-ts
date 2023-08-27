@@ -31,21 +31,21 @@ export class CategoriesResolver {
 
   @ResolveField(() => [IncomeGQLModel])
   async incomes(@Info() info: GraphQLResolveInfo): Promise<Income[]> {
-    const incomes = await this.incomesService.listByWalletIds(info.variableValues.wallet_ids)
+    const incomes = await this.incomesService.listByWalletIds(info.variableValues.wallet_ids as string[])
 
     return incomes as Income[]
   }
 
   @ResolveField(() => [ExpenseGQLModel])
   async expenses(@Info() info: GraphQLResolveInfo): Promise<Expense[]> {
-    const expenses = await this.expensesService.listByWalletIds(info.variableValues.wallet_ids)
+    const expenses = await this.expensesService.listByWalletIds(info.variableValues.wallet_ids as string[])
 
     return expenses as Expense[]
   }
 
   @ResolveField(() => [TransferGQLModel])
   async transfers(@Info() info: GraphQLResolveInfo): Promise<Transfer[]> {
-    const transfers = await this.transfersService.listByWalletIds(info.variableValues.wallet_ids)
+    const transfers = await this.transfersService.listByWalletIds(info.variableValues.wallet_ids as string[])
 
     return transfers as Transfer[]
   }

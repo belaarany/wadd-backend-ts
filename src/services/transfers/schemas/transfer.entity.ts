@@ -1,13 +1,15 @@
 import { Currency } from "src/interfaces/enums/Currency"
-import { Column, Entity, ObjectIdColumn } from "typeorm"
+import { WalletEntity } from "src/services/wallets/schemas/wallet.entity"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
 
 @Entity("transfers")
 export class TransferEntity {
-  @ObjectIdColumn({ name: "_id" })
-  _id: string
-
-  @Column()
+  @PrimaryColumn()
   id: string
+
+  @ManyToOne(() => WalletEntity, (wallet) => wallet.id, { lazy: true })
+  @JoinColumn({ name: "source_wallet_id" })
+  source_wallet: WalletEntity
 
   @Column()
   source_wallet_id: string
@@ -17,6 +19,10 @@ export class TransferEntity {
 
   @Column()
   source_currency: Currency
+
+  @ManyToOne(() => WalletEntity, (wallet) => wallet.id, { lazy: true })
+  @JoinColumn({ name: "target_wallet_id" })
+  target_wallet: WalletEntity
 
   @Column()
   target_wallet_id: string

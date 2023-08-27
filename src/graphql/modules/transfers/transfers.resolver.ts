@@ -1,8 +1,6 @@
 import { HttpException, HttpStatus, UseGuards } from "@nestjs/common"
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql"
-import DataLoader from "dataloader"
-import { Loader } from "nestjs-dataloader"
-import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { AuthUser, Authorization } from "src/decorators/auth.decorator"
 import { WalletNotExistsException } from "src/exceptions/walletNotExists.exception"
 import { AuthGuard } from "src/guards/auth.guard"
 import { Transfer } from "src/services/transfers/interfaces/transfer.model"
@@ -19,6 +17,7 @@ export class TransfersResolver {
   constructor(
     private walletsService: WalletsService,
     private transfersService: TransfersService,
+    private walletsLoader: WalletsLoader,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -47,17 +46,6 @@ export class TransfersResolver {
 
     const transfer = await this.transfersService.create(data)
 
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "transfer.create",
-    // 	user_id: authUser.id,
-    // 	target_id: transfer.id,
-    // 	platform: null,
-    // 	data: {
-    // 		transfer: transfer,
-    // 	},
-    // })
-
     return transfer
   }
 
@@ -70,21 +58,15 @@ export class TransfersResolver {
   }
 
   @ResolveField(() => WalletGQLModel)
-  async source_wallet(
-    @Parent() parent: TransferGQLModel,
-    @Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
-  ): Promise<Wallet> {
-    const wallet = await walletsLoader.load(parent.source_wallet_id)
+  async source_wallet(@Parent() parent: TransferGQLModel): Promise<Wallet> {
+    const wallet = await this.walletsLoader.load(parent.source_wallet_id)
 
     return wallet
   }
 
   @ResolveField(() => WalletGQLModel)
-  async target_wallet(
-    @Parent() parent: TransferGQLModel,
-    @Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
-  ): Promise<Wallet> {
-    const wallet = await walletsLoader.load(parent.target_wallet_id)
+  async target_wallet(@Parent() parent: TransferGQLModel): Promise<Wallet> {
+    const wallet = await this.walletsLoader.load(parent.target_wallet_id)
 
     return wallet
   }

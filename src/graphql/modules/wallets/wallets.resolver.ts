@@ -25,17 +25,6 @@ export class WalletsResolver {
       icon_url: data.icon_url,
     })
 
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "wallet.create",
-    // 	user_id: wallet.owner_user_id,
-    // 	target_id: wallet.id,
-    // 	platform: null,
-    // 	data: {
-    // 		wallet: wallet,
-    // 	},
-    // })
-
     return wallet
   }
 
@@ -52,17 +41,6 @@ export class WalletsResolver {
       icon_url: data.icon_url,
     })
 
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "wallet.create",
-    // 	user_id: wallet.owner_user_id,
-    // 	target_id: wallet.id,
-    // 	platform: null,
-    // 	data: {
-    // 		wallet: wallet,
-    // 	},
-    // })
-
     return wallet
   }
 
@@ -70,17 +48,6 @@ export class WalletsResolver {
   @Mutation(() => WalletGQLModel)
   async deleteWallet(@Authorization() authUser: AuthUser, @Args("walletId") walletId: string): Promise<Wallet> {
     let wallet = await this.walletsService.delete(walletId)
-
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "wallet.create",
-    // 	user_id: wallet.owner_user_id,
-    // 	target_id: wallet.id,
-    // 	platform: null,
-    // 	data: {
-    // 		wallet: wallet,
-    // 	},
-    // })
 
     return wallet
   }

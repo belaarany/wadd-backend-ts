@@ -1,15 +1,13 @@
 import { UseGuards } from "@nestjs/common"
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql"
-import DataLoader from "dataloader"
-import { Loader } from "nestjs-dataloader"
-import { Authorization, AuthUser } from "src/decorators/auth.decorator"
+import { AuthUser, Authorization } from "src/decorators/auth.decorator"
 import { CategoryNotExistsException } from "src/exceptions/categoryNotExists.exception"
 import { IncomeNotExistsException } from "src/exceptions/incomeNotExists.exception"
 import { CategoriesLoader } from "src/graphql/loaders/categories.loader"
 import { IncomesLoader } from "src/graphql/loaders/incomes.loader"
 import { AuthGuard } from "src/guards/auth.guard"
-import { LogMicroservice } from "src/microservices/log/log.service"
 import { CategoriesService } from "src/services/categories/categories.service"
+import { Category } from "src/services/categories/interfaces/category.model"
 import { ExpensesService } from "src/services/expenses/expenses.service"
 import { Expense } from "src/services/expenses/interfaces/expense.model"
 import { IncomesService } from "src/services/incomes/incomes.service"
@@ -28,6 +26,9 @@ export class ExpensesResolver {
     private expensesService: ExpensesService,
     private categoriesService: CategoriesService,
     private incomesService: IncomesService,
+    private categoriesLoader: CategoriesLoader,
+    private incomesLoader: IncomesLoader,
+    private walletsLoader: WalletsLoader,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -48,17 +49,6 @@ export class ExpensesResolver {
 
     const expense = await this.expensesService.create(data)
 
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "expense.create",
-    // 	user_id: authUser.id,
-    // 	target_id: expense.id,
-    // 	platform: null,
-    // 	data: {
-    // 		expense: expense,
-    // 	},
-    // })
-
     return expense
   }
 
@@ -71,31 +61,22 @@ export class ExpensesResolver {
   }
 
   @ResolveField(() => WalletGQLModel)
-  async wallet(
-    @Parent() parent: ExpenseGQLModel,
-    @Loader(WalletsLoader) walletsLoader: DataLoader<string, Wallet>,
-  ): Promise<Wallet> {
-    const wallet = await walletsLoader.load(parent.wallet_id)
+  async wallet(@Parent() parent: ExpenseGQLModel): Promise<Wallet> {
+    const wallet = await this.walletsLoader.load(parent.wallet_id)
 
     return wallet
   }
 
   @ResolveField(() => CategoryGQLModel)
-  async category(
-    @Parent() parent: ExpenseGQLModel,
-    @Loader(CategoriesLoader) categoriesLoader: DataLoader<string, Wallet>,
-  ): Promise<Wallet> {
-    const category = await categoriesLoader.load(parent.category_id)
+  async category(@Parent() parent: ExpenseGQLModel): Promise<Category> {
+    const category = await this.categoriesLoader.load(parent.category_id)
 
     return category
   }
 
   @ResolveField(() => [IncomeGQLModel])
-  async related_incomes(
-    @Parent() parent: ExpenseGQLModel,
-    @Loader(IncomesLoader) incomesLoader: DataLoader<string, Income>,
-  ): Promise<Income[]> {
-    const incomes = await incomesLoader.loadMany(parent.related_income_ids)
+  async related_incomes(@Parent() parent: ExpenseGQLModel): Promise<Income[]> {
+    const incomes = await this.incomesLoader.loadMany(parent.related_income_ids)
 
     return incomes as Income[]
   }

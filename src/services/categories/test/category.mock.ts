@@ -1,4 +1,4 @@
-import * as Faker from "faker"
+import { faker } from "@faker-js/faker";
 import { generateId } from "../../../utils/GenerateId"
 import { IdPrefix } from "../../../interfaces/enums/IdPrefix"
 import { CreateCategoryDto } from "../interfaces/category.dto"
@@ -11,7 +11,7 @@ export class CategoryMock {
     return {
       owner_user_id: generateId(IdPrefix.USER),
       parent_category_id: generateId(IdPrefix.CATEGORY),
-      name: Faker.lorem.word(),
+      name: faker.lorem.word(),
     }
   }
 

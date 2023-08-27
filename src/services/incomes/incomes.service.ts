@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common"
-import Decimal from "decimal.js"
 import { MultipleEntitiesFoundException } from "../../errors/entity.errors"
 import { ISummarizable, Summarized, SummarizedCollection } from "../../interfaces/contracts/Summarizable.interface"
 import { Kind } from "../../interfaces/enums/Kind"
@@ -70,9 +69,9 @@ export class IncomesService implements IIncomesService, ISummarizable {
         sum.wallets[income.wallet_id][income.currency] = 0
       }
 
-      sum.wallets[income.wallet_id][income.currency] = new Decimal(sum.wallets[income.wallet_id][income.currency])
-        .add(income.amount)
-        .toNumber()
+      // sum.wallets[income.wallet_id][income.currency] = new Decimal(sum.wallets[income.wallet_id][income.currency])
+      //   .add(income.amount)
+      //   .toNumber()
     }
 
     return {

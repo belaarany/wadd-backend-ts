@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common"
 import { GqlExecutionContext } from "@nestjs/graphql"
-import { IdentityMicroservice } from "src/microservices/identity/identity.service"
 
 @Injectable()
 export class AuthGuard implements CanActivate {

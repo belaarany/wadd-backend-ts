@@ -1,13 +1,16 @@
 import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
-import { NestDataLoader } from "nestjs-dataloader"
+import { INestDataLoader, NestDataLoader } from "src/core/utils/data-loader"
 import { Wallet } from "src/services/wallets/interfaces/wallet.model"
 import { WalletsService } from "src/services/wallets/wallets.service"
-import { ExpenseMicroserviceWalletsService } from "../../microservices/expense/services/wallets.service"
 
 @Injectable()
-export class WalletsLoader implements NestDataLoader<string, Wallet> {
-  constructor(private walletsService: WalletsService) {}
+export class WalletsLoader extends NestDataLoader<Wallet> implements INestDataLoader<Wallet> {
+  constructor(private walletsService: WalletsService) {
+    super()
+
+    this.dataLoader = this.generateDataLoader()
+  }
 
   generateDataLoader(): DataLoader<string, Wallet> {
     return new DataLoader<string, Wallet>((walletIds) => this.walletsService.listByIds(walletIds as string[]))

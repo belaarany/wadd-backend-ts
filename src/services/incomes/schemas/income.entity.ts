@@ -1,13 +1,16 @@
-import { Column, Entity, ObjectIdColumn } from "typeorm"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
 import { Currency } from "../../../interfaces/enums/Currency"
+import { WalletEntity } from "src/services/wallets/schemas/wallet.entity"
+import { CategoryEntity } from "src/services/categories/schemas/category.entity"
 
 @Entity("incomes")
 export class IncomeEntity {
-  @ObjectIdColumn({ name: "_id" })
-  _id: string
-
-  @Column()
+  @PrimaryColumn()
   id: string
+
+  @ManyToOne(() => WalletEntity, (wallet) => wallet.id, { lazy: true })
+  @JoinColumn({ name: "wallet_id" })
+  wallet: WalletEntity
 
   @Column()
   wallet_id: string
@@ -24,22 +27,26 @@ export class IncomeEntity {
   @Column()
   location: string
 
-  @Column()
+  @Column({ type: "jsonb" })
   related_expense_ids: string[]
 
   @Column()
   note: string
 
+  @ManyToOne(() => CategoryEntity, (category) => category.id, { lazy: true })
+  @JoinColumn({ name: "category_id" })
+  category: CategoryEntity
+
   @Column()
   category_id: string
 
-  @Column()
+  @Column({ type: "jsonb" })
   tags: string[]
 
   @Column({ nullable: true })
   group_id: string | null = null
 
-  @Column()
+  @Column({ type: "jsonb" })
   attachment_file_ids: string[]
 
   @Column({ type: "boolean" })

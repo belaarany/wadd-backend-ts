@@ -1,4 +1,4 @@
-import * as Faker from "faker"
+import { faker } from "@faker-js/faker";
 import { createConnection, getConnection, getRepository, Repository } from "typeorm"
 import { generateId } from "../../../utils/GenerateId"
 import { IdPrefix } from "../../../interfaces/enums/IdPrefix"
@@ -156,7 +156,7 @@ describe("ExpensesService", () => {
     })
 
     it("The 'tags' should not be an empty array", async () => {
-      const tags = new Array(5).fill(null).map(() => Faker.lorem.word())
+      const tags = new Array(5).fill(null).map(() => faker.lorem.word())
 
       const expense = await service.create({
         ...mockExpenseCreate,
