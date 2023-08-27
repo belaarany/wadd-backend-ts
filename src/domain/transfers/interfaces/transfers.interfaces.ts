@@ -7,12 +7,4 @@ export interface ITransfersService {
   listByWalletIds(walletIds: string[]): Promise<Transfer[]>
 }
 
-export interface ITransfersRepository {
-  create(transferData: Partial<Transfer>): Promise<Transfer>
-  list(filter?: TransferRepositoryFilter): Promise<Transfer[]>
-}
-
-export type TransferRepositoryFilter = {
-  ids?: string[]
-  wallet_ids?: string[]
-}
+export interface ITransfersRepository {}

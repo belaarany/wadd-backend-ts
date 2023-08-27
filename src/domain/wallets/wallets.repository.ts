@@ -1,21 +1,18 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { EntityNotFoundException } from "src/core/errors/entity.errors"
 import { Repository } from "typeorm"
-import { Wallet } from "./interfaces/wallet.model"
-import { CreateWalletDto } from "./interfaces/wallets.dto"
-import { IWalletsRepository, WalletRepositoryFilter } from "./interfaces/wallets.interfaces"
+import { IWalletsRepository } from "./interfaces/wallets.interfaces"
 import { WalletEntity } from "./schemas/wallet.entity"
-import { WalletFactory } from "./schemas/wallet.factory"
-import { WalletMapper } from "./schemas/wallet.mapper"
 
 @Injectable()
-export class WalletsRepository implements IWalletsRepository {
+export class WalletsRepository extends Repository<WalletEntity> implements IWalletsRepository {
   constructor(
     @InjectRepository(WalletEntity)
-    private readonly db: Repository<WalletEntity>,
-  ) {}
-
+    private readonly repository: Repository<WalletEntity>,
+  ) {
+    super(repository.target, repository.manager, repository.queryRunner)
+  }
+  /*
   async create(data: CreateWalletDto): Promise<Wallet> {
     const wallet = WalletFactory.make({
       name: data.name,
@@ -75,5 +72,5 @@ export class WalletsRepository implements IWalletsRepository {
     const wallets = await this.db.find({ where: findFilterWhere })
 
     return wallets.map(WalletMapper.fromEntity)
-  }
+  }*/
 }

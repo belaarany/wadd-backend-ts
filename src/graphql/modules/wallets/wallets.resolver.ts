@@ -45,11 +45,11 @@ export class WalletsResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => WalletGQLModel)
-  async deleteWallet(@Authorization() authUser: AuthUser, @Args("walletId") walletId: string): Promise<Wallet> {
-    let wallet = await this.walletsService.delete(walletId)
+  @Mutation(() => String)
+  async deleteWallet(@Authorization() authUser: AuthUser, @Args("walletId") walletId: string): Promise<string> {
+    let deletedWalletId = await this.walletsService.delete(walletId)
 
-    return wallet
+    return deletedWalletId
   }
 
   @UseGuards(AuthGuard)

@@ -1,40 +1,41 @@
 import { Injectable } from "@nestjs/common"
-import { Category } from "./interfaces/category.model"
-import { CreateCategoryDto } from "./interfaces/category.dto"
-import { ICategoriesService } from "./interfaces/categories.interfaces"
 import { CategoriesRepository } from "./categories.repository"
-import { MultipleEntitiesFoundException } from "src/core/errors/entity.errors"
+import { ICategoriesService } from "./interfaces/categories.interfaces"
+import { CreateCategoryDto } from "./interfaces/category.dto"
+import { Category } from "./interfaces/category.model"
+import { CategoryFactory } from "./schemas/category.factory"
+import { CategoryMapper } from "./schemas/category.mapper"
+import { In } from "typeorm"
 
 @Injectable()
 export class CategoriesService implements ICategoriesService {
   constructor(private readonly categoriesRepo: CategoriesRepository) {}
 
-  async create(transferData: CreateCategoryDto): Promise<Category> {
-    const category = await this.categoriesRepo.create(transferData)
-    return category
+  async create(categoryData: CreateCategoryDto): Promise<Category> {
+    const category = CategoryFactory.make({
+      owner_user_id: categoryData.owner_user_id,
+      parent_category_id: categoryData.parent_category_id,
+      name: categoryData.name,
+    })
+
+    const insertedCategory = await this.categoriesRepo.create(category)
+
+    return CategoryMapper.fromEntity(insertedCategory)
   }
 
   async exists(categoryId: string): Promise<boolean> {
-    const categories = await this.categoriesRepo.list({ ids: [categoryId] })
-
-    if (categories.length > 1) {
-      throw new MultipleEntitiesFoundException()
-    }
-
-    if (categories.length === 0) {
-      return false
-    }
-
-    return true
+    return await this.categoriesRepo.exist({ where: { id: categoryId } })
   }
 
   async listByUserId(userId: string): Promise<Category[]> {
-    const categories = await this.categoriesRepo.list({ owner_user_id: userId })
-    return categories
+    const categories = await this.categoriesRepo.findBy({ owner_user_id: userId })
+
+    return categories.map(CategoryMapper.fromEntity)
   }
 
   async listByIds(categoryIds: string[]): Promise<Category[]> {
-    const categories = await this.categoriesRepo.list({ ids: categoryIds })
-    return categories
+    const categories = await this.categoriesRepo.findBy({ id: In(categoryIds) })
+
+    return categories.map(CategoryMapper.fromEntity)
   }
 }

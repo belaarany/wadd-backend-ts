@@ -8,12 +8,4 @@ export interface ICategoriesService {
   listByIds(categoryIds: string[]): Promise<Category[]>
 }
 
-export interface ICategoriesRepository {
-  create(transferData: Partial<Category>): Promise<Category>
-  list(filter?: CategoryRepositoryFilter): Promise<Category[]>
-}
-
-export type CategoryRepositoryFilter = {
-  ids?: string[]
-  owner_user_id?: string
-}
+export interface ICategoriesRepository {}

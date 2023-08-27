@@ -8,10 +8,7 @@ export interface IIncomesService {
   listByIds(incomeIds: string[]): Promise<Income[]>
 }
 
-export interface IIncomesRepository {
-  create(incomeData: Partial<Income>): Promise<Income>
-  list(filter?: IncomeRepositoryFilter): Promise<Income[]>
-}
+export interface IIncomesRepository {}
 
 export type IncomeRepositoryFilter = {
   ids?: string[]

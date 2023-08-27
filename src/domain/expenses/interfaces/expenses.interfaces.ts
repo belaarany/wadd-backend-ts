@@ -9,13 +9,4 @@ export interface IExpenseService {
   listByIds(ids: string[]): Promise<Expense[]>
 }
 
-export interface IExpenseRepository {
-  create(data: Partial<Expense>): Promise<Expense>
-  update(id: string, data: Partial<Expense>): Promise<Expense>
-  list(filter?: ExpenseRepositoryFilter): Promise<Expense[]>
-}
-
-export type ExpenseRepositoryFilter = {
-  ids?: string[]
-  wallet_ids?: string[]
-}
+export interface IExpenseRepository {}

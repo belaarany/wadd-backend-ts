@@ -132,7 +132,7 @@ type Query {
 type Mutation {
   createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
   updateWallet(data: UpdateWalletGQLInput!): WalletGQLModel!
-  deleteWallet(walletId: String!): WalletGQLModel!
+  deleteWallet(walletId: String!): String!
   createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
   updateCategory(data: UpdateCategoryGQLInput!): CategoryGQLModel!
   deleteCategory(categoryId: String!): CategoryGQLModel!
