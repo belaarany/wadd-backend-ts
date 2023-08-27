@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql"
 import { IsEnum, IsNotEmpty } from "class-validator"
-import { Currency } from "src/interfaces/enums/Currency"
-import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"
+import { Currency } from "src/core/interfaces/enums/Currency"
+import { IsWaddObjectId } from "src/core/validators/IsWaddObjectIs"
 
 @InputType()
 export class CreateTransferGQLInput {

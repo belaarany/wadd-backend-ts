@@ -1,8 +1,8 @@
 import { Field, InputType } from "@nestjs/graphql"
 import { IsEnum, IsHexColor, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from "class-validator"
-import { Currency } from "src/interfaces/enums/Currency"
-import { WalletType } from "src/interfaces/enums/WalletType"
-import { IsWaddObjectId } from "src/validators/IsWaddObjectIs"
+import { Currency } from "src/core/interfaces/enums/Currency"
+import { WalletType } from "src/core/interfaces/enums/WalletType"
+import { IsWaddObjectId } from "src/core/validators/IsWaddObjectIs"
 
 @InputType()
 export class CreateWalletGQLInput {

@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common"
-import { CategoriesModule } from "src/services/categories/categories.module"
-import { CategoriesService } from "src/services/categories/categories.service"
+import { CategoriesModule } from "src/domain/categories/categories.module"
+import { CategoriesService } from "src/domain/categories/categories.service"
 import { CategoriesResolver } from "./categories.resolver"
 
 @Module({

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
 import { INestDataLoader, NestDataLoader } from "src/core/utils/data-loader"
-import { Wallet } from "src/services/wallets/interfaces/wallet.model"
-import { WalletsService } from "src/services/wallets/wallets.service"
+import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
+import { WalletsService } from "src/domain/wallets/wallets.service"
 
 @Injectable()
 export class WalletsLoader extends NestDataLoader<Wallet> implements INestDataLoader<Wallet> {

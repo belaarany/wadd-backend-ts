@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import * as DataLoader from "dataloader"
 import { INestDataLoader, NestDataLoader } from "src/core/utils/data-loader"
-import { IncomesService } from "src/services/incomes/incomes.service"
-import { Income } from "src/services/incomes/interfaces/income.model"
+import { IncomesService } from "src/domain/incomes/incomes.service"
+import { Income } from "src/domain/incomes/interfaces/income.model"
 
 @Injectable()
 export class IncomesLoader extends NestDataLoader<Income> implements INestDataLoader<Income> {

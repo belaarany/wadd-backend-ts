@@ -1,9 +1,9 @@
 import { UseGuards } from "@nestjs/common"
 import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql"
-import { Authorization, AuthUser } from "src/decorators/auth.decorator"
-import { AuthGuard } from "src/guards/auth.guard"
-import { Wallet } from "src/services/wallets/interfaces/wallet.model"
-import { WalletsService } from "src/services/wallets/wallets.service"
+import { Authorization, AuthUser } from "src/core/decorators/auth.decorator"
+import { AuthGuard } from "src/core/guards/auth.guard"
+import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
+import { WalletsService } from "src/domain/wallets/wallets.service"
 import { WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput, UpdateWalletGQLInput } from "./interfaces/wallets.inputs"
 

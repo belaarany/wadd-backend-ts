@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, registerEnumType } from "@nestjs/graphql"
-import { Currency } from "src/interfaces/enums/Currency"
-import { WalletType } from "src/interfaces/enums/WalletType"
+import { Currency } from "src/core/interfaces/enums/Currency"
+import { WalletType } from "src/core/interfaces/enums/WalletType"
 
 @ObjectType()
 export class TransactionGQLModel {

@@ -1,10 +1,10 @@
 import { Module } from "@nestjs/common"
-import { ExpensesModule } from "src/services/expenses/expenses.module"
-import { ExpensesService } from "src/services/expenses/expenses.service"
-import { IncomesModule } from "src/services/incomes/incomes.module"
-import { IncomesService } from "src/services/incomes/incomes.service"
-import { TransfersModule } from "src/services/transfers/transfers.module"
-import { TransfersService } from "src/services/transfers/transfers.service"
+import { ExpensesModule } from "src/domain/expenses/expenses.module"
+import { ExpensesService } from "src/domain/expenses/expenses.service"
+import { IncomesModule } from "src/domain/incomes/incomes.module"
+import { IncomesService } from "src/domain/incomes/incomes.service"
+import { TransfersModule } from "src/domain/transfers/transfers.module"
+import { TransfersService } from "src/domain/transfers/transfers.service"
 import { CategoriesResolver } from "./transactions.resolver"
 
 @Module({
