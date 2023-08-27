@@ -1,12 +1,10 @@
+import { BaseEntity } from "src/core/entities/base-entity"
 import { Currency } from "src/interfaces/enums/Currency"
-import { Column, Entity, ObjectIdColumn, PrimaryColumn } from "typeorm"
+import { Column, Entity } from "typeorm"
 import { WalletType } from "../interfaces/wallet.model"
 
 @Entity("wallets")
-export class WalletEntity {
-  @PrimaryColumn()
-  id: string
-
+export class WalletEntity extends BaseEntity {
   @Column()
   name: string
 
@@ -31,21 +29,10 @@ export class WalletEntity {
   @Column()
   icon_url: string
 
-  @Column({ type: "boolean" })
-  is_deleted = false
-
-  @Column({ type: "boolean" })
-  is_archived = false
-
-  @Column()
-  created_at: Date
-
-  @Column({ nullable: true })
-  updated_at: Date = null
-
-  @Column({ nullable: true })
-  deleted_at: Date = null
-
   @Column({ nullable: true })
   archived_at: Date = null
+
+  get is_archived() {
+    return !!this.archived_at
+  }
 }

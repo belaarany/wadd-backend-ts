@@ -19,8 +19,6 @@ export class ExpenseFactory {
     expense.tags = []
     expense.group_id = null
     expense.attachment_file_ids = []
-    expense.is_deleted = false
-    expense.is_cancelled = false
     expense.created_at = null
     expense.updated_at = null
     expense.deleted_at = null

@@ -72,10 +72,6 @@ export class WalletsRepository implements IWalletsRepository {
       findFilterWhere["owner_user_id"] = filter.owner_user_id
     }
 
-    if ("is_deleted" in filter) {
-      findFilterWhere["is_deleted"] = filter.is_deleted
-    }
-
     const wallets = await this.db.find({ where: findFilterWhere })
 
     return wallets.map(WalletMapper.fromEntity)

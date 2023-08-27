@@ -11,7 +11,6 @@ export class CategoryFactory {
     category.owner_user_id = null
     category.parent_category_id = null
     category.name = ""
-    category.is_deleted = false
     category.created_at = null
     category.updated_at = null
     category.deleted_at = null

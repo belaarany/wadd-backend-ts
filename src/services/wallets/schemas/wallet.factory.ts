@@ -18,8 +18,6 @@ export class WalletFactory {
     wallet.type = WalletType.CASH
     wallet.color_hex = "000000"
     wallet.icon_url = ""
-    wallet.is_archived = false
-    wallet.is_deleted = false
     wallet.created_at = null
     wallet.updated_at = null
     wallet.archived_at = null

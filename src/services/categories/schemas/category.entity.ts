@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryColumn } from "typeorm"
+import { BaseEntity } from "src/core/entities/base-entity"
+import { Column, Entity } from "typeorm"
 
 @Entity("categories")
-export class CategoryEntity {
-  @PrimaryColumn()
-  id: string
-
+export class CategoryEntity extends BaseEntity {
   @Column()
   owner_user_id: string
 
@@ -13,16 +11,4 @@ export class CategoryEntity {
 
   @Column()
   name: string
-
-  @Column({ type: "boolean" })
-  is_deleted = false
-
-  @Column()
-  created_at: Date = null
-
-  @Column({ nullable: true })
-  updated_at: Date = null
-
-  @Column({ nullable: true })
-  deleted_at: Date = null
 }

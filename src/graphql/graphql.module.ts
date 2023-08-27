@@ -1,6 +1,7 @@
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo"
 import { Module } from "@nestjs/common"
-import { APP_INTERCEPTOR } from "@nestjs/core"
 import { GraphQLModule } from "@nestjs/graphql"
+import { join } from "path"
 import { CategoriesModule } from "src/services/categories/categories.module"
 import { ExpensesModule } from "src/services/expenses/expenses.module"
 import { IncomesModule } from "src/services/incomes/incomes.module"
@@ -16,7 +17,6 @@ import { IncomesGQLModule } from "./modules/incomes/incomes.module"
 import { TransactionsGQLModule } from "./modules/transactions/transactions.module"
 import { TransfersGQLModule } from "./modules/transfers/transfers.module"
 import { WalletsGQLModule } from "./modules/wallets/wallets.module"
-import { ApolloDriver } from "@nestjs/apollo"
 
 @Module({
   imports: [
@@ -31,9 +31,9 @@ import { ApolloDriver } from "@nestjs/apollo"
     ExpensesGQLModule,
     TransfersGQLModule,
     TransactionsGQLModule,
-    GraphQLModule.forRoot({
+    GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: "schema.gql",
+      autoSchemaFile: join(process.cwd(), "./src/graphql/schemas/schema.gql"),
       playground: true,
     }),
   ],

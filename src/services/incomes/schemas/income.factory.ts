@@ -19,8 +19,6 @@ export class IncomeFactory {
     income.tags = []
     income.group_id = null
     income.attachment_file_ids = []
-    income.is_deleted = false
-    income.is_cancelled = false
     income.created_at = null
     income.updated_at = null
     income.deleted_at = null

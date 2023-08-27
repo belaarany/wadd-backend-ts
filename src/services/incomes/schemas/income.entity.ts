@@ -1,13 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
-import { Currency } from "../../../interfaces/enums/Currency"
-import { WalletEntity } from "src/services/wallets/schemas/wallet.entity"
+import { BaseEntity } from "src/core/entities/base-entity"
 import { CategoryEntity } from "src/services/categories/schemas/category.entity"
+import { WalletEntity } from "src/services/wallets/schemas/wallet.entity"
+import { Column, Entity, JoinColumn, ManyToOne } from "typeorm"
+import { Currency } from "../../../interfaces/enums/Currency"
 
 @Entity("incomes")
-export class IncomeEntity {
-  @PrimaryColumn()
-  id: string
-
+export class IncomeEntity extends BaseEntity {
   @ManyToOne(() => WalletEntity, (wallet) => wallet.id, { lazy: true })
   @JoinColumn({ name: "wallet_id" })
   wallet: WalletEntity
@@ -49,21 +47,10 @@ export class IncomeEntity {
   @Column({ type: "jsonb" })
   attachment_file_ids: string[]
 
-  @Column({ type: "boolean" })
-  is_deleted = false
-
-  @Column({ type: "boolean" })
-  is_cancelled = false
-
-  @Column()
-  created_at: Date
-
-  @Column({ nullable: true })
-  updated_at: Date = null
-
-  @Column({ nullable: true })
-  deleted_at: Date = null
-
   @Column({ nullable: true })
   cancelled_at: Date = null
+
+  get is_cancelled() {
+    return !!this.cancelled_at
+  }
 }

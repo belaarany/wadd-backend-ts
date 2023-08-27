@@ -16,7 +16,6 @@ export class TransferFactory {
     transfer.target_currency = null
     transfer.timestamp = null
     transfer.note = ""
-    transfer.is_deleted = false
     transfer.created_at = null
     transfer.updated_at = null
     transfer.deleted_at = null
