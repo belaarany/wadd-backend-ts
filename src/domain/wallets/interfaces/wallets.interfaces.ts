@@ -1,14 +1,14 @@
-import { Wallet } from "./wallet.model"
+import { WalletEntity } from "../schemas/wallet.entity"
 import { CreateWalletDto, UpdateWalletDto } from "./wallets.dto"
 
 export interface IWalletsService {
-  create(data: CreateWalletDto): Promise<Wallet>
+  create(data: CreateWalletDto): Promise<WalletEntity>
   exists(walletId: string): Promise<boolean>
-  update(walletId: string, walletData: UpdateWalletDto): Promise<Wallet>
-  get(walletId: string): Promise<Wallet>
-  listAll(): Promise<Wallet[]>
-  listByIds(walletIds: string[]): Promise<Wallet[]>
-  listByUserId(userId: string): Promise<Wallet[]>
+  update(walletId: string, walletData: UpdateWalletDto): Promise<WalletEntity>
+  get(walletId: string): Promise<WalletEntity>
+  listAll(): Promise<WalletEntity[]>
+  listByIds(walletIds: string[]): Promise<WalletEntity[]>
+  listByUserId(userId: string): Promise<WalletEntity[]>
   delete(walletId: string): Promise<string>
   // archive(walletId: string): Promise<Wallet>
 }

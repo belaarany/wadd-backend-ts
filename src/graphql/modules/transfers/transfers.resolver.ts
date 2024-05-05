@@ -5,12 +5,13 @@ import { WalletNotExistsException } from "src/core/exceptions/walletNotExists.ex
 import { AuthGuard } from "src/core/guards/auth.guard"
 import { Transfer } from "src/domain/transfers/interfaces/transfer.model"
 import { TransfersService } from "src/domain/transfers/transfers.service"
-import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
+import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
 import { WalletsService } from "src/domain/wallets/wallets.service"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { TransferGQLModel } from "./interfaces/transfer.model"
 import { CreateTransferGQLInput } from "./interfaces/transfers.inputs"
+import { TransferEntity } from "src/domain/transfers/schemas/transfer.entity"
 
 @Resolver(() => TransferGQLModel)
 export class TransfersResolver {
@@ -21,11 +22,11 @@ export class TransfersResolver {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => TransferGQLModel)
+  @Mutation(() => TransferGQLModel, { name: "create_transfer" })
   async createTransfer(
     @Authorization() authUser: AuthUser,
     @Args("data") data: CreateTransferGQLInput,
-  ): Promise<Transfer> {
+  ): Promise<TransferEntity> {
     if ((await this.walletsService.exists(data.source_wallet_id)) === false) {
       throw new WalletNotExistsException(data.source_wallet_id)
     }
@@ -51,21 +52,21 @@ export class TransfersResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [TransferGQLModel])
-  async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<Transfer[]> {
+  async transfers(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<TransferEntity[]> {
     const incomes = await this.transfersService.listByWalletIds(walletIds)
 
     return incomes
   }
 
   @ResolveField(() => WalletGQLModel)
-  async source_wallet(@Parent() parent: TransferGQLModel): Promise<Wallet> {
+  async source_wallet(@Parent() parent: TransferGQLModel): Promise<WalletEntity> {
     const wallet = await this.walletsLoader.load(parent.source_wallet_id)
 
     return wallet
   }
 
   @ResolveField(() => WalletGQLModel)
-  async target_wallet(@Parent() parent: TransferGQLModel): Promise<Wallet> {
+  async target_wallet(@Parent() parent: TransferGQLModel): Promise<WalletEntity> {
     const wallet = await this.walletsLoader.load(parent.target_wallet_id)
 
     return wallet

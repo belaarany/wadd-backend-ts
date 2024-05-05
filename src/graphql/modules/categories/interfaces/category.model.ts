@@ -27,14 +27,20 @@ export class CategoryGQLModel {
   name: string
 
   @Field()
+  color: string
+
+  @Field()
+  icon: string
+
+  @Field()
   is_deleted: boolean
 
   @Field({ nullable: true })
-  created_at: string | null
+  created_at: Date | null
 
   @Field({ nullable: true })
-  updated_at: string | null
+  updated_at: Date | null
 
   @Field({ nullable: true })
-  deleted_at: string | null
+  deleted_at: Date | null
 }

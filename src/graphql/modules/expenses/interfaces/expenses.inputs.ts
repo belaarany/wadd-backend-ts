@@ -24,40 +24,45 @@ export class CreateExpenseGQLInput {
   // @IsDateString()
   timestamp: Date
 
-  @Field()
+  @Field({ nullable: true })
   @IsNotEmpty()
-  location: string
+  @IsOptional()
+  location?: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsNotEmpty()
   @IsArray()
   @ArrayUnique()
+  @IsOptional()
   @IsWaddObjectId({ each: true })
-  related_income_ids: string[]
-
-  @Field()
-  @IsNotEmpty()
-  note: string
-
-  @Field()
-  @IsNotEmpty()
-  category_id: string
-
-  @Field(() => [String])
-  @IsNotEmpty()
-  @IsArray()
-  @ArrayUnique()
-  tags: string[]
+  related_income_ids?: string[]
 
   @Field({ nullable: true })
   @IsNotEmpty()
   @IsOptional()
-  group_id: string | null
+  note?: string
 
-  @Field(() => [String])
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  category_id: string
+
+  @Field(() => [String], { nullable: true })
+  @IsNotEmpty()
+  @IsArray()
+  @ArrayUnique()
+  @IsOptional()
+  tags?: string[]
+
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  @IsOptional()
+  group_id?: string
+
+  @Field(() => [String], { nullable: true })
+  @IsOptional()
   @IsNotEmpty()
   @IsArray()
   @ArrayUnique()
   @IsWaddObjectId({ each: true })
-  attachment_file_ids: string[]
+  attachment_file_ids?: string[]
 }

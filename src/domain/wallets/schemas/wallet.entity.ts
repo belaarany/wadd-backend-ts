@@ -1,10 +1,23 @@
+import { Expose } from "class-transformer"
 import { BaseEntity } from "src/core/entities/base-entity"
 import { Currency } from "src/core/interfaces/enums/Currency"
+import { IdPrefix } from "src/core/interfaces/enums/IdPrefix"
+import { Kind } from "src/core/interfaces/enums/Kind"
+import { WalletType } from "src/core/interfaces/enums/WalletType"
 import { Column, Entity } from "typeorm"
-import { WalletType } from "../interfaces/wallet.model"
+
+interface IEntity {
+  idPrefix: IdPrefix
+  kind: Kind
+}
 
 @Entity("wallets")
-export class WalletEntity extends BaseEntity {
+export class WalletEntity extends BaseEntity implements IEntity {
+  readonly idPrefix = IdPrefix.WALLET
+
+  @Expose()
+  readonly kind = Kind.WALLET
+
   @Column()
   name: string
 

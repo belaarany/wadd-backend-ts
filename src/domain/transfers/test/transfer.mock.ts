@@ -8,7 +8,7 @@ import { TransferMapper } from "../schemas/transfer.mapper"
 import { Currency } from "src/core/interfaces/enums/Currency"
 
 export class TransferMock {
-  static makeCreateRequest(): CreateTransferDto {
+  /*static makeCreateRequest(): CreateTransferDto {
     return {
       source_wallet_id: generateId(IdPrefix.WALLET),
       source_amount: faker.datatype.number(80000),
@@ -46,5 +46,5 @@ export class TransferMock {
       "updated_at",
       "deleted_at",
     ]
-  }
+  }*/
 }

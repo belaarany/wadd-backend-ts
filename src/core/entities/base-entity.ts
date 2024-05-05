@@ -1,19 +1,31 @@
-import { CreateDateColumn, DeleteDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm"
+import { BeforeInsert, CreateDateColumn, DeleteDateColumn, PrimaryColumn, UpdateDateColumn } from "typeorm"
+import { IdPrefix } from "../interfaces/enums/IdPrefix"
+import { Kind } from "../interfaces/enums/Kind"
+import { generateId } from "../utils/GenerateId"
 
 export abstract class BaseEntity {
+  readonly idPrefix: IdPrefix
+
+  readonly kind: Kind
+
   @PrimaryColumn()
-  id: string = ""
+  id: string
 
   @CreateDateColumn({ nullable: true })
-  created_at: Date = null
+  created_at: Date
 
-  @UpdateDateColumn({ nullable: true })
-  updated_at: Date = null
+  @UpdateDateColumn()
+  updated_at: Date
 
-  @DeleteDateColumn({ nullable: true })
-  deleted_at: Date = null
+  @DeleteDateColumn()
+  deleted_at: Date
 
   get is_deleted(): boolean {
     return !!this.deleted_at
+  }
+
+  @BeforeInsert()
+  generateId() {
+    this.id = generateId(this.idPrefix)
   }
 }

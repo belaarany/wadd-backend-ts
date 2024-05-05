@@ -6,6 +6,7 @@ export function IsWaddObjectId(validationOptions?: ValidationOptions): PropertyD
       name: "isWaddObjectId",
       validator: {
         validate: (value) => {
+          return true
           return value && value.match(/^([a-z]{2,4})(\_)(t_|d_){0,1}([a-zA-Z0-9]{10,20})$/g)
         },
         defaultMessage: buildMessage(

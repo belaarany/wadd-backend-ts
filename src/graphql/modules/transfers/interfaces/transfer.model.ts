@@ -21,35 +21,26 @@ export class TransferGQLModel {
   source_wallet_id: string
 
   @Field()
-  source_amount: number
-
-  @Field()
-  source_currency: Currency
-
-  @Field()
   target_wallet_id: string
 
   @Field()
-  target_amount: number
+  amount: number
 
   @Field()
-  target_currency: Currency
+  timestamp: Date
 
-  @Field()
-  timestamp: string
-
-  @Field()
+  @Field({ nullable: true })
   note: string
 
   @Field()
   is_deleted: boolean
 
   @Field({ nullable: true })
-  created_at: string | null
+  created_at: Date | null
 
   @Field({ nullable: true })
-  updated_at: string | null
+  updated_at: Date | null
 
   @Field({ nullable: true })
-  deleted_at: string | null
+  deleted_at: Date | null
 }

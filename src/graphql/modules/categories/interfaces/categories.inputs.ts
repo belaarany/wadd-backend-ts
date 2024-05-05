@@ -13,15 +13,18 @@ export class CreateCategoryGQLInput {
   @Field()
   @IsNotEmpty()
   name: string
+
+  @Field()
+  @IsNotEmpty()
+  color: string
+
+  @Field()
+  @IsNotEmpty()
+  icon: string
 }
 
 @InputType()
 export class UpdateCategoryGQLInput {
-  @Field()
-  @IsNotEmpty()
-  @IsWaddObjectId()
-  id: string
-
   @Field({ nullable: true })
   @IsNotEmpty()
   @IsOptional()
@@ -31,4 +34,12 @@ export class UpdateCategoryGQLInput {
   @Field()
   @IsNotEmpty()
   name: string
+
+  @Field()
+  @IsNotEmpty()
+  color: string
+
+  @Field()
+  @IsNotEmpty()
+  icon: string
 }

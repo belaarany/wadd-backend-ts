@@ -4,7 +4,7 @@ import { IdPrefix } from "../../../core/interfaces/enums/IdPrefix"
 import { TransferEntity } from "./transfer.entity"
 
 export class TransferFactory {
-  static make(transferPartialData: Partial<TransferEntity>): TransferEntity {
+ /* static make(transferPartialData: Partial<TransferEntity>): TransferEntity {
     const transfer = new TransferEntity()
 
     transfer.id = generateId(IdPrefix.TRANSFER)
@@ -25,5 +25,5 @@ export class TransferFactory {
     })
 
     return transfer
-  }
+  }*/
 }

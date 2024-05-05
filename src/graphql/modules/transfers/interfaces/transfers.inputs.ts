@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql"
-import { IsEnum, IsNotEmpty } from "class-validator"
+import { IsEnum, IsNotEmpty, IsOptional } from "class-validator"
 import { Currency } from "src/core/interfaces/enums/Currency"
 import { IsWaddObjectId } from "src/core/validators/IsWaddObjectIs"
 
@@ -7,31 +7,17 @@ import { IsWaddObjectId } from "src/core/validators/IsWaddObjectIs"
 export class CreateTransferGQLInput {
   @Field()
   @IsNotEmpty()
-  @IsWaddObjectId()
+  // @IsWaddObjectId()
   source_wallet_id: string
 
   @Field()
   @IsNotEmpty()
-  source_amount: number
-
-  @Field()
-  @IsNotEmpty()
-  @IsEnum(Currency)
-  source_currency: Currency
-
-  @Field()
-  @IsNotEmpty()
-  @IsWaddObjectId()
+  // @IsWaddObjectId()
   target_wallet_id: string
 
   @Field()
   @IsNotEmpty()
-  target_amount: number
-
-  @Field()
-  @IsNotEmpty()
-  @IsEnum(Currency)
-  target_currency: Currency
+  amount: number
 
   @Field()
   @IsNotEmpty()
@@ -39,7 +25,8 @@ export class CreateTransferGQLInput {
   // @IsDateString()
   timestamp: Date
 
-  @Field()
+  @Field({ nullable: true })
   @IsNotEmpty()
+  @IsOptional()
   note: string
 }

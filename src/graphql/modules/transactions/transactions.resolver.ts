@@ -1,19 +1,16 @@
 import { UseGuards } from "@nestjs/common"
-import { Args, Info, Query, ResolveField, Resolver } from "@nestjs/graphql"
-import { GraphQLResolveInfo } from "graphql"
+import { Args, Query, Resolver } from "@nestjs/graphql"
 import { AuthGuard } from "src/core/guards/auth.guard"
 import { ExpensesService } from "src/domain/expenses/expenses.service"
-import { Expense } from "src/domain/expenses/interfaces/expense.model"
+import { ExpenseEntity } from "src/domain/expenses/schemas/expense.entity"
 import { IncomesService } from "src/domain/incomes/incomes.service"
-import { Income } from "src/domain/incomes/interfaces/income.model"
-import { Transfer } from "src/domain/transfers/interfaces/transfer.model"
+import { IncomeEntity } from "src/domain/incomes/schemas/income.entity"
+import { TransferEntity } from "src/domain/transfers/schemas/transfer.entity"
 import { TransfersService } from "src/domain/transfers/transfers.service"
-import { ExpenseGQLModel } from "../expenses/interfaces/expense.model"
-import { IncomeGQLModel } from "../incomes/interfaces/income.model"
-import { TransferGQLModel } from "../transfers/interfaces/transfer.model"
-import { TransactionGQLModel } from "./interfaces/category.model"
+import { TransactionGQLUnion } from "./interfaces/transaction.model"
+import { TransactionsFilterGQLInput } from "./interfaces/transactions.inputs"
 
-@Resolver(() => TransactionGQLModel)
+@Resolver(() => TransactionGQLUnion)
 export class CategoriesResolver {
   constructor(
     private expensesService: ExpensesService,
@@ -22,31 +19,14 @@ export class CategoriesResolver {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Query(() => TransactionGQLModel)
-  async transactions(@Args("wallet_ids", { type: () => [String] }) walletIds: string[]): Promise<any> {
-    return {
-      kind: "transactions",
-    }
-  }
+  @Query(() => [TransactionGQLUnion])
+  async transactions(
+    @Args("filter") data: TransactionsFilterGQLInput,
+  ): Promise<(IncomeEntity | ExpenseEntity | TransferEntity)[]> {
+    const incomes = await this.incomesService.listByWalletIds(data.wallet_ids)
+    const expenses = await this.expensesService.listByWalletIds(data.wallet_ids)
+    const transfers = await this.transfersService.listByWalletIds(data.wallet_ids)
 
-  @ResolveField(() => [IncomeGQLModel])
-  async incomes(@Info() info: GraphQLResolveInfo): Promise<Income[]> {
-    const incomes = await this.incomesService.listByWalletIds(info.variableValues.wallet_ids as string[])
-
-    return incomes as Income[]
-  }
-
-  @ResolveField(() => [ExpenseGQLModel])
-  async expenses(@Info() info: GraphQLResolveInfo): Promise<Expense[]> {
-    const expenses = await this.expensesService.listByWalletIds(info.variableValues.wallet_ids as string[])
-
-    return expenses as Expense[]
-  }
-
-  @ResolveField(() => [TransferGQLModel])
-  async transfers(@Info() info: GraphQLResolveInfo): Promise<Transfer[]> {
-    const transfers = await this.transfersService.listByWalletIds(info.variableValues.wallet_ids as string[])
-
-    return transfers as Transfer[]
+    return [...incomes, ...expenses, ...transfers]
   }
 }

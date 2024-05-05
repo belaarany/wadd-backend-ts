@@ -24,29 +24,33 @@ export class CreateIncomeGQLInput {
   // @IsDateString()
   timestamp: Date
 
-  @Field()
+  @Field({ nullable: true})
   @IsNotEmpty()
+  @IsOptional()
   location: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsNotEmpty()
   @IsArray()
   @ArrayUnique()
-  @IsWaddObjectId({ each: true })
+  @IsOptional()
+  // @IsWaddObjectId({ each: true })
   related_expense_ids: string[]
 
-  @Field()
+  @Field({ nullable: true})
   @IsNotEmpty()
+  @IsOptional()
   note: string
 
   @Field()
   @IsNotEmpty()
   category_id: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsNotEmpty()
   @IsArray()
   @ArrayUnique()
+  @IsOptional()
   tags: string[]
 
   @Field({ nullable: true })
@@ -54,10 +58,11 @@ export class CreateIncomeGQLInput {
   @IsOptional()
   group_id: string | null
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @IsNotEmpty()
   @IsArray()
   @ArrayUnique()
-  @IsWaddObjectId({ each: true })
+  @IsOptional()
+  // @IsWaddObjectId({ each: true })
   attachment_file_ids: string[]
 }

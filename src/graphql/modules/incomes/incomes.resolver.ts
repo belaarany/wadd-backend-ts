@@ -11,7 +11,6 @@ import { ExpensesService } from "src/domain/expenses/expenses.service"
 import { Expense } from "src/domain/expenses/interfaces/expense.model"
 import { IncomesService } from "src/domain/incomes/incomes.service"
 import { Income } from "src/domain/incomes/interfaces/income.model"
-import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
 import { ExpenseGQLModel } from "../expenses/interfaces/expense.model"
@@ -19,6 +18,7 @@ import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { IncomeGQLModel } from "./interfaces/income.model"
 import { CreateIncomeGQLInput } from "./interfaces/incomes.inputs"
 import { Category } from "src/domain/categories/interfaces/category.model"
+import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
 
 @Resolver(() => IncomeGQLModel)
 export class IncomesResolver {
@@ -32,13 +32,13 @@ export class IncomesResolver {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => IncomeGQLModel)
+  @Mutation(() => IncomeGQLModel, { name: "create_income" })
   async createIncome(@Authorization() authUser: AuthUser, @Args("data") data: CreateIncomeGQLInput): Promise<Income> {
     if ((await this.categoriesService.exists(data.category_id)) === false) {
       throw new CategoryNotExistsException(data.category_id)
     }
 
-    for (let related_expense_id of data.related_expense_ids) {
+    for (let related_expense_id of data.related_expense_ids ?? []) {
       if ((await this.expensesService.exists(related_expense_id)) === false) {
         throw new ExpenseNotExistsException(related_expense_id)
       }
@@ -58,7 +58,7 @@ export class IncomesResolver {
   }
 
   @ResolveField(() => WalletGQLModel)
-  async wallet(@Parent() parent: IncomeGQLModel): Promise<Wallet> {
+  async wallet(@Parent() parent: IncomeGQLModel): Promise<WalletEntity> {
     const wallet = await this.walletsLoader.load(parent.wallet_id)
 
     return wallet

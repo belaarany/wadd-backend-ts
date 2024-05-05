@@ -12,13 +12,13 @@ import { ExpensesService } from "src/domain/expenses/expenses.service"
 import { Expense } from "src/domain/expenses/interfaces/expense.model"
 import { IncomesService } from "src/domain/incomes/incomes.service"
 import { Income } from "src/domain/incomes/interfaces/income.model"
-import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
 import { WalletsLoader } from "../../loaders/wallets.loader"
 import { CategoryGQLModel } from "../categories/interfaces/category.model"
 import { IncomeGQLModel } from "../incomes/interfaces/income.model"
 import { WalletGQLModel } from "../wallets/interfaces/wallet.model"
 import { ExpenseGQLModel } from "./interfaces/expense.model"
 import { CreateExpenseGQLInput } from "./interfaces/expenses.inputs"
+import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
 
 @Resolver(() => ExpenseGQLModel)
 export class ExpensesResolver {
@@ -32,7 +32,7 @@ export class ExpensesResolver {
   ) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => ExpenseGQLModel)
+  @Mutation(() => ExpenseGQLModel, { name: "create_expense" })
   async createExpense(
     @Authorization() authUser: AuthUser,
     @Args("data") data: CreateExpenseGQLInput,
@@ -41,7 +41,7 @@ export class ExpensesResolver {
       throw new CategoryNotExistsException(data.category_id)
     }
 
-    for (let related_income_id of data.related_income_ids) {
+    for (let related_income_id of data.related_income_ids ?? []) {
       if ((await this.incomesService.exists(related_income_id)) === false) {
         throw new IncomeNotExistsException(related_income_id)
       }
@@ -61,7 +61,7 @@ export class ExpensesResolver {
   }
 
   @ResolveField(() => WalletGQLModel)
-  async wallet(@Parent() parent: ExpenseGQLModel): Promise<Wallet> {
+  async wallet(@Parent() parent: ExpenseGQLModel): Promise<WalletEntity> {
     const wallet = await this.walletsLoader.load(parent.wallet_id)
 
     return wallet

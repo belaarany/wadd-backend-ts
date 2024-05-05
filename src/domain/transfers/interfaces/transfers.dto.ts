@@ -2,11 +2,8 @@ import { Currency } from "src/core/interfaces/enums/Currency"
 
 export type CreateTransferDto = {
   source_wallet_id: string
-  source_amount: number
-  source_currency: Currency
   target_wallet_id: string
-  target_amount: number
-  target_currency: Currency
+  amount: number
   timestamp: Date
   note: string
 }

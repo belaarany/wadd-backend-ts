@@ -1,18 +1,16 @@
 import { Injectable } from "@nestjs/common"
 import { In } from "typeorm"
 import { IncomesRepository } from "./incomes.repository"
-import { Income } from "./interfaces/income.model"
 import { CreateIncomeDto } from "./interfaces/incomes.dto"
 import { IIncomesService } from "./interfaces/incomes.interfaces"
-import { IncomeFactory } from "./schemas/income.factory"
-import { IncomeMapper } from "./schemas/income.mapper"
+import { IncomeEntity } from "./schemas/income.entity"
 
 @Injectable()
 export class IncomesService implements IIncomesService {
   constructor(private readonly incomesRepo: IncomesRepository) {}
 
-  async create(incomeData: CreateIncomeDto): Promise<Income> {
-    const income = IncomeFactory.make({
+  async create(incomeData: CreateIncomeDto): Promise<IncomeEntity> {
+    const income = this.incomesRepo.create({
       wallet_id: incomeData.wallet_id,
       amount: incomeData.amount,
       currency: incomeData.currency,
@@ -26,25 +24,25 @@ export class IncomesService implements IIncomesService {
       attachment_file_ids: incomeData.attachment_file_ids,
     })
 
-    const insertedIncome = await this.incomesRepo.save(income)
+    const incomeEntity = await this.incomesRepo.save(income)
 
-    return IncomeMapper.fromEntity(insertedIncome)
+    return incomeEntity
   }
 
   async exists(incomeId: string): Promise<boolean> {
     return await this.incomesRepo.exist({ where: { id: incomeId } })
   }
 
-  async listByWalletIds(walletIds: string[]): Promise<Income[]> {
+  async listByWalletIds(walletIds: string[]): Promise<IncomeEntity[]> {
     const incomes = await this.incomesRepo.findBy({ wallet_id: In(walletIds) })
 
-    return incomes.map(IncomeMapper.fromEntity)
+    return incomes
   }
 
-  async listByIds(incomeIds: string[]): Promise<Income[]> {
+  async listByIds(incomeIds: string[]): Promise<IncomeEntity[]> {
     const incomes = await this.incomesRepo.findBy({ id: In(incomeIds) })
 
-    return incomes.map(IncomeMapper.fromEntity)
+    return incomes
   }
 
   // async getSummary(walletIds: string[]): Promise<any> {

@@ -48,16 +48,16 @@ export class WalletGQLModel {
   is_archived: boolean
 
   @Field({ nullable: true })
-  created_at: string
+  created_at: Date
 
   @Field({ nullable: true })
-  updated_at: string | null
+  updated_at: Date | null
 
   @Field({ nullable: true })
-  deleted_at: string | null
+  deleted_at: Date | null
 
   @Field({ nullable: true })
-  archived_at: string | null
+  archived_at: Date | null
 }
 
 // @ObjectType()

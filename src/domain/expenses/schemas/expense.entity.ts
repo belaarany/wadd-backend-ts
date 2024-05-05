@@ -3,9 +3,17 @@ import { Currency } from "../../../core/interfaces/enums/Currency"
 import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
 import { CategoryEntity } from "src/domain/categories/schemas/category.entity"
 import { BaseEntity } from "src/core/entities/base-entity"
+import { IdPrefix } from "src/core/interfaces/enums/IdPrefix"
+import { Expose } from "class-transformer"
+import { Kind } from "src/core/interfaces/enums/Kind"
 
 @Entity("expense")
 export class ExpenseEntity extends BaseEntity {
+  readonly idPrefix = IdPrefix.EXPENSE
+
+  @Expose()
+  readonly kind = Kind.EXPENSE
+
   @ManyToOne(() => WalletEntity, (wallet) => wallet.id, { lazy: true })
   @JoinColumn({ name: "wallet_id" })
   wallet: WalletEntity
@@ -22,13 +30,13 @@ export class ExpenseEntity extends BaseEntity {
   @Column()
   timestamp: Date
 
-  @Column()
+  @Column({ nullable: true })
   location: string
 
-  @Column({ type: "jsonb" })
+  @Column({ type: "jsonb", nullable: true })
   related_income_ids: string[]
 
-  @Column()
+  @Column({ nullable: true })
   note: string
 
   @ManyToOne(() => CategoryEntity, (category) => category.id, { lazy: true })
@@ -38,13 +46,13 @@ export class ExpenseEntity extends BaseEntity {
   @Column()
   category_id: string
 
-  @Column({ type: "jsonb" })
+  @Column({ type: "jsonb", nullable: true })
   tags: string[]
 
   @Column({ nullable: true })
   group_id: string | null = null
 
-  @Column({ type: "jsonb" })
+  @Column({ type: "jsonb", nullable: true })
   attachment_file_ids: string[]
 
   @Column({ nullable: true })

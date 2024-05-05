@@ -1,5 +1,5 @@
 import { Currency } from "src/core/interfaces/enums/Currency"
-import { WalletType } from "./wallet.model"
+import { WalletType } from "src/core/interfaces/enums/WalletType"
 
 export type CreateWalletDto = {
   name: string

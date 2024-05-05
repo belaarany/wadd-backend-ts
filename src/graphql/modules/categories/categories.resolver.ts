@@ -13,7 +13,7 @@ export class CategoriesResolver {
   constructor(private categoriesService: CategoriesService) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => CategoryGQLModel)
+  @Mutation(() => CategoryGQLModel, { name: "create_category" })
   async createCategory(
     @Authorization() authUser: AuthUser,
     @Args("data") data: CreateCategoryGQLInput,
@@ -26,42 +26,28 @@ export class CategoriesResolver {
       owner_user_id: authUser.id,
       parent_category_id: data.parent_category_id,
       name: data.name,
+      color: data.color,
+      icon: data.icon,
     })
-
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "category.create",
-    // 	user_id: authUser.id,
-    // 	target_id: cateogry.id,
-    // 	platform: null,
-    // 	data: {
-    // 		category: cateogry,c
-    // 	},
-    // })
 
     return cateogry
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => CategoryGQLModel)
+  @Mutation(() => CategoryGQLModel, { name: "update_category" })
   async updateCategory(
     @Authorization() authUser: AuthUser,
+    @Args("id") id: string,
     @Args("data") data: UpdateCategoryGQLInput,
   ): Promise<Category> {
-    const cateogry = await this.categoriesService.listByIds([data.id])
+    const wallet = await this.categoriesService.update(id, {
+      name: data.name,
+      color: data.color,
+      icon: data.icon,
+      parent_category_id: data.parent_category_id,
+    })
 
-    // this.logMicroservice.createLog({
-    // 	scope: "user",
-    // 	action: "category.create",
-    // 	user_id: authUser.id,
-    // 	target_id: cateogry.id,
-    // 	platform: null,
-    // 	data: {
-    // 		category: cateogry,c
-    // 	},
-    // })
-
-    return cateogry[0]
+    return wallet
   }
 
   @UseGuards(AuthGuard)
@@ -89,5 +75,13 @@ export class CategoriesResolver {
     const categories = await this.categoriesService.listByUserId(authUser.id)
 
     return categories
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => CategoryGQLModel)
+  async category(@Authorization() authUser: AuthUser, @Args("id") id: string): Promise<Category> {
+    const category = await this.categoriesService.get(id)
+
+    return category
   }
 }

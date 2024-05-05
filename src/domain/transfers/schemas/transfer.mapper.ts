@@ -2,7 +2,7 @@ import { Transfer } from "../interfaces/transfer.model"
 import { TransferEntity } from "./transfer.entity"
 
 export class TransferMapper {
-  static fromEntity(document: TransferEntity): Transfer {
+  /*static fromEntity(document: TransferEntity): Transfer {
     return {
       id: document.id,
       kind: "transfer",
@@ -19,5 +19,5 @@ export class TransferMapper {
       updated_at: document.updated_at,
       deleted_at: document.deleted_at,
     }
-  }
+  }*/
 }

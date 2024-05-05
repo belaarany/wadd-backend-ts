@@ -2,18 +2,21 @@ import { UseGuards } from "@nestjs/common"
 import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/core/decorators/auth.decorator"
 import { AuthGuard } from "src/core/guards/auth.guard"
-import { Wallet } from "src/domain/wallets/interfaces/wallet.model"
 import { WalletsService } from "src/domain/wallets/wallets.service"
 import { WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput, UpdateWalletGQLInput } from "./interfaces/wallets.inputs"
+import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
 
 @Resolver(() => WalletGQLModel)
 export class WalletsResolver {
   constructor(private walletsService: WalletsService) {}
 
   @UseGuards(AuthGuard)
-  @Mutation(() => WalletGQLModel)
-  async createWallet(@Authorization() authUser: AuthUser, @Args("data") data: CreateWalletGQLInput): Promise<Wallet> {
+  @Mutation(() => WalletGQLModel, { name: "create_wallet" })
+  async createWallet(
+    @Authorization() authUser: AuthUser,
+    @Args("data") data: CreateWalletGQLInput,
+  ): Promise<WalletEntity> {
     const wallet = await this.walletsService.create({
       name: data.name,
       order: data.order,
@@ -29,9 +32,13 @@ export class WalletsResolver {
   }
 
   @UseGuards(AuthGuard)
-  @Mutation(() => WalletGQLModel)
-  async updateWallet(@Authorization() authUser: AuthUser, @Args("data") data: UpdateWalletGQLInput): Promise<Wallet> {
-    const wallet = await this.walletsService.update(data.id, {
+  @Mutation(() => WalletGQLModel, { name: "update_wallet" })
+  async updateWallet(
+    @Authorization() authUser: AuthUser,
+    @Args("id") id: string,
+    @Args("data") data: UpdateWalletGQLInput,
+  ): Promise<WalletEntity> {
+    const wallet = await this.walletsService.update(id, {
       name: data.name,
       order: data.order,
       default_currency: data.default_currency,
@@ -54,12 +61,20 @@ export class WalletsResolver {
 
   @UseGuards(AuthGuard)
   @Query(() => [WalletGQLModel])
-  async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<Wallet[]> {
+  async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<WalletEntity[]> {
     const wallets = await this.walletsService.listByUserId(authUser.id)
 
     console.log(info.fieldNodes[0].selectionSet.selections.map((item) => item.name.value))
 
     return wallets
+  }
+
+  @UseGuards(AuthGuard)
+  @Query(() => WalletGQLModel)
+  async wallet(@Authorization() authUser: AuthUser, @Args("id") id: string): Promise<WalletEntity> {
+    const wallet = await this.walletsService.get(id)
+
+    return wallet
   }
 
   // @UseGuards(AuthGuard)

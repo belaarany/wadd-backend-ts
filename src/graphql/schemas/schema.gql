@@ -8,11 +8,18 @@ type CategoryGQLModel {
   owner_user_id: String!
   parent_category_id: String
   name: String!
+  color: String!
+  icon: String!
   is_deleted: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  deleted_at: DateTime
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type IncomeGQLModel {
   id: ID!
@@ -20,20 +27,20 @@ type IncomeGQLModel {
   wallet_id: String!
   amount: Float!
   currency: String!
-  timestamp: String!
-  location: String!
-  related_expense_ids: [String!]!
-  note: String!
+  timestamp: DateTime!
+  location: String
+  related_expense_ids: [String!]
+  note: String
   category_id: String!
-  tags: [String!]!
+  tags: [String!]
   group_id: String
-  attachment_file_ids: [String!]!
+  attachment_file_ids: [String!]
   is_deleted: Boolean!
   is_cancelled: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
-  cancelled_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  deleted_at: DateTime
+  cancelled_at: DateTime
   wallet: WalletGQLModel!
   category: CategoryGQLModel!
   related_expenses: [ExpenseGQLModel!]!
@@ -52,10 +59,10 @@ type WalletGQLModel {
   icon_url: String!
   is_deleted: Boolean!
   is_archived: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
-  archived_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  deleted_at: DateTime
+  archived_at: DateTime
 }
 
 enum Currency {
@@ -75,20 +82,20 @@ type ExpenseGQLModel {
   wallet_id: String!
   amount: Float!
   currency: String!
-  timestamp: String!
-  location: String!
+  timestamp: DateTime!
+  location: String
   related_income_ids: [String!]!
-  note: String!
+  note: String
   category_id: String!
-  tags: [String!]!
+  tags: [String!]
   group_id: String
-  attachment_file_ids: [String!]!
+  attachment_file_ids: [String!]
   is_deleted: Boolean!
   is_cancelled: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
-  cancelled_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  deleted_at: DateTime
+  cancelled_at: DateTime
   wallet: WalletGQLModel!
   category: CategoryGQLModel!
   related_incomes: [IncomeGQLModel!]!
@@ -98,47 +105,45 @@ type TransferGQLModel {
   id: ID!
   kind: String!
   source_wallet_id: String!
-  source_amount: Float!
-  source_currency: String!
   target_wallet_id: String!
-  target_amount: Float!
-  target_currency: String!
-  timestamp: String!
-  note: String!
+  amount: Float!
+  timestamp: DateTime!
+  note: String
   is_deleted: Boolean!
-  created_at: String
-  updated_at: String
-  deleted_at: String
+  created_at: DateTime
+  updated_at: DateTime
+  deleted_at: DateTime
   source_wallet: WalletGQLModel!
   target_wallet: WalletGQLModel!
 }
 
-type TransactionGQLModel {
-  kind: String!
-  incomes: [IncomeGQLModel!]!
-  expenses: [ExpenseGQLModel!]!
-  transfers: [TransferGQLModel!]!
-}
-
 type Query {
   wallets: [WalletGQLModel!]!
+  wallet(id: String!): WalletGQLModel!
   categories: [CategoryGQLModel!]!
+  category(id: String!): CategoryGQLModel!
   incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
   expenses(wallet_ids: [String!]!): [ExpenseGQLModel!]!
   transfers(wallet_ids: [String!]!): [TransferGQLModel!]!
-  transactions(wallet_ids: [String!]!): TransactionGQLModel!
+  transactions(filter: TransactionsFilterGQLInput!): [TransactionGQLUnion!]!
+}
+
+union TransactionGQLUnion = IncomeGQLModel | ExpenseGQLModel | TransferGQLModel
+
+input TransactionsFilterGQLInput {
+  wallet_ids: [String!]!
 }
 
 type Mutation {
-  createWallet(data: CreateWalletGQLInput!): WalletGQLModel!
-  updateWallet(data: UpdateWalletGQLInput!): WalletGQLModel!
+  create_wallet(data: CreateWalletGQLInput!): WalletGQLModel!
+  update_wallet(id: String!, data: UpdateWalletGQLInput!): WalletGQLModel!
   deleteWallet(walletId: String!): String!
-  createCategory(data: CreateCategoryGQLInput!): CategoryGQLModel!
-  updateCategory(data: UpdateCategoryGQLInput!): CategoryGQLModel!
+  create_category(data: CreateCategoryGQLInput!): CategoryGQLModel!
+  update_category(id: String!, data: UpdateCategoryGQLInput!): CategoryGQLModel!
   deleteCategory(categoryId: String!): CategoryGQLModel!
-  createIncome(data: CreateIncomeGQLInput!): IncomeGQLModel!
-  createExpense(data: CreateExpenseGQLInput!): ExpenseGQLModel!
-  createTransfer(data: CreateTransferGQLInput!): TransferGQLModel!
+  create_income(data: CreateIncomeGQLInput!): IncomeGQLModel!
+  create_expense(data: CreateExpenseGQLInput!): ExpenseGQLModel!
+  create_transfer(data: CreateTransferGQLInput!): TransferGQLModel!
 }
 
 input CreateWalletGQLInput {
@@ -152,7 +157,6 @@ input CreateWalletGQLInput {
 }
 
 input UpdateWalletGQLInput {
-  id: String!
   name: String!
   order: Float!
   initial_balance: Float!
@@ -165,12 +169,15 @@ input UpdateWalletGQLInput {
 input CreateCategoryGQLInput {
   parent_category_id: String
   name: String!
+  color: String!
+  icon: String!
 }
 
 input UpdateCategoryGQLInput {
-  id: String!
   parent_category_id: String
   name: String!
+  color: String!
+  icon: String!
 }
 
 input CreateIncomeGQLInput {
@@ -178,41 +185,33 @@ input CreateIncomeGQLInput {
   amount: Float!
   currency: String!
   timestamp: DateTime!
-  location: String!
-  related_expense_ids: [String!]!
-  note: String!
+  location: String
+  related_expense_ids: [String!]
+  note: String
   category_id: String!
-  tags: [String!]!
+  tags: [String!]
   group_id: String
-  attachment_file_ids: [String!]!
+  attachment_file_ids: [String!]
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 input CreateExpenseGQLInput {
   wallet_id: String!
   amount: Float!
   currency: String!
   timestamp: DateTime!
-  location: String!
-  related_income_ids: [String!]!
-  note: String!
-  category_id: String!
-  tags: [String!]!
+  location: String
+  related_income_ids: [String!]
+  note: String
+  category_id: String
+  tags: [String!]
   group_id: String
-  attachment_file_ids: [String!]!
+  attachment_file_ids: [String!]
 }
 
 input CreateTransferGQLInput {
   source_wallet_id: String!
-  source_amount: Float!
-  source_currency: String!
   target_wallet_id: String!
-  target_amount: Float!
-  target_currency: String!
+  amount: Float!
   timestamp: DateTime!
-  note: String!
+  note: String
 }

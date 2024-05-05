@@ -27,27 +27,27 @@ export class IncomeGQLModel {
   currency: Currency
 
   @Field()
-  timestamp: string
+  timestamp: Date
 
-  @Field()
+  @Field({ nullable: true })
   location: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   related_expense_ids: string[]
 
-  @Field()
+  @Field({ nullable: true })
   note: string
 
   @Field()
   category_id: string
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   tags: string[]
 
   @Field({ nullable: true })
   group_id: string | null
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   attachment_file_ids: string[]
 
   @Field()
@@ -57,14 +57,14 @@ export class IncomeGQLModel {
   is_cancelled: boolean
 
   @Field({ nullable: true })
-  created_at: string | null
+  created_at: Date | null
 
   @Field({ nullable: true })
-  updated_at: string | null
+  updated_at: Date | null
 
   @Field({ nullable: true })
-  deleted_at: string | null
+  deleted_at: Date | null
 
   @Field({ nullable: true })
-  cancelled_at: string | null
+  cancelled_at: Date | null
 }

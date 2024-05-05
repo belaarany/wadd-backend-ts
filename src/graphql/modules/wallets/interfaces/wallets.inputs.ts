@@ -46,11 +46,6 @@ export class CreateWalletGQLInput {
 export class UpdateWalletGQLInput {
   @Field()
   @IsNotEmpty()
-  @IsWaddObjectId()
-  id: string
-
-  @Field()
-  @IsNotEmpty()
   @IsString()
   name: string
 
