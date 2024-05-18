@@ -27,7 +27,7 @@ export class TransferEntity extends BaseEntity {
   @Column()
   target_wallet_id: string
 
-  @Column()
+  @Column({ type: "numeric" })
   amount: number
 
   @Column()

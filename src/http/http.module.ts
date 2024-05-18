@@ -1,8 +1,9 @@
 import { Module } from "@nestjs/common"
 import { AuthHttpModule } from "./auth/auth.module"
+import { InternalHttpModule } from "./internal/internal.module"
 
 @Module({
-  imports: [AuthHttpModule],
+  imports: [AuthHttpModule, InternalHttpModule],
   controllers: [],
   providers: [],
   exports: [],

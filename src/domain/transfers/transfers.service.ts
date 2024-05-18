@@ -3,6 +3,7 @@ import { CreateTransferDto, ListByFiltersDto } from "./interfaces/transfers.dto"
 import { ITransfersService } from "./interfaces/transfers.interfaces"
 import { TransferEntity } from "./schemas/transfer.entity"
 import { TransfersRepository } from "./transfers.repository"
+import { Brackets } from "typeorm"
 
 @Injectable()
 export class TransfersService implements ITransfersService {
@@ -41,9 +42,12 @@ export class TransfersService implements ITransfersService {
     const qb = this.transfersRepo.createQueryBuilder("transfer")
 
     if (filters.wallet_ids) {
-      qb.where("transfer.source_wallet_id IN (:...walletIds)", { walletIds: filters.wallet_ids }).orWhere(
-        "transfer.target_wallet_id IN (:...walletIds)",
-        { walletIds: filters.wallet_ids },
+      qb.where(
+        new Brackets((qb) =>
+          qb
+            .where("transfer.source_wallet_id IN (:...walletIds)", { walletIds: filters.wallet_ids })
+            .orWhere("transfer.target_wallet_id IN (:...walletIds)", { walletIds: filters.wallet_ids }),
+        ),
       )
     }
 

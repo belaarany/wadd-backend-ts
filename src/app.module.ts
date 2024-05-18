@@ -31,6 +31,7 @@ import appConfig from "./config/app.config"
           entities: [__dirname + "/**/*.entity.{js,ts}"],
           synchronize: true,
           // logging: true,
+          // dropSchema: true,
         }
       },
     }),

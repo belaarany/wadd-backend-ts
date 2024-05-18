@@ -16,7 +16,7 @@ import { WalletEntity } from "./wallet.entity"
       .addSelect("COALESCE(incoming_transfers.total_amount, 0::numeric)", "total_incoming_transfers")
       .addSelect("COALESCE(outgoing_transfers.total_amount, 0::numeric)", "total_outgoing_transfers")
       .addSelect(
-        `COALESCE(wallets.initial_balance, 0) + COALESCE(incomes.total_amount, 0) - COALESCE(expenses.total_amount, 0) + COALESCE(incoming_transfers.total_amount, 0) - COALESCE(outgoing_transfers.total_amount, 0)`,
+        `COALESCE(COALESCE(wallets.initial_balance, 0::numeric) + COALESCE(incomes.total_amount, 0::numeric) - COALESCE(expenses.total_amount, 0::numeric) + COALESCE(incoming_transfers.total_amount, 0::numeric) - COALESCE(outgoing_transfers.total_amount, 0::numeric), 0::numeric)`,
         "balance",
       )
       .from(WalletEntity, "wallets")

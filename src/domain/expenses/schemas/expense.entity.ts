@@ -21,7 +21,7 @@ export class ExpenseEntity extends BaseEntity {
   @Column()
   wallet_id: string
 
-  @Column()
+  @Column({ type: "numeric" })
   amount: number
 
   @Column()

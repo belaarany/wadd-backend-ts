@@ -27,7 +27,7 @@ export class WalletEntity extends BaseEntity implements IEntity {
   @Column()
   owner_user_id: string
 
-  @Column()
+  @Column({ type: "numeric" })
   initial_balance: number
 
   @Column()
