@@ -76,6 +76,16 @@ enum WalletType {
   CASH
 }
 
+type WalletBalancesViewGQLModel {
+  wallet_id: ID!
+  initial_balance: Float!
+  total_incomes: Float!
+  total_expenses: Float!
+  total_incoming_transfers: Float!
+  total_outgoing_transfers: Float!
+  balance: Float!
+}
+
 type ExpenseGQLModel {
   id: ID!
   kind: String!
@@ -120,6 +130,7 @@ type TransferGQLModel {
 type Query {
   wallets: [WalletGQLModel!]!
   wallet(id: String!): WalletGQLModel!
+  wallet_balances: [WalletBalancesViewGQLModel!]!
   categories: [CategoryGQLModel!]!
   category(id: String!): CategoryGQLModel!
   incomes(wallet_ids: [String!]!): [IncomeGQLModel!]!
@@ -132,6 +143,12 @@ union TransactionGQLUnion = IncomeGQLModel | ExpenseGQLModel | TransferGQLModel
 
 input TransactionsFilterGQLInput {
   wallet_ids: [String!]!
+  timestamp: TimestampFilter!
+}
+
+input TimestampFilter {
+  from: DateTime!
+  to: DateTime!
 }
 
 type Mutation {

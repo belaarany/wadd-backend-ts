@@ -1,3 +1,4 @@
+import { WalletBalancesViewEntity } from "../schemas/wallet-balances.entity"
 import { WalletEntity } from "../schemas/wallet.entity"
 import { CreateWalletDto, UpdateWalletDto } from "./wallets.dto"
 
@@ -11,6 +12,8 @@ export interface IWalletsService {
   listByUserId(userId: string): Promise<WalletEntity[]>
   delete(walletId: string): Promise<string>
   // archive(walletId: string): Promise<Wallet>
+
+  listWalletBalances(): Promise<WalletBalancesViewEntity[]>
 }
 
 export interface IWalletsRepository {}

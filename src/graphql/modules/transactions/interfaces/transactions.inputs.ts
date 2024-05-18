@@ -18,11 +18,26 @@ import { IncomeGQLModel } from "../../incomes/interfaces/income.model"
 import { ExpenseGQLModel } from "../../expenses/interfaces/expense.model"
 
 @InputType()
+class TimestampFilter {
+  @Field()
+  @IsString()
+  from: Date
+
+  @Field()
+  @IsString()
+  to: Date
+}
+
+@InputType()
 export class TransactionsFilterGQLInput {
   @Field(() => [String])
   @IsArray()
   @ArrayUnique()
   // @IsWaddObjectId({ each: true })
-  @IsOptional()
-  wallet_ids?: string[]
+  wallet_ids: string[]
+
+  @Field(() => TimestampFilter)
+  @Type(() => TimestampFilter)
+  @IsNotEmpty()
+  timestamp: TimestampFilter
 }

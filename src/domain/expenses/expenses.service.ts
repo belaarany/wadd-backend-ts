@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import { In } from "typeorm"
 import { ExpensesRepository } from "./expenses.repository"
-import { CreateExpenseDto } from "./interfaces/expenses.dto"
+import { CreateExpenseDto, ListByFiltersDto } from "./interfaces/expenses.dto"
 import { IExpenseService } from "./interfaces/expenses.interfaces"
 import { ExpenseEntity } from "./schemas/expense.entity"
 
@@ -52,5 +52,25 @@ export class ExpensesService implements IExpenseService {
     const entities = await this.expensesRepo.findBy({ id: In(ids) })
 
     return entities
+  }
+
+  async listByFilters(filters: ListByFiltersDto): Promise<ExpenseEntity[]> {
+    const qb = this.expensesRepo.createQueryBuilder("expense")
+
+    if (filters.wallet_ids) {
+      qb.where("expense.wallet_id IN (:...walletIds)", { walletIds: filters.wallet_ids })
+    }
+
+    if (filters.timestamp) {
+      if (filters.timestamp.from) {
+        qb.andWhere("expense.timestamp >= :from", { from: filters.timestamp.from })
+      }
+
+      if (filters.timestamp.to) {
+        qb.andWhere("expense.timestamp <= :to", { to: filters.timestamp.to })
+      }
+    }
+
+    return await qb.getMany()
   }
 }

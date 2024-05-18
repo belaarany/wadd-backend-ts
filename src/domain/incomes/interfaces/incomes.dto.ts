@@ -13,3 +13,11 @@ export type CreateIncomeDto = {
   group_id: string | null
   attachment_file_ids: string[]
 }
+
+export type ListByFiltersDto = {
+  wallet_ids?: string[]
+  timestamp?: {
+    from?: Date
+    to?: Date
+  }
+}

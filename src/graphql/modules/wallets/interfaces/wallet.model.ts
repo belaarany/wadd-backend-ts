@@ -71,3 +71,27 @@ export class WalletGQLModel {
 //   @Field()
 //   HUF: number
 // }
+
+@ObjectType()
+export class WalletBalancesViewGQLModel {
+  @Field(() => ID)
+  wallet_id: number
+
+  @Field()
+  initial_balance: number
+
+  @Field()
+  total_incomes: number
+
+  @Field()
+  total_expenses: number
+
+  @Field()
+  total_incoming_transfers: number
+
+  @Field()
+  total_outgoing_transfers: number
+
+  @Field()
+  balance: number
+}

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import { In } from "typeorm"
 import { IncomesRepository } from "./incomes.repository"
-import { CreateIncomeDto } from "./interfaces/incomes.dto"
+import { CreateIncomeDto, ListByFiltersDto } from "./interfaces/incomes.dto"
 import { IIncomesService } from "./interfaces/incomes.interfaces"
 import { IncomeEntity } from "./schemas/income.entity"
 
@@ -45,40 +45,23 @@ export class IncomesService implements IIncomesService {
     return incomes
   }
 
-  // async getSummary(walletIds: string[]): Promise<any> {
-  //   const incomes = await this.incomesRepo.list({ wallet_ids: walletIds })
-  //   const sum: SummarizedCollection<"wallets"> = {
-  //     wallets: {},
-  //     // categories: {},
-  //     // tags: {},
-  //   }
+  async listByFilters(filters: ListByFiltersDto): Promise<IncomeEntity[]> {
+    const qb = this.incomesRepo.createQueryBuilder("income")
 
-  //   const running = {}
+    if (filters.wallet_ids) {
+      qb.where("income.wallet_id IN (:...walletIds)", { walletIds: filters.wallet_ids })
+    }
 
-  //   this.incomesRepo.getRunningSum(walletIds)
+    if (filters.timestamp) {
+      if (filters.timestamp.from) {
+        qb.andWhere("income.timestamp >= :from", { from: filters.timestamp.from })
+      }
 
-  //   for (const income of incomes) {
-  //     let timestamp = Moment.utc(income.timestamp)
-  //     let timestampKey = timestamp.format("YYYYMM")
-  //     if (timestampKey in running === false) {
-  //       running[timestampKey] = 0
-  //     }
-  //     running[timestampKey] += income.amount
+      if (filters.timestamp.to) {
+        qb.andWhere("income.timestamp <= :to", { to: filters.timestamp.to })
+      }
+    }
 
-  //     if (income.wallet_id in sum.wallets === false) {
-  //       sum.wallets[income.wallet_id] = {}
-  //     }
-  //     if (income.currency in sum.wallets[income.wallet_id] === false) {
-  //       sum.wallets[income.wallet_id][income.currency] = 0
-  //     }
-
-  //     // sum.wallets[income.wallet_id][income.currency] = new Decimal(sum.wallets[income.wallet_id][income.currency])
-  //     //   .add(income.amount)
-  //     //   .toNumber()
-  //   }
-
-  //   return {
-  //     [Kind.INCOME]: sum,
-  //   }
-  // }
+    return await qb.getMany()
+  }
 }

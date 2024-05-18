@@ -23,9 +23,17 @@ export class CategoriesResolver {
   async transactions(
     @Args("filter") data: TransactionsFilterGQLInput,
   ): Promise<(IncomeEntity | ExpenseEntity | TransferEntity)[]> {
-    const incomes = await this.incomesService.listByWalletIds(data.wallet_ids)
-    const expenses = await this.expensesService.listByWalletIds(data.wallet_ids)
-    const transfers = await this.transfersService.listByWalletIds(data.wallet_ids)
+    const filters = {
+      wallet_ids: data.wallet_ids,
+      timestamp: {
+        from: data.timestamp.from,
+        to: data.timestamp.to,
+      },
+    }
+
+    const incomes = await this.incomesService.listByFilters(filters)
+    const expenses = await this.expensesService.listByFilters(filters)
+    const transfers = await this.transfersService.listByFilters(filters)
 
     return [...incomes, ...expenses, ...transfers]
   }

@@ -7,7 +7,7 @@ import { IdPrefix } from "src/core/interfaces/enums/IdPrefix"
 import { Expose } from "class-transformer"
 import { Kind } from "src/core/interfaces/enums/Kind"
 
-@Entity("expense")
+@Entity("expenses")
 export class ExpenseEntity extends BaseEntity {
   readonly idPrefix = IdPrefix.EXPENSE
 

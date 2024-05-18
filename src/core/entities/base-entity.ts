@@ -2,8 +2,10 @@ import { BeforeInsert, CreateDateColumn, DeleteDateColumn, PrimaryColumn, Update
 import { IdPrefix } from "../interfaces/enums/IdPrefix"
 import { Kind } from "../interfaces/enums/Kind"
 import { generateId } from "../utils/GenerateId"
+import { Exclude } from "class-transformer"
 
 export abstract class BaseEntity {
+  @Exclude()
   readonly idPrefix: IdPrefix
 
   readonly kind: Kind

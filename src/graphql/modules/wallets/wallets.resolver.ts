@@ -3,9 +3,10 @@ import { Args, Info, Mutation, Query, Resolver } from "@nestjs/graphql"
 import { Authorization, AuthUser } from "src/core/decorators/auth.decorator"
 import { AuthGuard } from "src/core/guards/auth.guard"
 import { WalletsService } from "src/domain/wallets/wallets.service"
-import { WalletGQLModel } from "./interfaces/wallet.model"
+import { WalletBalancesViewGQLModel, WalletGQLModel } from "./interfaces/wallet.model"
 import { CreateWalletGQLInput, UpdateWalletGQLInput } from "./interfaces/wallets.inputs"
 import { WalletEntity } from "src/domain/wallets/schemas/wallet.entity"
+import { WalletBalancesViewEntity } from "src/domain/wallets/schemas/wallet-balances.entity"
 
 @Resolver(() => WalletGQLModel)
 export class WalletsResolver {
@@ -64,7 +65,7 @@ export class WalletsResolver {
   async wallets(@Authorization() authUser: AuthUser, @Info() info): Promise<WalletEntity[]> {
     const wallets = await this.walletsService.listByUserId(authUser.id)
 
-    console.log(info.fieldNodes[0].selectionSet.selections.map((item) => item.name.value))
+    // console.log(info.fieldNodes[0].selectionSet.selections.map((item) => item.name.value))
 
     return wallets
   }
@@ -77,21 +78,11 @@ export class WalletsResolver {
     return wallet
   }
 
-  // @UseGuards(AuthGuard)
-  // @Query(() => BalanceGQLModel)
-  // async balances(@Authorization() authUser: AuthUser): Promise<any> {
-  // 	const balances = await this.expenseMicroserviceWalletsService.getBalances(["wal_XZrrpjiQk7VI3eL7", "wal_kCqOXOLFlGcyVkHIm2", "wal_kCqOXOLFlGcyVkHIm"])
-  //
-  // 	return balances
-  // }
+  @UseGuards(AuthGuard)
+  @Query(() => [WalletBalancesViewGQLModel])
+  async wallet_balances(@Authorization() authUser: AuthUser): Promise<WalletBalancesViewEntity[]> {
+    const balances = await this.walletsService.listWalletBalances()
 
-  // @ResolveField(() => WalletBalanceGQLModel)
-  // async balance(
-  // 	@Parent() parent: WalletGQLModel,
-  // 	@Loader(BalancesLoader) categoriesLoader: DataLoader<string, any>,
-  // ): Promise<any> {
-  // 	const balance = await categoriesLoader.load(parent.id)
-
-  // 	return balance
-  // }
+    return balances
+  }
 }

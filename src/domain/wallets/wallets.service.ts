@@ -1,14 +1,21 @@
 import { Injectable } from "@nestjs/common"
-import { In } from "typeorm"
+import { In, Repository } from "typeorm"
 import { CreateWalletDto, UpdateWalletDto } from "./interfaces/wallets.dto"
 import { IWalletsService } from "./interfaces/wallets.interfaces"
 import { WalletEntity } from "./schemas/wallet.entity"
 import { WalletFactory } from "./schemas/wallet.factory"
 import { WalletsRepository } from "./wallets.repository"
+import { WalletBalancesViewEntity } from "./schemas/wallet-balances.entity"
+import { InjectRepository } from "@nestjs/typeorm"
 
 @Injectable()
 export class WalletsService implements IWalletsService {
-  constructor(private readonly walletsRepo: WalletsRepository) {}
+  constructor(
+    private readonly walletsRepo: WalletsRepository,
+
+    @InjectRepository(WalletBalancesViewEntity)
+    private readonly wbver: Repository<WalletBalancesViewEntity>,
+  ) {}
 
   async create(data: CreateWalletDto): Promise<WalletEntity> {
     const walletEntity = await this.walletsRepo.create(data)
@@ -64,5 +71,11 @@ export class WalletsService implements IWalletsService {
       console.log(e)
       throw e
     }
+  }
+
+  async listWalletBalances(): Promise<WalletBalancesViewEntity[]> {
+    const walletBalances = await this.wbver.find()
+
+    return walletBalances
   }
 }

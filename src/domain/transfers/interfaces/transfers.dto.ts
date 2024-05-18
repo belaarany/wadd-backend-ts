@@ -7,3 +7,11 @@ export type CreateTransferDto = {
   timestamp: Date
   note: string
 }
+
+export type ListByFiltersDto = {
+  wallet_ids?: string[]
+  timestamp?: {
+    from?: Date
+    to?: Date
+  }
+}
