@@ -4,7 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { GraphQLRootModule } from "./graphql/graphql.module"
 import { HttpRootModule } from "./http/http.module"
 import { APP_INTERCEPTOR } from "@nestjs/core"
-import databaseConfig from "./config/database.config"
+import databaseConfig, { DatabaseConfig } from "./config/database.config"
 import jwtConfig from "./config/jwt.config"
 import appConfig from "./config/app.config"
 
@@ -23,11 +23,11 @@ import appConfig from "./config/app.config"
       useFactory: (configService: ConfigService) => {
         return {
           type: "postgres",
-          host: configService.getOrThrow("database.host"),
-          port: configService.getOrThrow("database.port"),
-          username: configService.getOrThrow("database.username"),
-          password: configService.getOrThrow("database.password"),
-          database: configService.getOrThrow("database.database"),
+          host: configService.getOrThrow<DatabaseConfig["host"]>("database.host"),
+          port: configService.getOrThrow<DatabaseConfig["port"]>("database.port"),
+          username: configService.getOrThrow<DatabaseConfig["username"]>("database.username"),
+          password: configService.getOrThrow<DatabaseConfig["password"]>("database.password"),
+          database: configService.getOrThrow<DatabaseConfig["database"]>("database.database"),
           entities: [__dirname + "/**/*.entity.{js,ts}"],
           synchronize: true,
           // logging: true,

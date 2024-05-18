@@ -6,6 +6,7 @@ import { LocalStrategy } from "./local.strategy"
 import { JwtModule } from "@nestjs/jwt"
 import { JwtStrategy } from "./jwt.strategy"
 import { ConfigService } from "@nestjs/config"
+import { JwtConfig } from "src/config/jwt.config"
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ConfigService } from "@nestjs/config"
       useFactory: (configService: ConfigService) => ({
         secret: configService.getOrThrow("jwt.secret"),
         signOptions: {
-          expiresIn: configService.getOrThrow("jwt.expiresIn"),
+          expiresIn: configService.getOrThrow<JwtConfig["expiresIn"]>("jwt.expiresIn"),
         },
         verifyOptions: {},
       }),

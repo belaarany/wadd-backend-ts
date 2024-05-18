@@ -5,6 +5,7 @@ import { JWTContent } from "./types"
 import { UsersService } from "src/domain/users/users.service"
 import { UserEntity } from "src/domain/users/schemas/user.entity"
 import { ConfigService } from "@nestjs/config"
+import { JwtConfig } from "src/config/jwt.config"
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +16,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow("jwt.secret"),
+      secretOrKey: configService.getOrThrow<JwtConfig["secret"]>("jwt.secret"),
     })
   }
 

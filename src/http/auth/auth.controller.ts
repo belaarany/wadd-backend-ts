@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common"
 import { AuthGuard } from "@nestjs/passport"
+import { Internal } from "src/core/decorators/internal.decorator"
 import { AuthService } from "src/services/auth/auth.service"
 import { JwtAuthGuard } from "src/services/auth/jwt-auth.guard"
 import { LocalAuthGuard } from "src/services/auth/local-auth.guard"
@@ -30,5 +31,11 @@ export class AuthController {
   @Get("profile")
   getProfile(@Request() req) {
     return req.user
+  }
+
+  @Internal()
+  @Get("internal")
+  internal() {
+    return "hi"
   }
 }
